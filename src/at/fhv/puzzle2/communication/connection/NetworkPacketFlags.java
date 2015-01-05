@@ -4,10 +4,10 @@ package at.fhv.puzzle2.communication.connection;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
-public class PacketFlags implements JSONAware {
+public class NetworkPacketFlags implements JSONAware {
     private boolean _acknowledge = false, _close = false, _error = false;
 
-    public PacketFlags(boolean acknowledge, boolean close, boolean error) {
+    public NetworkPacketFlags(boolean acknowledge, boolean close, boolean error) {
         _acknowledge = acknowledge;
         _close = close;
         _error = error;
@@ -39,11 +39,15 @@ public class PacketFlags implements JSONAware {
     }
 
     public String toJSONString() {
-        JSONObject object = new JSONObject();
-        object.put("ack", _acknowledge);
-        object.put("close", _close);
-        object.put("error", _error);
+        JSONObject json = new JSONObject();
+        json.put("ack", _acknowledge);
+        json.put("close", _close);
+        json.put("error", _error);
 
-        return object.toJSONString();
+        return json.toJSONString();
+    }
+
+    public static NetworkPacketFlags parseJSON(JSONObject json) {
+        return new NetworkPacketFlags((boolean)json.get("ack"), (boolean)json.get("close"), (boolean)json.get("error"));
     }
 }

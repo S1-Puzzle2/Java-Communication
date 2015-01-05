@@ -19,43 +19,35 @@ public class NetworkPacketManager {
     }
 
     public void sendApplicationMessage(ApplicationMessage message) throws IOException {
-        JSONObject packet = new JSONObject();
-
-        packet.put("seqID", NetworkPacketManager.getNextSequenceID());
-        packet.put("appMsg", message);
-        packet.put("checkSum", 0L);
+        NetworkPacket packet = new NetworkPacket(NetworkPacketManager.getNextSequenceID(), null, message.getMessage());
 
         _networkConnection.sendBytes(packet.toJSONString().getBytes(Charset.forName("UTF-8")));
     }
 
     public ApplicationMessage receiveMessage() throws IOException {
-        byte[] packet = _networkConnection.readBytes();
+        NetworkPacket packet;
+        //TODO sent response if something failed, for now we just ignore malformed packets or wrong checksums
+        do {
+            packet = NetworkPacket.parse(retrieveMessage());
+        } while(!packet.checkSumCorrect());
 
-        JSONObject packetJSON = (JSONObject) JSONValue.parse(new String(packet, Charset.forName("UTF-8")));
-
-        //TODO check checksum
-        String acknowledge = createAcknowledge(new BigDecimal((long)packetJSON.get("seqID")).intValueExact());
-
+        //Send an acknowledge back
+        String acknowledge = createAcknowledge(packet.getSequenceID());
         _networkConnection.sendBytes(acknowledge.getBytes(Charset.forName("UTF-8")));
 
-        return new ApplicationMessage((String) packetJSON.get("appMsg"));
+        return new ApplicationMessage(packet.getApplicationMessage());
+    }
+
+    private JSONObject retrieveMessage() throws IOException {
+        byte[] receivedBytes = _networkConnection.readBytes();
+
+        return (JSONObject) JSONValue.parse(new String(receivedBytes, Charset.forName("UTF-8")));
     }
 
     private String createAcknowledge(int sequenceID) {
-        JSONObject obj = new JSONObject();
+        NetworkPacket packet = new NetworkPacket(sequenceID, new NetworkPacketFlags(true, false, false), null);
 
-        obj.put("seqID", sequenceID);
-        obj.put("flags", new PacketFlags(true, false, false));
-
-
-        Checksum checksum = new CRC32();
-
-        byte[] jsonBytes = obj.toJSONString().getBytes(Charset.forName("UTF-8"));
-        checksum.update(jsonBytes, 0, jsonBytes.length);
-
-        obj.put("checkSum", checksum.getValue());
-
-        return obj.toJSONString();
+        return packet.toJSONString();
     }
 
     private static int getNextSequenceID() {
