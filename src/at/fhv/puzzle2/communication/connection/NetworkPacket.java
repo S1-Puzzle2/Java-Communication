@@ -2,6 +2,7 @@ package at.fhv.puzzle2.communication.connection;
 
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
@@ -34,19 +35,30 @@ public class NetworkPacket implements JSONAware {
         return _checkSum;
     }
 
-    public static NetworkPacket parse(JSONObject json) {
-        NetworkPacket packet = new NetworkPacket();
-        packet._sequenceID = new BigDecimal((Long) json.get("seqID")).intValueExact();
-        packet._checkSum = (long) json.get("checkSum");
-        if(json.containsKey("flags")) {
-            packet._flags = NetworkPacketFlags.parseJSON((JSONObject) json.get("flags"));
+    public static NetworkPacket parse(byte[] packetData) throws MalformedNetworkPacketException {
+        String packetString = new String(packetData, Charset.forName("UTF-8"));
+        JSONObject packetJSON = (JSONObject) JSONValue.parse(packetString);
+
+        if(packetJSON == null) {
+            throw new MalformedNetworkPacketException(packetString);
         }
 
-        if(json.containsKey("appMsg")) {
-            packet._appMsg = (String) json.get("appMsg");
-        }
+        try {
+            NetworkPacket packet = new NetworkPacket();
+            packet._sequenceID = new BigDecimal((Long) packetJSON.get("seqID")).intValueExact();
+            packet._checkSum = (long) packetJSON.get("checkSum");
+            if(packetJSON.containsKey("flags")) {
+                packet._flags = NetworkPacketFlags.parseJSON((JSONObject) packetJSON.get("flags"));
+            }
 
-        return packet;
+            if(packetJSON.containsKey("appMsg")) {
+                packet._appMsg = (String) packetJSON.get("appMsg");
+            }
+
+            return packet;
+        } catch(Exception e) {
+            throw new MalformedNetworkPacketException(packetJSON.toJSONString());
+        }
     }
 
     public boolean checkSumCorrect() {
