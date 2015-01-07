@@ -27,19 +27,17 @@ public class TCPNetworkConnection implements NetworkConnection {
         InputStream inStream = _socket.getInputStream();
 
         byte[] receivedBytes = new byte[0];
-        byte[] buffer = new byte[1024];
 
-        int bytesRead;
-        while((bytesRead = inStream.read(buffer)) != -1) {
-            receivedBytes = ByteArrayOperations.appendByteArray(receivedBytes, buffer, bytesRead);
+        byte tmpByte;
+        while((tmpByte = (byte) inStream.read()) != -1) {
+            receivedBytes = ByteArrayOperations.appendByteToArray(receivedBytes, tmpByte);
 
-            if(inStream.available() <= 0) {
-                //We've read all bytes available
+            if(tmpByte == '\0') {
                 break;
             }
         }
 
-        if(bytesRead == -1) {
+        if(tmpByte == -1) {
             throw new ConnectionClosedException();
         }
 
