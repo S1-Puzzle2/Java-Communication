@@ -1,5 +1,6 @@
 package at.fhv.puzzle2.communication.connection.listener;
 
+import at.fhv.puzzle2.communication.PaddingNullByteNetworkConnection;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 
@@ -37,7 +38,7 @@ public class ConnectionListener implements Listener, Runnable {
                 NetworkConnection connection = _endPoint.acceptNetworkConnection();
                 if (connection != null) {
                     synchronized (_queue) {
-                        _queue.add(connection);
+                        _queue.add(new PaddingNullByteNetworkConnection(connection));
 
                         _queue.notifyAll();
                     }
