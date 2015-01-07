@@ -1,5 +1,6 @@
 package at.fhv.puzzle2.communication.connection.protocoll.ethernet.tcp;
 
+import at.fhv.puzzle2.communication.connection.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.util.ByteArrayOperations;
 
@@ -36,6 +37,10 @@ public class TCPNetworkConnection implements NetworkConnection {
                 //We've read all bytes available
                 break;
             }
+        }
+
+        if(bytesRead == -1) {
+            throw new ConnectionClosedException();
         }
 
         return receivedBytes;

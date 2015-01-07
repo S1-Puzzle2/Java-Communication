@@ -3,9 +3,9 @@ package at.fhv.puzzle2.communication.application.listener;
 import at.fhv.puzzle2.communication.CommunicationManager;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
 import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
+import at.fhv.puzzle2.communication.connection.ConnectionClosedException;
 
 import java.io.IOException;
-import java.net.SocketException;
 
 public class MessageListener implements Runnable {
     private CommunicationManager _communicationManager;
@@ -43,8 +43,8 @@ public class MessageListener implements Runnable {
                 //We lost the connection, so we dont have to wait for other messages
                 _isRunning = false;
 
-                //SocketException occurs, when the other side closes the connection
-                if(!(e instanceof SocketException)) {
+                //ConnectionClosedException occurs, when the other side closes the connection
+                if(!(e instanceof ConnectionClosedException)) {
                     e.printStackTrace();
                 }
             }
