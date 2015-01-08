@@ -60,6 +60,14 @@ public class CommunicationManager {
         _networkManager.stopListeningForBroadcasts();
     }
 
+    public void addConnectionClosedObserver(ClosedConnectionObserver observer) {
+        _closedConnectionObservable.addObserver(observer);
+    }
+
+    public boolean removeConnectionClosedObserver(ClosedConnectionObserver observer) {
+        return _closedConnectionObservable.removeObserver(observer);
+    }
+
 
     public void addConnectionListener(ListenableEndPoint endPoint) throws IOException {
         _networkManager.addConnectionListener(endPoint);
