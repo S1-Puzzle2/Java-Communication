@@ -3,6 +3,7 @@ import at.fhv.puzzle2.communication.connection.protocoll.ethernet.tcp.TCPEndpoin
 import at.fhv.puzzle2.communication.connection.protocoll.ethernet.udp.UDPEndpoint;
 import at.fhv.puzzle2.communication.observable.ConnectionObservable;
 import at.fhv.puzzle2.communication.observable.MessageReceivedObservable;
+import at.fhv.puzzle2.communication.observer.ClosedConnectionObserver;
 import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 import at.fhv.puzzle2.communication.observer.NewConnectionObserver;
 
@@ -18,6 +19,7 @@ public class Main implements NewConnectionObserver, MessageReceivedObserver {
             CommunicationManager cm = new CommunicationManager("PUZZLE2");
             cm.addMessageReceivedObserver(this);
             cm.addNewConnectionObserver(this);
+            cm.addConnectionClosedObserver(new ClosedConnectionObserving());
             cm.addConnectionListener(new TCPEndpoint("0.0.0.0", 4711));
             cm.addBroadcastListener(new UDPEndpoint("0.0.0.0", 4712));
 
@@ -42,5 +44,13 @@ public class Main implements NewConnectionObserver, MessageReceivedObserver {
         System.out.println("Messages received!!!");
         messageReceivedObservable.getMessageList().forEach(message -> System.out.println(message.getMessage()));
         System.out.println();
+    }
+
+    class ClosedConnectionObserving implements ClosedConnectionObserver {
+
+        @Override
+        public void notify(ConnectionObservable observable) {
+            System.out.println("Connection closed :( Byebye!");
+        }
     }
 }
