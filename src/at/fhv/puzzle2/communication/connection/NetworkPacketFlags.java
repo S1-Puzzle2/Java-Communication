@@ -3,6 +3,10 @@ package at.fhv.puzzle2.communication.connection;
 
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class NetworkPacketFlags implements JSONAware {
     private boolean _acknowledge = false, _close = false, _error = false;
@@ -39,12 +43,12 @@ public class NetworkPacketFlags implements JSONAware {
     }
 
     public String toJSONString() {
-        JSONObject json = new JSONObject();
-        json.put("ack", _acknowledge);
-        json.put("close", _close);
-        json.put("error", _error);
+        HashMap<String, Boolean> map = new LinkedHashMap<String, Boolean>();
+        map.put("ack", _acknowledge);
+        map.put("close", _close);
+        map.put("error", _error);
 
-        return json.toJSONString();
+        return JSONValue.toJSONString(map);
     }
 
     public static NetworkPacketFlags parseJSON(JSONObject json) {

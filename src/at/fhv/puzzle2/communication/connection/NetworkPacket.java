@@ -6,6 +6,7 @@ import org.json.simple.JSONValue;
 
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.util.*;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -37,7 +38,7 @@ public class NetworkPacket implements JSONAware {
 
     public static NetworkPacket parse(byte[] packetData) throws MalformedNetworkPacketException {
         String packetString = new String(packetData, Charset.forName("UTF-8"));
-        JSONObject packetJSON = (JSONObject) JSONValue.parse(packetString);
+        HashMap<String, Object> packetJSON = (HashMap<String, Object>) JSONValue.parse(packetString);
 
         if(packetJSON == null) {
             throw new MalformedNetworkPacketException(packetString);
@@ -57,7 +58,7 @@ public class NetworkPacket implements JSONAware {
 
             return packet;
         } catch(Exception e) {
-            throw new MalformedNetworkPacketException(packetJSON.toJSONString());
+            throw new MalformedNetworkPacketException(packetString);
         }
     }
 
@@ -66,37 +67,37 @@ public class NetworkPacket implements JSONAware {
     }
 
     public long generateChecksum() {
-        JSONObject json = this.getJSONObject();
+        HashMap<String, Object> map = this.getJSONObject();
         Checksum checksum = new CRC32();
 
-        json.remove("checkSum");
+        map.remove("checkSum");
 
-        byte[] jsonBytes = json.toJSONString().getBytes(Charset.forName("UTF-8"));
+        byte[] jsonBytes = JSONValue.toJSONString(map).getBytes(Charset.forName("UTF-8"));
         checksum.update(jsonBytes, 0, jsonBytes.length);
 
         return checksum.getValue();
     }
 
-    private JSONObject getJSONObject() {
-        JSONObject json = new JSONObject();
+    private HashMap<String, Object> getJSONObject() {
+        HashMap<String, Object> map = new LinkedHashMap<>();
 
-        json.put("seqID", _sequenceID);
-        json.put("checkSum", _checkSum);
+        map.put("seqID", _sequenceID);
+        if(_flags != null) {
+            map.put("flags", _flags);
+        }
 
         if(_appMsg != null) {
-            json.put("appMsg", _appMsg);
+            map.put("appMsg", _appMsg);
         }
 
-        if(_flags != null) {
-            json.put("flags", _flags);
-        }
+        map.put("checkSum", _checkSum);
 
-        return  json;
+        return map;
     }
 
     @Override
     public String toJSONString() {
-        return this.getJSONObject().toJSONString();
+        return JSONValue.toJSONString(this.getJSONObject());
     }
 
     public String getApplicationMessage() {
