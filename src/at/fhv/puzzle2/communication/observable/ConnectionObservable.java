@@ -10,6 +10,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
+import static java.util.stream.Collectors.toCollection;
+
 public class ConnectionObservable<T extends ConnectionObserver> {
     private List<T> _observableList;
     private BlockingQueue<ApplicationConnection> _connectionQueue;
@@ -48,7 +50,7 @@ public class ConnectionObservable<T extends ConnectionObserver> {
     }
 
     public List<ApplicationConnection> getConnectionList() {
-        List<ApplicationConnection> tmpList = _connectionQueue.stream().collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
+        List<ApplicationConnection> tmpList = _connectionQueue.stream().collect(toCollection(LinkedList::new));
 
         _connectionQueue.clear();
 
