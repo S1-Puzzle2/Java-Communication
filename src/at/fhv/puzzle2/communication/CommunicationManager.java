@@ -7,7 +7,7 @@ import at.fhv.puzzle2.communication.application.connection.encryption.EncryptedA
 import at.fhv.puzzle2.communication.application.connection.encryption.Encryption;
 import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
-import at.fhv.puzzle2.communication.connection.NetworkPacketManager;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 import at.fhv.puzzle2.communication.connection.endpoint.DiscoverableEndPoint;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 import at.fhv.puzzle2.communication.observable.ConnectionObservable;
@@ -106,7 +106,7 @@ public class CommunicationManager {
     }
 
     void newConnectionEstablished(NetworkConnection networkConnection) {
-        ApplicationConnection applicationConnection = new BaseApplicationConnection(new NetworkPacketManager(networkConnection));
+        ApplicationConnection applicationConnection = new BaseApplicationConnection(new NetworkPacketHandler(networkConnection));
         applicationConnection = new Base64ApplicationConnection(applicationConnection);
 
         //If the user provided an encryption, use it

@@ -1,7 +1,7 @@
-package at.fhv.puzzle2.communication.connection;
+package at.fhv.puzzle2.communication.connection.networkPacket;
 
+import at.fhv.puzzle2.communication.connection.MalformedNetworkPacketException;
 import org.json.simple.JSONAware;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.math.BigDecimal;
@@ -11,6 +11,10 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 public class NetworkPacket implements JSONAware {
+    public static final String CHECKSUM = "checkSum";
+    public static final String SEQUENCE_ID = "seqID";
+    public static final String APP_MSG = "appMsg";
+    public static final String FLAGS = "flags";
     private int _sequenceID;
     private long _checkSum;
     private String _appMsg;
@@ -28,12 +32,16 @@ public class NetworkPacket implements JSONAware {
 
     }
 
-    public int getSequenceID() {
-        return _sequenceID;
+    public static NetworkPacket createResponse(int sequenceID, NetworkPacketFlags flags) {
+        return new NetworkPacket(sequenceID, flags, null);
     }
 
-    public long getCheckSum() {
-        return _checkSum;
+    public NetworkPacketFlags getNetworkFlags() {
+        return _flags;
+    }
+
+    public int getSequenceID() {
+        return _sequenceID;
     }
 
     public static NetworkPacket parse(byte[] packetData) throws MalformedNetworkPacketException {
@@ -46,14 +54,14 @@ public class NetworkPacket implements JSONAware {
 
         try {
             NetworkPacket packet = new NetworkPacket();
-            packet._sequenceID = new BigDecimal((Long) packetJSON.get("seqID")).intValueExact();
-            packet._checkSum = (long) packetJSON.get("checkSum");
-            if(packetJSON.containsKey("flags")) {
-                packet._flags = NetworkPacketFlags.parseJSON((JSONObject) packetJSON.get("flags"));
+            packet._sequenceID = new BigDecimal((Long) packetJSON.get(SEQUENCE_ID)).intValueExact();
+            packet._checkSum = (long) packetJSON.get(CHECKSUM);
+            if(packetJSON.containsKey(FLAGS)) {
+                packet._flags = NetworkPacketFlags.parse((HashMap<String, Object>) packetJSON.get(FLAGS));
             }
 
-            if(packetJSON.containsKey("appMsg")) {
-                packet._appMsg = (String) packetJSON.get("appMsg");
+            if(packetJSON.containsKey(APP_MSG)) {
+                packet._appMsg = (String) packetJSON.get(APP_MSG);
             }
 
             return packet;
@@ -70,7 +78,7 @@ public class NetworkPacket implements JSONAware {
         HashMap<String, Object> map = this.getJSONObject();
         Checksum checksum = new CRC32();
 
-        map.remove("checkSum");
+        map.remove(CHECKSUM);
 
         byte[] jsonBytes = JSONValue.toJSONString(map).getBytes(Charset.forName("UTF-8"));
         checksum.update(jsonBytes, 0, jsonBytes.length);
@@ -81,16 +89,16 @@ public class NetworkPacket implements JSONAware {
     private HashMap<String, Object> getJSONObject() {
         HashMap<String, Object> map = new LinkedHashMap<>();
 
-        map.put("seqID", _sequenceID);
+        map.put(SEQUENCE_ID, _sequenceID);
         if(_flags != null) {
-            map.put("flags", _flags);
+            map.put(FLAGS, _flags);
         }
 
         if(_appMsg != null) {
-            map.put("appMsg", _appMsg);
+            map.put(APP_MSG, _appMsg);
         }
 
-        map.put("checkSum", _checkSum);
+        map.put(CHECKSUM, _checkSum);
 
         return map;
     }
@@ -102,5 +110,9 @@ public class NetworkPacket implements JSONAware {
 
     public String getApplicationMessage() {
         return _appMsg;
+    }
+
+    public byte[] getBytes() {
+        return toJSONString().getBytes(Charset.forName("UTF-8"));
     }
 }

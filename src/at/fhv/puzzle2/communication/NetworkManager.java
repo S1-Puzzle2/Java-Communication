@@ -6,6 +6,7 @@ import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 import at.fhv.puzzle2.communication.connection.listener.BroadcastListener;
 import at.fhv.puzzle2.communication.connection.listener.ConnectionListener;
 import at.fhv.puzzle2.communication.connection.listener.ListenerManager;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketManager;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
@@ -18,6 +19,7 @@ public class NetworkManager {
     private String _broadcastResponse;
 
     private NetworkConnectionManager _networkConnectionManager;
+    private NetworkPacketManager _networkPacketManager;
 
     private BlockingQueue<NetworkConnection> _newConnectionQueue;
 
@@ -30,6 +32,7 @@ public class NetworkManager {
         _broadcastResponse = broadcastResponse;
 
         _networkConnectionManager = new NetworkConnectionManager(communicationManager, _newConnectionQueue);
+        _networkPacketManager = NetworkPacketManager.getInstance();
     }
 
     protected void addConnectionListener(ListenableEndPoint listenableEndPoint) throws IOException {
@@ -69,5 +72,6 @@ public class NetworkManager {
         _broadcastListenerManager.stopListening();
 
         _networkConnectionManager.close();
+        _networkPacketManager.close();
     }
 }

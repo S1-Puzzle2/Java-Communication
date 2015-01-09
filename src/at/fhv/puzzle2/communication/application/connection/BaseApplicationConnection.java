@@ -1,14 +1,14 @@
 package at.fhv.puzzle2.communication.application.connection;
 
 import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
-import at.fhv.puzzle2.communication.connection.NetworkPacketManager;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 
 import java.io.IOException;
 
 public class BaseApplicationConnection implements ApplicationConnection {
-    private NetworkPacketManager _packetManager;
+    private NetworkPacketHandler _packetManager;
 
-    public BaseApplicationConnection(NetworkPacketManager packetManager) {
+    public BaseApplicationConnection(NetworkPacketHandler packetManager) {
         _packetManager = packetManager;
     }
 
