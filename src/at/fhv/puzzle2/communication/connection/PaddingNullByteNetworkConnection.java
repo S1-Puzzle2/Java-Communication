@@ -1,7 +1,5 @@
 package at.fhv.puzzle2.communication.connection;
 
-import at.fhv.puzzle2.communication.connection.NetworkConnection;
-import at.fhv.puzzle2.communication.connection.NetworkConnectionDecorator;
 import at.fhv.puzzle2.communication.connection.util.ByteArrayOperations;
 
 import java.io.IOException;

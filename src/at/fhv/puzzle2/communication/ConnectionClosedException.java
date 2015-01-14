@@ -1,4 +1,4 @@
-package at.fhv.puzzle2.communication.connection;
+package at.fhv.puzzle2.communication;
 
 import java.io.IOException;
 

@@ -1,8 +1,9 @@
 package at.fhv.puzzle2.communication.application.connection.encryption;
 
+import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnectionDecorator;
-import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
+import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -34,8 +35,8 @@ public class EncryptedApplicationConnection extends ApplicationConnectionDecorat
     }
 
     @Override
-    public ApplicationMessage readApplicationMessage() throws IOException {
-        ApplicationMessage message = _connection.readApplicationMessage();
+    public ApplicationMessage receiveMessage() throws IOException {
+        ApplicationMessage message = _connection.receiveMessage();
 
         byte[] messageBytes = message.getMessage().getBytes(Charset.forName("UTF-8"));
 

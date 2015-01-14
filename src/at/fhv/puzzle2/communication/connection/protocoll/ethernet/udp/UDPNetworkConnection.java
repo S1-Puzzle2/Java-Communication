@@ -1,5 +1,6 @@
 package at.fhv.puzzle2.communication.connection.protocoll.ethernet.udp;
 
+import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;
@@ -23,14 +24,18 @@ public class UDPNetworkConnection implements NetworkConnection {
     }
 
     @Override
-    public void sendBytes(byte[] data) throws IOException {
+    public void sendBytes(byte[] data) throws ConnectionClosedException {
         DatagramPacket packet = new DatagramPacket(data, data.length, _host, _port);
 
-        _socket.send(packet);
+        try {
+            _socket.send(packet);
+        } catch (IOException e) {
+            throw new ConnectionClosedException();
+        }
     }
 
     @Override
-    public byte[] readBytes() throws IOException {
+    public byte[] readBytes() throws ConnectionClosedException {
         return null;
     }
 

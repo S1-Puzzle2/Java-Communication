@@ -1,6 +1,8 @@
 package at.fhv.puzzle2.communication.application.connection;
 
-import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
+import at.fhv.puzzle2.communication.application.ApplicationMessage;
+import at.fhv.puzzle2.communication.ConnectionClosedException;
+import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 
 import java.io.IOException;
@@ -13,22 +15,22 @@ public class BaseApplicationConnection implements ApplicationConnection {
     }
 
     @Override
-    public void sendApplicationMessage(ApplicationMessage message) throws IOException {
-        _packetManager.sendApplicationMessage(message);
+    public void sendApplicationMessage(ApplicationMessage applicationMessage) throws IOException {
+        _packetManager.sendMessage(applicationMessage.getMessage());
     }
 
     @Override
-    public ApplicationMessage readApplicationMessage() throws IOException {
-        ApplicationMessage message = _packetManager.receiveMessage();
-
-        //We need to know up the stack where we got this from
-        message.setSender(this);
-
-        return message;
+    public ApplicationMessage receiveMessage() throws IOException {
+        return new ApplicationMessage(this, _packetManager.receiveMessage());
     }
 
     @Override
     public void close() throws IOException {
         _packetManager.close();
+    }
+
+    @Override
+    public NetworkConnection getUnderlyingConnection() {
+        return _packetManager.getUnderlyingConnection();
     }
 }

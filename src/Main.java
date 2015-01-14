@@ -1,8 +1,11 @@
 import at.fhv.puzzle2.communication.CommunicationManager;
+import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
+import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.connection.protocoll.ethernet.tcp.TCPEndpoint;
 import at.fhv.puzzle2.communication.connection.protocoll.ethernet.udp.UDPEndpoint;
 import at.fhv.puzzle2.communication.observable.ConnectionObservable;
-import at.fhv.puzzle2.communication.observable.MessageReceivedObservable;
+import at.fhv.puzzle2.communication.observable.CommandReceivedObservable;
 import at.fhv.puzzle2.communication.observer.ClosedConnectionObserver;
 import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 import at.fhv.puzzle2.communication.observer.NewConnectionObserver;
@@ -37,13 +40,13 @@ public class Main implements NewConnectionObserver, MessageReceivedObserver {
     @Override
     public void notify(ConnectionObservable observable) {
         System.out.println("New connection!!!");
+        CommandConnection conn = (CommandConnection) observable.getConnectionList().get(0);
     }
 
     @Override
-    public void messageReceived(MessageReceivedObservable messageReceivedObservable) {
-        System.out.println("Messages received!!!");
-        messageReceivedObservable.getMessageList().forEach(message -> System.out.println(message.getMessage()));
-        System.out.println();
+    public void messageReceived(CommandReceivedObservable commandReceivedObservable) {
+        System.out.println("Command received!!!");
+        commandReceivedObservable.getMessageList().forEach(AbstractCommand::toJSONString);
     }
 
     class ClosedConnectionObserving implements ClosedConnectionObserver {

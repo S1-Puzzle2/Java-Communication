@@ -1,5 +1,7 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
+import at.fhv.puzzle2.communication.NetworkConnectionManager;
+import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;
@@ -10,12 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class NetworkPacketManager implements Runnable {
+    private NetworkConnectionManager _netNetworkConnectionManager;
     private List<SentNetworkPacket> _packetSentList;
 
     private Thread _localThread;
     private final Object _lock = new Object();
 
-    private NetworkPacketManager() {
+    private NetworkPacketManager(NetworkConnectionManager networkConnectionManager) {
+        _netNetworkConnectionManager = networkConnectionManager;
         _packetSentList = Collections.synchronizedList(new LinkedList<>());
 
         _localThread = new Thread(this);
@@ -31,11 +35,15 @@ public class NetworkPacketManager implements Runnable {
 
                 for(SentNetworkPacket sentNetworkPacket: _packetSentList) {
                     if(new Date().getTime() - sentNetworkPacket.sentDate.getTime() > 10000) {
-                        resendNetworkPacket(sentNetworkPacket);
+                        try {
+                            resendNetworkPacket(sentNetworkPacket);
+                        } catch (IOException e) {
+                            _netNetworkConnectionManager.connectionClosed(sentNetworkPacket.destination);
+                        }
                     }
                 }
 
-            } catch (InterruptedException | IOException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -84,11 +92,11 @@ public class NetworkPacketManager implements Runnable {
     }
 
     private static NetworkPacketManager _instance;
-    public static synchronized NetworkPacketManager getInstance() {
-        if(_instance == null) {
-            _instance = new NetworkPacketManager();
-        }
+    public static synchronized void initializeNetworkPacketManager(NetworkConnectionManager networkConnectionManager) {
+        _instance = new NetworkPacketManager(networkConnectionManager);
+    }
 
+    public static NetworkPacketManager getInstance() {
         return _instance;
     }
 }

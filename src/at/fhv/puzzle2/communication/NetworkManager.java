@@ -32,6 +32,8 @@ public class NetworkManager {
         _broadcastResponse = broadcastResponse;
 
         _networkConnectionManager = new NetworkConnectionManager(communicationManager, _newConnectionQueue);
+
+        NetworkPacketManager.initializeNetworkPacketManager(_networkConnectionManager);
         _networkPacketManager = NetworkPacketManager.getInstance();
     }
 

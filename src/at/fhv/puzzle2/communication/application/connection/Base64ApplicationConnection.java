@@ -1,6 +1,6 @@
 package at.fhv.puzzle2.communication.application.connection;
 
-import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
+import at.fhv.puzzle2.communication.application.ApplicationMessage;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -20,8 +20,8 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
     }
 
     @Override
-    public ApplicationMessage readApplicationMessage() throws IOException {
-        ApplicationMessage message = _connection.readApplicationMessage();
+    public ApplicationMessage receiveMessage() throws IOException {
+        ApplicationMessage message = _connection.receiveMessage();
 
         message.setMessage(Base64.getDecoder().decode(message.getMessage()));
 

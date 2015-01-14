@@ -52,4 +52,8 @@ public class NetworkConnectionManager implements Runnable {
 
         _localThread.interrupt();
     }
+
+    public void connectionClosed(NetworkConnection connection) {
+
+    }
 }

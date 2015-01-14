@@ -1,6 +1,6 @@
 package at.fhv.puzzle2.communication.connection.listener;
 
-import at.fhv.puzzle2.communication.PaddingNullByteNetworkConnection;
+import at.fhv.puzzle2.communication.connection.PaddingNullByteNetworkConnection;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 

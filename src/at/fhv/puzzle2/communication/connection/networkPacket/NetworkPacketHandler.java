@@ -1,7 +1,6 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
-import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
-import at.fhv.puzzle2.communication.connection.ConnectionClosedException;
+import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.MalformedNetworkPacketException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
@@ -17,8 +16,8 @@ public class NetworkPacketHandler {
         _networkConnection = networkConnection;
     }
 
-    public void sendApplicationMessage(ApplicationMessage message) throws IOException {
-        NetworkPacket packet = new NetworkPacket(NetworkPacketHandler.getNextSequenceID(), null, message.getMessage());
+    public void sendMessage(String message) throws IOException {
+        NetworkPacket packet = new NetworkPacket(NetworkPacketHandler.getNextSequenceID(), null, message);
 
         _networkConnection.sendBytes(packet.toJSONString().getBytes(Charset.forName("UTF-8")));
 
@@ -27,7 +26,7 @@ public class NetworkPacketHandler {
         NetworkPacketManager.getInstance().sentNetworkPacket(packet, _networkConnection, currentDate);
     }
 
-    public ApplicationMessage receiveMessage() throws IOException {
+    public String receiveMessage() throws IOException {
         NetworkPacket packet = readMessage();
 
         if(packet.getNetworkFlags() != null) {
@@ -37,8 +36,6 @@ public class NetworkPacketHandler {
 
             } else if(packet.getNetworkFlags().isClosePresent() && packet.getNetworkFlags().getClose()) {
                 _networkConnection.close();
-
-                throw new ConnectionClosedException();
             }
         } else {
             NetworkPacketFlags flags = new NetworkPacketFlags();
@@ -48,7 +45,7 @@ public class NetworkPacketHandler {
             _networkConnection.sendBytes(response.getBytes());
         }
 
-        return new ApplicationMessage(packet.getApplicationMessage());
+        return packet.getApplicationMessage();
     }
 
     private NetworkPacket readMessage() throws IOException {
@@ -80,5 +77,9 @@ public class NetworkPacketHandler {
 
     public void close() throws IOException {
         _networkConnection.close();
+    }
+
+    public NetworkConnection getUnderlyingConnection() {
+        return _networkConnection;
     }
 }

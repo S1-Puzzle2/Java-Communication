@@ -1,6 +1,6 @@
 package at.fhv.puzzle2.communication.observable;
 
-import at.fhv.puzzle2.communication.application.model.ApplicationMessage;
+import at.fhv.puzzle2.communication.application.command.AbstractCommand;
 import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 
 import java.util.Collections;
@@ -10,11 +10,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
-public class MessageReceivedObservable {
+public class CommandReceivedObservable {
     private List<MessageReceivedObserver> _observerList;
-    private BlockingQueue<ApplicationMessage> _messageQueue;
+    private BlockingQueue<AbstractCommand> _messageQueue;
 
-    public MessageReceivedObservable() {
+    public CommandReceivedObservable() {
         _observerList = Collections.synchronizedList(new LinkedList<>());
         _messageQueue = new LinkedBlockingQueue<>();
     }
@@ -27,7 +27,7 @@ public class MessageReceivedObservable {
         return _observerList.remove(observer);
     }
 
-    public void appendMessage(ApplicationMessage message) {
+    public void appendMessage(AbstractCommand message) {
         _messageQueue.add(message);
 
         _observerList.forEach(listener -> notifyInThread(listener::messageReceived));
@@ -37,7 +37,7 @@ public class MessageReceivedObservable {
      *
      * @param consumer Consumer<ConnectionObservable>
      */
-    protected void notifyInThread(Consumer<MessageReceivedObservable> consumer) {
+    private void notifyInThread(Consumer<CommandReceivedObservable> consumer) {
         //Run the notification in its own thread per listener, so the listeners wont block our network stack
 
         Runnable runnable = () -> consumer.accept(this);
@@ -45,8 +45,8 @@ public class MessageReceivedObservable {
         new Thread(runnable).start();
     }
 
-    public List<ApplicationMessage> getMessageList() {
-        List<ApplicationMessage> tmpList = _messageQueue.stream().collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
+    public List<AbstractCommand> getMessageList() {
+        List<AbstractCommand> tmpList = _messageQueue.stream().collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
 
         _messageQueue.clear();
 
