@@ -1,4 +1,4 @@
-package at.fhv.puzzle2.communication;
+package at.fhv.puzzle2.communication.connection;
 
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.NetworkConnectionDecorator;
