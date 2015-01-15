@@ -39,7 +39,9 @@ public class CommandConnection {
 
                 final Command command = CommandFactory.parseCommand(recievedMessage);
 
+
                 if(command instanceof AbstractCommand) {
+                    ((AbstractCommand)command).setSender(this);
                     return (AbstractCommand)command;
                 }
 

@@ -21,7 +21,7 @@ public abstract class AbstractCommand implements Command {
         return _sender;
     }
 
-    protected void setSender(CommandConnection sender) {
+    public void setSender(CommandConnection sender) {
         _sender = sender;
     }
 

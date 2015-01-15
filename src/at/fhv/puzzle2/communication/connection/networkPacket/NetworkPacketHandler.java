@@ -27,25 +27,27 @@ public class NetworkPacketHandler {
     }
 
     public String receiveMessage() throws IOException {
-        NetworkPacket packet = readMessage();
+        while(true) {
+            NetworkPacket packet = readMessage();
 
-        if(packet.getNetworkFlags() != null) {
-            //So it should be an acknowledge, an error or the connection gets closed
-            if(packet.getNetworkFlags().isAcknowledgePresent()) {
-                NetworkPacketManager.getInstance().receivedAcknowledge(packet);
+            if(packet.getNetworkFlags() != null) {
+                //So it should be an acknowledge, an error or the connection gets closed
+                if(packet.getNetworkFlags().isAcknowledgePresent()) {
+                    NetworkPacketManager.getInstance().receivedAcknowledge(packet);
 
-            } else if(packet.getNetworkFlags().isClosePresent() && packet.getNetworkFlags().getClose()) {
-                _networkConnection.close();
+                } else if(packet.getNetworkFlags().isClosePresent() && packet.getNetworkFlags().getClose()) {
+                    _networkConnection.close();
+                }
+            } else {
+                NetworkPacketFlags flags = new NetworkPacketFlags();
+                flags.setAcknowledge(true);
+
+                NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
+                _networkConnection.sendBytes(response.getBytes());
+
+                return packet.getApplicationMessage();
             }
-        } else {
-            NetworkPacketFlags flags = new NetworkPacketFlags();
-            flags.setAcknowledge(true);
-
-            NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
-            _networkConnection.sendBytes(response.getBytes());
         }
-
-        return packet.getApplicationMessage();
     }
 
     private NetworkPacket readMessage() throws IOException {

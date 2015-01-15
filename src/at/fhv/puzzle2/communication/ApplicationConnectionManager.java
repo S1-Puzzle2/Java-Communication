@@ -28,7 +28,7 @@ public class ApplicationConnectionManager {
         }
     }
 
-    public void connectionClosed(CommandConnection connection) {
+    public synchronized void connectionClosed(CommandConnection connection) {
         //Close the listener now
         for(int i = 0; i < _listenerList.size(); i++) {
             CommandListener listener = _listenerList.get(i);
@@ -40,7 +40,7 @@ public class ApplicationConnectionManager {
                     //We dont care about it now, we close the listener anyway
                 }
 
-                _listenerList.remove(i);
+                //_listenerList.remove(i);
 
                 break;
             }
