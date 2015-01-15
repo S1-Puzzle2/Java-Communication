@@ -1,6 +1,9 @@
-package at.fhv.puzzle2.communication.application.command;
+package at.fhv.puzzle2.communication.application.command.commands;
 
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
+import at.fhv.puzzle2.communication.application.command.Command;
+import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
+import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
 import org.json.simple.JSONValue;
 
 import java.util.HashMap;
@@ -17,10 +20,10 @@ public class MalformedCommand implements Command {
         HashMap<String, Object> command = new LinkedHashMap<>();
         HashMap<String, Object> data = new LinkedHashMap<>();
 
-        command.put("msgType", "MALFORMED_COMMAND");
+        command.put(CommandConstants.MESSAGE_TYPE, CommandTypeConstants.MALFORMED_COMMAND_MESSAGE);
 
-        data.put("message", _applicationMessage.getMessage());
-        command.put("msgData", data);
+        data.put(CommandConstants.APPLICATION_MESSAGE, _applicationMessage.getMessage());
+        command.put(CommandConstants.MESSAGE_DATA, data);
 
         return JSONValue.toJSONString(command);
     }

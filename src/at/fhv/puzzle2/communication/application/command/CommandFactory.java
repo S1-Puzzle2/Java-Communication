@@ -1,7 +1,12 @@
 package at.fhv.puzzle2.communication.application.command;
 
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
+import at.fhv.puzzle2.communication.application.command.commands.MalformedCommand;
+import at.fhv.puzzle2.communication.application.command.commands.UnknownCommand;
+import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.parser.CommandParser;
+import at.fhv.puzzle2.communication.application.command.parser.GetGameStateCommandParser;
+import at.fhv.puzzle2.communication.application.command.parser.ReadyCommandParser;
 import at.fhv.puzzle2.communication.application.command.parser.RegisterCommandParser;
 import org.json.simple.JSONValue;
 
@@ -15,18 +20,20 @@ public class CommandFactory {
 
     static {
         _parserList.add(new RegisterCommandParser());
+        _parserList.add(new ReadyCommandParser());
+        _parserList.add(new GetGameStateCommandParser());
     }
 
     public static Command parseCommand(ApplicationMessage message) {
         try {
             HashMap<String, Object> messageData = (HashMap<String, Object>) JSONValue.parse(message.getMessage());
 
-            if(!messageData.containsKey("msgType")) {
+            if(!messageData.containsKey(CommandConstants.MESSAGE_TYPE)) {
                 return new MalformedCommand(message);
             }
 
             Optional<CommandParser> optionalParser = _parserList.stream()
-                    .filter(parser -> parser.canProcessMessage((String)messageData.get("msgType")))
+                    .filter(parser -> parser.canProcessMessage((String)messageData.get(CommandConstants.MESSAGE_TYPE)))
                     .findFirst();
 
             if(optionalParser.isPresent()) {
