@@ -10,6 +10,12 @@ public class GetPuzzlePartCommand extends AbstractCommand {
         super(clientID, CommandTypeConstants.GET_PUZZLE_PART_MESSAGE);
     }
 
+    public GetPuzzlePartCommand(GetPuzzlePartCommand getPuzzlePartCommand, String clientID) {
+        super(clientID, getPuzzlePartCommand.getMessageType());
+
+        _puzzlePartID = getPuzzlePartCommand.getPuzzlePartID();
+    }
+
     public void setPuzzlePartID(int id) {
         _puzzlePartID = id;
     }
@@ -21,5 +27,10 @@ public class GetPuzzlePartCommand extends AbstractCommand {
     @Override
     public String toJSONString() {
         return null;
+    }
+
+    @Override
+    public AbstractCommand createCopyWithDiffClientID(String clientID) {
+        return new GetPuzzlePartCommand(this, clientID);
     }
 }

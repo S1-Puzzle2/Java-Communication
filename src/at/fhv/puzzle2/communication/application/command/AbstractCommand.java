@@ -43,4 +43,6 @@ public abstract class AbstractCommand implements Command {
 
         return JSONValue.toJSONString(message);
     }
+
+    public abstract AbstractCommand createCopyWithDiffClientID(String clientID);
 }

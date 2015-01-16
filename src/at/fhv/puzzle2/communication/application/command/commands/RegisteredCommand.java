@@ -14,6 +14,12 @@ public class RegisteredCommand extends AbstractCommand {
         super(playerID, CommandTypeConstants.REGISTERED_MESSAGE);
     }
 
+    public RegisteredCommand(RegisteredCommand registeredCommand, String clientID) {
+        super(clientID, registeredCommand.getMessageType());
+
+        _registered = registeredCommand.getRegistered();
+    }
+
     public void setRegistered(boolean registered) {
         _registered = registered;
     }
@@ -28,5 +34,10 @@ public class RegisteredCommand extends AbstractCommand {
         messageData.put(CommandConstants.SUCCESS, _registered);
 
         return this.createJSONString(messageData);
+    }
+
+    @Override
+    public AbstractCommand createCopyWithDiffClientID(String clientID) {
+        return new RegisteredCommand(this, clientID);
     }
 }

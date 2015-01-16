@@ -10,8 +10,17 @@ public class PauseCommand extends AbstractCommand {
         super(clientID, CommandTypeConstants.PAUSE_MESSAGE);
     }
 
+    public PauseCommand(PauseCommand pauseCommand, String clientID) {
+        super(clientID, pauseCommand.getMessageType());
+    }
+
     @Override
     public String toJSONString() {
         return createJSONString(new LinkedHashMap<>());
+    }
+
+    @Override
+    public AbstractCommand createCopyWithDiffClientID(String clientID) {
+        return new PauseCommand(this, clientID);
     }
 }

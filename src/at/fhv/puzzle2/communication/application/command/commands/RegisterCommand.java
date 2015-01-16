@@ -29,4 +29,9 @@ public class RegisterCommand extends AbstractCommand {
 
         return this.createJSONString(messageData);
     }
+
+    @Override
+    public AbstractCommand createCopyWithDiffClientID(String clientID) {
+        return null;
+    }
 }

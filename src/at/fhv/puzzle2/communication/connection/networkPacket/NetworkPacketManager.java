@@ -26,7 +26,7 @@ public class NetworkPacketManager implements Runnable {
         _localThread.start();
     }
 
-    private volatile boolean _isRunning;
+    private volatile boolean _isRunning = false;
     @Override
     public void run() {
         while(_isRunning) {

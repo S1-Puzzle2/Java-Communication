@@ -20,6 +20,15 @@ public class GameStateResponseCommand extends AbstractCommand {
         _puzzlePartList = new ArrayList<>();
     }
 
+    private GameStateResponseCommand(GameStateResponseCommand command, String clientID) {
+        super(clientID, command.getMessageType());
+
+        _teamName = command.getTeamName();
+        _gameName = command.getGameName();
+
+        _puzzlePartList = command._puzzlePartList;
+    }
+
     public String getTeamName() {
         return _teamName;
     }
@@ -48,5 +57,10 @@ public class GameStateResponseCommand extends AbstractCommand {
         messageData.put("puzzleParts", _puzzlePartList);
 
         return this.createJSONString(messageData);
+    }
+
+    @Override
+    public AbstractCommand createCopyWithDiffClientID(String clientID) {
+        return new GameStateResponseCommand(this, clientID);
     }
 }
