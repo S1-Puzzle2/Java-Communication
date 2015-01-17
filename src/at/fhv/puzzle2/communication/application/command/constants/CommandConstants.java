@@ -13,4 +13,7 @@ public class CommandConstants {
 
     //Registered-Command
     public static final String SUCCESS = "success";
+
+    //GetPuzzlePart-Command
+    public static final String PUZZLE_PART_ID = "puzzlePartID";
 }

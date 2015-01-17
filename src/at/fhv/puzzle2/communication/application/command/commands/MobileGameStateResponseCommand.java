@@ -1,27 +1,28 @@
 package at.fhv.puzzle2.communication.application.command.commands;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
-import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
+import at.fhv.puzzle2.communication.ClientID;
+import at.fhv.puzzle2.communication.application.command.Response;
+import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class GameStateResponseCommand extends AbstractCommand {
+public class MobileGameStateResponseCommand extends Response {
     private String _teamName;
     private String _gameName;
 
     private List<Integer> _puzzlePartList;
 
-    public GameStateResponseCommand(String clientID) {
-        super(clientID, CommandTypeConstants.GAME_STATE_RESPONSE_MESSAGE);
+    public MobileGameStateResponseCommand(ClientID clientID) {
+        super(clientID, CommandType.MobileGameStateResponse);
 
         _puzzlePartList = new ArrayList<>();
     }
 
-    private GameStateResponseCommand(GameStateResponseCommand command, String clientID) {
-        super(clientID, command.getMessageType());
+    private MobileGameStateResponseCommand(MobileGameStateResponseCommand command, ClientID clientID) {
+        super(clientID, command.getCommandType());
 
         _teamName = command.getTeamName();
         _gameName = command.getGameName();
@@ -60,7 +61,7 @@ public class GameStateResponseCommand extends AbstractCommand {
     }
 
     @Override
-    public AbstractCommand createCopyWithDiffClientID(String clientID) {
-        return new GameStateResponseCommand(this, clientID);
+    public Response createCopyWithDifferentClientID(ClientID clientID) {
+        return new MobileGameStateResponseCommand(this, clientID);
     }
 }

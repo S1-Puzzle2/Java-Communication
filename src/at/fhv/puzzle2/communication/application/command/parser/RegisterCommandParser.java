@@ -1,12 +1,13 @@
 package at.fhv.puzzle2.communication.application.command.parser;
 
-import at.fhv.puzzle2.communication.application.command.*;
+import at.fhv.puzzle2.communication.ClientID;
+import at.fhv.puzzle2.communication.application.command.Command;
+import at.fhv.puzzle2.communication.application.command.MalformedCommandException;
 import at.fhv.puzzle2.communication.application.command.commands.RegisterCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
-import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
+import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class RegisterCommandParser extends CommandParser {
 
@@ -16,13 +17,13 @@ public class RegisterCommandParser extends CommandParser {
 
     @Override
     public boolean canProcessMessage(String messageType) {
-        return Objects.equals(messageType, CommandTypeConstants.REGISTER_MESSAGE);
+        return CommandType.Register.isRightType(messageType);
     }
 
     @Override
-    public AbstractCommand parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+    public Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
         try {
-            RegisterCommand registerCommand = new RegisterCommand(clientID);
+            RegisterCommand registerCommand = new RegisterCommand(new ClientID(clientID));
             registerCommand.setClientType((String) messageData.get(CommandConstants.CLIENT_TYPE));
 
             return registerCommand;

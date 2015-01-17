@@ -1,21 +1,22 @@
 package at.fhv.puzzle2.communication.application.command.commands;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.ClientID;
+import at.fhv.puzzle2.communication.application.command.Response;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
-import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
+import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class RegisteredCommand extends AbstractCommand {
+public class RegisteredCommand extends Response {
     private boolean _registered;
 
-    public RegisteredCommand(String playerID) {
-        super(playerID, CommandTypeConstants.REGISTERED_MESSAGE);
+    public RegisteredCommand(ClientID playerID) {
+        super(playerID, CommandType.Registered);
     }
 
-    public RegisteredCommand(RegisteredCommand registeredCommand, String clientID) {
-        super(clientID, registeredCommand.getMessageType());
+    public RegisteredCommand(RegisteredCommand registeredCommand, ClientID clientID) {
+        super(clientID, registeredCommand.getCommandType());
 
         _registered = registeredCommand.getRegistered();
     }
@@ -37,7 +38,7 @@ public class RegisteredCommand extends AbstractCommand {
     }
 
     @Override
-    public AbstractCommand createCopyWithDiffClientID(String clientID) {
+    public Response createCopyWithDifferentClientID(ClientID clientID) {
         return new RegisteredCommand(this, clientID);
     }
 }

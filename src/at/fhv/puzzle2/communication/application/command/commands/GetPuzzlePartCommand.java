@@ -1,17 +1,22 @@
 package at.fhv.puzzle2.communication.application.command.commands;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
-import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
+import at.fhv.puzzle2.communication.ClientID;
+import at.fhv.puzzle2.communication.application.command.Command;
+import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
+import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
-public class GetPuzzlePartCommand extends AbstractCommand {
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+public class GetPuzzlePartCommand extends Command {
     private int _puzzlePartID;
 
-    public GetPuzzlePartCommand(String clientID) {
-        super(clientID, CommandTypeConstants.GET_PUZZLE_PART_MESSAGE);
+    public GetPuzzlePartCommand(ClientID clientID) {
+        super(clientID, CommandType.GetPuzzlePart);
     }
 
-    public GetPuzzlePartCommand(GetPuzzlePartCommand getPuzzlePartCommand, String clientID) {
-        super(clientID, getPuzzlePartCommand.getMessageType());
+    public GetPuzzlePartCommand(GetPuzzlePartCommand getPuzzlePartCommand, ClientID clientID) {
+        super(clientID, getPuzzlePartCommand.getCommandType());
 
         _puzzlePartID = getPuzzlePartCommand.getPuzzlePartID();
     }
@@ -26,11 +31,9 @@ public class GetPuzzlePartCommand extends AbstractCommand {
 
     @Override
     public String toJSONString() {
-        return null;
-    }
+        HashMap<String, Object> messageData = new LinkedHashMap<>();
+        messageData.put(CommandConstants.PUZZLE_PART_ID, _puzzlePartID);
 
-    @Override
-    public AbstractCommand createCopyWithDiffClientID(String clientID) {
-        return new GetPuzzlePartCommand(this, clientID);
+        return this.createJSONString(messageData);
     }
 }

@@ -1,7 +1,7 @@
 package at.fhv.puzzle2.communication.application.listener;
 
 import at.fhv.puzzle2.communication.ApplicationConnectionManager;
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class CommandListener implements Runnable {
     @Override
     public void run() {
         while(_isRunning) {
-            AbstractCommand command = _connection.receiveCommand();
+            Command command = _connection.receiveCommand();
 
             if(command != null) {
                 _connectionManager.commandRecieved(command);

@@ -1,7 +1,5 @@
 package at.fhv.puzzle2.communication.connection;
 
-import at.fhv.puzzle2.communication.ConnectionClosedException;
-
 import java.io.IOException;
 
 public interface NetworkConnection {

@@ -1,5 +1,5 @@
 import at.fhv.puzzle2.communication.CommunicationManager;
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.connection.protocoll.ethernet.tcp.TCPEndpoint;
@@ -46,7 +46,7 @@ public class Main implements NewConnectionObserver, MessageReceivedObserver {
     @Override
     public void messageReceived(CommandReceivedObservable commandReceivedObservable) {
         System.out.println("Command received!!!");
-        commandReceivedObservable.getMessageList().forEach(AbstractCommand::toJSONString);
+        commandReceivedObservable.getMessageList().forEach(Command::toJSONString);
     }
 
     class ClosedConnectionObserving implements ClosedConnectionObserver {

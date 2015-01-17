@@ -1,6 +1,6 @@
 package at.fhv.puzzle2.communication;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.Base64ApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.BaseApplicationConnection;
@@ -8,11 +8,11 @@ import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.application.connection.encryption.EncryptedApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.encryption.Encryption;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
-import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 import at.fhv.puzzle2.communication.connection.endpoint.DiscoverableEndPoint;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
-import at.fhv.puzzle2.communication.observable.ConnectionObservable;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 import at.fhv.puzzle2.communication.observable.CommandReceivedObservable;
+import at.fhv.puzzle2.communication.observable.ConnectionObservable;
 import at.fhv.puzzle2.communication.observer.ClosedConnectionObserver;
 import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 import at.fhv.puzzle2.communication.observer.NewConnectionObserver;
@@ -109,7 +109,7 @@ public class CommunicationManager {
         return _commandReceivedObservable.removeObserver(observable);
     }
 
-    protected void commandRecieved(AbstractCommand message) {
+    protected void commandRecieved(Command message) {
         _commandReceivedObservable.appendMessage(message);
     }
 

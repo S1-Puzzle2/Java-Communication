@@ -1,13 +1,13 @@
 package at.fhv.puzzle2.communication.application.command.parser;
 
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
-import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
+import at.fhv.puzzle2.communication.ClientID;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.MalformedCommandException;
 import at.fhv.puzzle2.communication.application.command.commands.ReadyCommand;
+import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class ReadyCommandParser extends CommandParser {
     public ReadyCommandParser() {
@@ -16,11 +16,11 @@ public class ReadyCommandParser extends CommandParser {
 
     @Override
     public boolean canProcessMessage(String messageType) {
-        return Objects.equals(messageType, CommandTypeConstants.READY_MESSAGE);
+        return CommandType.Ready.isRightType(messageType);
     }
 
     @Override
-    public AbstractCommand parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
-        return new ReadyCommand(clientID);
+    public Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+        return new ReadyCommand(new ClientID(clientID));
     }
 }

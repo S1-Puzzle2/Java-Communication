@@ -1,8 +1,8 @@
 package at.fhv.puzzle2.communication.application.command.parser;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
-import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.MalformedCommandException;
+import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -14,9 +14,9 @@ public abstract class CommandParser {
         _omitMessageDataAllowed = omitMessageDataAllowed;
     }
     public abstract boolean canProcessMessage(String messageType);
-    protected abstract AbstractCommand parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException;
+    protected abstract Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException;
 
-    public AbstractCommand parseCommand(HashMap<String, Object> message) throws  MalformedCommandException {
+    public Command parseCommand(HashMap<String, Object> message) throws  MalformedCommandException {
         try {
             boolean containsMessageData = message.containsKey(CommandConstants.MESSAGE_DATA);
             if(!_omitMessageDataAllowed && !containsMessageData) {

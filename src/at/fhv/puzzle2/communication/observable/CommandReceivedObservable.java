@@ -1,6 +1,6 @@
 package at.fhv.puzzle2.communication.observable;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 
 import java.util.Collections;
@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class CommandReceivedObservable {
     private List<MessageReceivedObserver> _observerList;
-    private BlockingQueue<AbstractCommand> _messageQueue;
+    private BlockingQueue<Command> _messageQueue;
 
     public CommandReceivedObservable() {
         _observerList = Collections.synchronizedList(new LinkedList<>());
@@ -27,7 +27,7 @@ public class CommandReceivedObservable {
         return _observerList.remove(observer);
     }
 
-    public void appendMessage(AbstractCommand message) {
+    public void appendMessage(Command message) {
         _messageQueue.add(message);
 
         _observerList.forEach(listener -> notifyInThread(listener::messageReceived));
@@ -45,8 +45,8 @@ public class CommandReceivedObservable {
         new Thread(runnable).start();
     }
 
-    public List<AbstractCommand> getMessageList() {
-        List<AbstractCommand> tmpList = _messageQueue.stream().collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
+    public List<Command> getMessageList() {
+        List<Command> tmpList = _messageQueue.stream().collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
 
         _messageQueue.clear();
 

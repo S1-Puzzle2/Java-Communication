@@ -1,7 +1,6 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
 import at.fhv.puzzle2.communication.NetworkConnectionManager;
-import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;

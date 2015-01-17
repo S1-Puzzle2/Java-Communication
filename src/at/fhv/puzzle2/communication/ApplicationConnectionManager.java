@@ -1,6 +1,6 @@
 package at.fhv.puzzle2.communication;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.application.listener.CommandListener;
 
@@ -49,7 +49,7 @@ public class ApplicationConnectionManager {
         _communicationManager.connectionClosed(connection);
     }
 
-    public void commandRecieved(AbstractCommand command) {
+    public void commandRecieved(Command command) {
         _communicationManager.commandRecieved(command);
     }
 }

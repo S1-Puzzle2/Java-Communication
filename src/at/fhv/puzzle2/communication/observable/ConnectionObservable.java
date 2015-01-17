@@ -1,6 +1,5 @@
 package at.fhv.puzzle2.communication.observable;
 
-import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.observer.ConnectionObserver;
 

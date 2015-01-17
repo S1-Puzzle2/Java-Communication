@@ -1,9 +1,12 @@
 package at.fhv.puzzle2.communication.application.connection;
 
 import at.fhv.puzzle2.communication.ApplicationConnectionManager;
-import at.fhv.puzzle2.communication.application.ApplicationMessage;
-import at.fhv.puzzle2.communication.application.command.*;
 import at.fhv.puzzle2.communication.ConnectionClosedException;
+import at.fhv.puzzle2.communication.application.ApplicationMessage;
+import at.fhv.puzzle2.communication.application.command.Command;
+import at.fhv.puzzle2.communication.application.command.CommandFactory;
+import at.fhv.puzzle2.communication.application.command.commands.MalformedCommand;
+import at.fhv.puzzle2.communication.application.command.commands.UnknownCommand;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;
@@ -29,20 +32,18 @@ public class CommandConnection {
         }
     }
 
-    public AbstractCommand receiveCommand() {
+    public Command receiveCommand() {
         while(true) {
             try {
-                final ApplicationMessage recievedMessage = _applicationConnection.receiveMessage();
-                if(recievedMessage == null) {
+                final ApplicationMessage receivedMessage = _applicationConnection.receiveMessage();
+                if(receivedMessage == null) {
                     return null;
                 }
 
-                final Command command = CommandFactory.parseCommand(recievedMessage);
-
-
-                if(command instanceof AbstractCommand) {
-                    ((AbstractCommand)command).setSender(this);
-                    return (AbstractCommand)command;
+                final Command command = CommandFactory.parseCommand(receivedMessage);
+                command.setConnection(this);
+                if(!(command instanceof UnknownCommand || command instanceof MalformedCommand)) {
+                    return command;
                 }
 
                 new Thread(() -> this.sendCommand(command)).start();

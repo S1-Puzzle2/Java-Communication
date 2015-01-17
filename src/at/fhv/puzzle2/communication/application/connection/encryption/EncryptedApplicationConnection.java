@@ -3,7 +3,6 @@ package at.fhv.puzzle2.communication.application.connection.encryption;
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnection;
 import at.fhv.puzzle2.communication.application.connection.ApplicationConnectionDecorator;
-import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

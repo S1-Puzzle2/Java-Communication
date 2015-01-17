@@ -1,12 +1,12 @@
 package at.fhv.puzzle2.communication.application.command.parser;
 
-import at.fhv.puzzle2.communication.application.command.AbstractCommand;
-import at.fhv.puzzle2.communication.application.command.commands.GetGameStateCommand;
+import at.fhv.puzzle2.communication.ClientID;
+import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.MalformedCommandException;
-import at.fhv.puzzle2.communication.application.command.constants.CommandTypeConstants;
+import at.fhv.puzzle2.communication.application.command.commands.GetGameStateCommand;
+import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class GetGameStateCommandParser extends CommandParser {
     public GetGameStateCommandParser() {
@@ -15,11 +15,11 @@ public class GetGameStateCommandParser extends CommandParser {
 
     @Override
     public boolean canProcessMessage(String messageType) {
-        return Objects.equals(messageType, CommandTypeConstants.GET_GAME_STATE_MESSAGE);
+        return CommandType.GetGameState.isRightType(messageType);
     }
 
     @Override
-    protected AbstractCommand parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
-        return new GetGameStateCommand(clientID);
+    protected Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+        return new GetGameStateCommand(new ClientID(clientID));
     }
 }

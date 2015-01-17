@@ -1,7 +1,6 @@
 package at.fhv.puzzle2.communication.connection.listener;
 
 import at.fhv.puzzle2.communication.connection.Broadcast;
-import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.endpoint.DiscoverableEndPoint;
 
 import java.io.IOException;
