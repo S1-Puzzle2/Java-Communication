@@ -20,7 +20,7 @@ public class ReadyCommandParser extends CommandParser {
     }
 
     @Override
-    public Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
-        return new ReadyCommand(new ClientID(clientID));
+    public Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+        return new ReadyCommand(clientID);
     }
 }

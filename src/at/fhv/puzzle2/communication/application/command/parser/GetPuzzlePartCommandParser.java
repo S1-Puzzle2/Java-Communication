@@ -20,8 +20,8 @@ public class GetPuzzlePartCommandParser extends CommandParser {
     }
 
     @Override
-    protected Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
-        GetPuzzlePartCommand command = new GetPuzzlePartCommand(new ClientID(clientID));
+    protected Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+        GetPuzzlePartCommand command = new GetPuzzlePartCommand(clientID);
         command.setPuzzlePartID((Integer) messageData.get("puzzlePartID"));
 
         return command;

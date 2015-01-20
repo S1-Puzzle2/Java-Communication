@@ -19,7 +19,7 @@ public class GetGameStateCommandParser extends CommandParser {
     }
 
     @Override
-    protected Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
-        return new GetGameStateCommand(new ClientID(clientID));
+    protected Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+        return new GetGameStateCommand(clientID);
     }
 }

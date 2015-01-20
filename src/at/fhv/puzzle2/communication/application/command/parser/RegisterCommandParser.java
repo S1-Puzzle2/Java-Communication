@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class RegisterCommandParser extends CommandParser {
 
     public RegisterCommandParser() {
-        super(false);
+        super(false, true);
     }
 
     @Override
@@ -21,9 +21,9 @@ public class RegisterCommandParser extends CommandParser {
     }
 
     @Override
-    public Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
+    public Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
         try {
-            RegisterCommand registerCommand = new RegisterCommand(new ClientID(clientID));
+            RegisterCommand registerCommand = new RegisterCommand(clientID);
             registerCommand.setClientType((String) messageData.get(CommandConstants.CLIENT_TYPE));
 
             return registerCommand;

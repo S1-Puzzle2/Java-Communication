@@ -1,20 +1,29 @@
 package at.fhv.puzzle2.communication.application.command.parser;
 
+import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.MalformedCommandException;
+import at.fhv.puzzle2.communication.application.command.commands.MalformedCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 public abstract class CommandParser {
-    private boolean _omitMessageDataAllowed = false;
+    boolean _omitMessageDataAllowed = false;
+    boolean _clientIDNullAllowed = false;
 
-    protected CommandParser(boolean omitMessageDataAllowed) {
+    protected CommandParser(boolean omitMessageDataAllowed, boolean clientIDNullAllowed) {
         _omitMessageDataAllowed = omitMessageDataAllowed;
+        _clientIDNullAllowed = clientIDNullAllowed;
+    }
+
+    protected CommandParser(boolean _omitMessageDataAllowed) {
+        this(_omitMessageDataAllowed, false);
     }
     public abstract boolean canProcessMessage(String messageType);
-    protected abstract Command parse(String clientID, HashMap<String, Object> messageData) throws MalformedCommandException;
+    protected abstract Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException;
 
     public Command parseCommand(HashMap<String, Object> message) throws  MalformedCommandException {
         try {
@@ -30,7 +39,19 @@ public abstract class CommandParser {
                 messageData = new LinkedHashMap<>();
             }
 
-            return parse((String) message.get(CommandConstants.CLIENT_ID), messageData);
+            String clientIDString =(String) message.get(CommandConstants.CLIENT_ID);
+            ClientID clientID;
+            if(clientIDString == null || clientIDString.isEmpty()) {
+                clientID = null;
+            } else {
+                clientID = new ClientID(UUID.fromString(clientIDString));
+            }
+
+            if(!_clientIDNullAllowed && clientID == null) {
+                throw new MalformedCommandException();
+            }
+
+            return parse(clientID, messageData);
         } catch(Exception e) {
             throw new MalformedCommandException();
         }
