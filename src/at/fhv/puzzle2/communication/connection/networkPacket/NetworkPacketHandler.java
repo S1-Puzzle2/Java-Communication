@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.util.Date;
 
 public class NetworkPacketHandler {
-    private static int _sequenceID = 0;
+    private static int _sequenceID = 2333;
     private NetworkConnection _networkConnection;
 
     public NetworkPacketHandler(NetworkConnection networkConnection) {
@@ -17,12 +17,18 @@ public class NetworkPacketHandler {
 
     public void sendMessage(String message) throws IOException {
         NetworkPacket packet = new NetworkPacket(NetworkPacketHandler.getNextSequenceID(), null, message);
+        sendMessage(packet, true);
+    }
 
+    public void sendMessage(NetworkPacket packet, boolean resend) throws IOException {
         _networkConnection.sendBytes(packet.toJSONString().getBytes(Charset.forName("UTF-8")));
 
-        //Store it inside NetworkPacketManager, which waits for an acknowledge or else sends the message again
-        Date currentDate = new Date();
-        NetworkPacketManager.getInstance().sentNetworkPacket(packet, _networkConnection, currentDate);
+        if(resend) {
+            //Store it inside NetworkPacketManager, which waits for an acknowledge or else sends the message again
+            NetworkPacketManager.getInstance().sentNetworkPacket(packet, this);
+        }
+
+        System.out.println("Sent network packet: " + packet.toJSONString());
     }
 
     public String receiveMessage() throws IOException {
@@ -42,7 +48,7 @@ public class NetworkPacketHandler {
                 flags.setAcknowledge(true);
 
                 NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
-                _networkConnection.sendBytes(response.getBytes());
+                this.sendMessage(response, false);
 
                 return packet.getApplicationMessage();
             }
@@ -54,18 +60,24 @@ public class NetworkPacketHandler {
 
         while(true) {
             try {
-                packet = NetworkPacket.parse(_networkConnection.readBytes());
+                String read = new String(_networkConnection.readBytes(), Charset.forName("UTF-8"));
+                System.out.println("Received network packet: " + read);
+                packet = NetworkPacket.parse(read.getBytes());
 
                 if(packet.checkSumCorrect()) {
                     return packet;
-                } else {
-                    NetworkPacketFlags flags = new NetworkPacketFlags();
-
-                    flags.setAcknowledge(false);
-                    NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
-
-                    _networkConnection.sendBytes(response.getBytes());
                 }
+
+                if(packet.getNetworkFlags() != null) {
+                    continue;
+                }
+
+                NetworkPacketFlags flags = new NetworkPacketFlags();
+
+                flags.setAcknowledge(false);
+                NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
+
+                this.sendMessage(response, false);
             } catch(MalformedNetworkPacketException e) {
                 System.out.println(e.getMessage());
             }

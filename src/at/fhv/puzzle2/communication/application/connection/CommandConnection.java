@@ -10,6 +10,8 @@ import at.fhv.puzzle2.communication.application.command.commands.UnknownCommand;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.util.Objects;
 
 public class CommandConnection {
     private ApplicationConnectionManager _connectionManager;
@@ -24,7 +26,7 @@ public class CommandConnection {
         try {
             _applicationConnection.sendApplicationMessage(new ApplicationMessage(command.toJSONString()));
         } catch (IOException e) {
-            if(e instanceof ConnectionClosedException) {
+            if(e instanceof ConnectionClosedException || e instanceof SocketException) {
                 _connectionManager.connectionClosed(this);
             } else {
                 e.printStackTrace();
@@ -49,7 +51,7 @@ public class CommandConnection {
                 new Thread(() -> this.sendCommand(command)).start();
 
             } catch (IOException e) {
-                if(e instanceof ConnectionClosedException) {
+                if(e instanceof ConnectionClosedException || e instanceof SocketException) {
                     _connectionManager.connectionClosed(this);
                 } else {
                     e.printStackTrace();
@@ -75,6 +77,6 @@ public class CommandConnection {
 
     @Override
     public boolean equals(Object object) {
-        return object instanceof CommandConnection && this.getUnderlyingConnection().equals(((CommandConnection)object).getUnderlyingConnection());
+        return object instanceof CommandConnection && Objects.equals(this.getUnderlyingConnection(), ((CommandConnection)object).getUnderlyingConnection());
     }
 }

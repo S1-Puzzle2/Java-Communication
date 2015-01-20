@@ -9,7 +9,8 @@ public enum CommandType {
     Registered("REGISTERED"), GameStart("GAME_START"), Ready("READY"),
     GetGameState("GET_GAME_STATE"), MobileGameStateResponse("MOBILE_GAME_STATE_RESPONSE"),
     UnityGameStateResponse("UNITY_GAME_STATE_RESPONSE"), GetPuzzlePart("GET_PUZZLE_PART"),
-    Pause("PAUSE");
+    Pause("PAUSE"), BarcodeScanned("BAR_CODE_SCANNED"), NotAllowed("NOT_ALLOWED"),
+    ShowQuestion("SHOW_QUESTION"), SearchPuzzlePart("SEARCH_PUZZLE_PART"), QuestionAnswered("QUESTION_ANSWERED");
 
     private String _type;
     CommandType(String type) {

@@ -3,7 +3,6 @@ package at.fhv.puzzle2.communication.application.command.parser;
 import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.MalformedCommandException;
-import at.fhv.puzzle2.communication.application.command.commands.MalformedCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 
 import java.util.HashMap;

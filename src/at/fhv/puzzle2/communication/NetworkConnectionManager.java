@@ -54,6 +54,6 @@ public class NetworkConnectionManager implements Runnable {
     }
 
     public void connectionClosed(NetworkConnection connection) {
-
+        _communicationManager.connectionClosed(connection);
     }
 }

@@ -5,9 +5,6 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 public class GetPuzzlePartCommand extends Command {
     private int _puzzlePartID;
 
@@ -31,9 +28,8 @@ public class GetPuzzlePartCommand extends Command {
 
     @Override
     public String toJSONString() {
-        HashMap<String, Object> messageData = new LinkedHashMap<>();
-        messageData.put(CommandConstants.PUZZLE_PART_ID, _puzzlePartID);
+        _messageData.put(CommandConstants.PUZZLE_PART_ID, _puzzlePartID);
 
-        return this.createJSONString(messageData);
+        return super.toJSONString();
     }
 }

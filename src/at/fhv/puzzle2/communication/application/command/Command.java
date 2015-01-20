@@ -14,16 +14,20 @@ import java.util.LinkedHashMap;
 public abstract class Command implements JSONAware {
     private CommandConnection _connection;
 
-    private ClientID _clientID = null;
+    private ClientID _clientID;
     private final CommandType _commandType;
 
+    protected HashMap<String, Object> _messageData;
+
     protected Command(ClientID clientID, CommandType commandType) {
+        _messageData = new LinkedHashMap<>();
+
         _clientID = clientID;
         _commandType = commandType;
     }
 
-    protected Command(CommandType messageType) {
-        _commandType = messageType;
+    protected Command(CommandType commandType) {
+        this(null, commandType);
     }
 
     public void setConnection(CommandConnection connection) {
@@ -42,17 +46,18 @@ public abstract class Command implements JSONAware {
         return _commandType;
     }
 
-    protected String createJSONString(HashMap<String, Object> messageData) {
+    @Override
+    public String toJSONString() {
         HashMap<String, Object> message = new LinkedHashMap<>();
 
-        if(_clientID == null) {
+        if (_clientID == null) {
             message.put(CommandConstants.CLIENT_ID, null);
         } else {
             message.put(CommandConstants.CLIENT_ID, _clientID.toString());
         }
         message.put(CommandConstants.MESSAGE_TYPE, _commandType.getTypeString());
 
-        message.put(CommandConstants.MESSAGE_DATA, messageData);
+        message.put(CommandConstants.MESSAGE_DATA, _messageData);
 
         return JSONValue.toJSONString(message);
     }

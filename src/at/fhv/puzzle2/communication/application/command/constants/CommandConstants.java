@@ -16,4 +16,12 @@ public class CommandConstants {
 
     //GetPuzzlePart-Command
     public static final String PUZZLE_PART_ID = "puzzlePartID";
+    public static final String BAR_CODE = "barCode";
+    public static final String NOT_ALLOWED_COMMAND_TYPE = "notAllowedCommandType";
+
+    //ShowQuestion-Command
+    public static final String QUESTION_ID = "questionID";
+    public static final String QUESTION_TEXT = "questionText";
+    public static final String QUESTION_ANSWERS = "questionAnswers";
+    public static final String ANSWER_ID = "answerID";
 }

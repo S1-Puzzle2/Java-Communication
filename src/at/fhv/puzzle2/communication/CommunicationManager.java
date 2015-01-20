@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class CommunicationManager {
     private List<CommandConnection> _connectionList;
@@ -132,10 +133,9 @@ public class CommunicationManager {
 
     protected void connectionClosed(CommandConnection connection) {
         boolean found = false;
-        for(int i = 0; i < _connectionList.size(); i++) {
-            if(_connectionList.get(i).equals(connection)) {
-                _connectionList.remove(i);
-
+        int i;
+        for(i = 0; i < _connectionList.size(); i++) {
+            if(Objects.equals(_connectionList.get(i), (connection))) {
                 found = true;
                 break;
             }
@@ -143,6 +143,7 @@ public class CommunicationManager {
 
         //Its possible, that we receive 2 different connection closed events for a single connection, so only propagate one
         if(found) {
+            _connectionList.remove(i);
             _closedConnectionObservable.appendConnection(connection);
         }
     }

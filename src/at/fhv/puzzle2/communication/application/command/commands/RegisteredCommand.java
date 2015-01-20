@@ -1,14 +1,12 @@
 package at.fhv.puzzle2.communication.application.command.commands;
 
 import at.fhv.puzzle2.communication.ClientID;
-import at.fhv.puzzle2.communication.application.command.Response;
+import at.fhv.puzzle2.communication.application.command.Command;
+import at.fhv.puzzle2.communication.application.command.MultipleReceiversCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-public class RegisteredCommand extends Response {
+public class RegisteredCommand extends Command implements MultipleReceiversCommand {
     private boolean _registered;
 
     public RegisteredCommand(ClientID playerID) {
@@ -31,14 +29,13 @@ public class RegisteredCommand extends Response {
 
     @Override
     public String toJSONString() {
-        HashMap<String, Object> messageData = new LinkedHashMap<>();
-        messageData.put(CommandConstants.SUCCESS, _registered);
+        _messageData.put(CommandConstants.SUCCESS, _registered);
 
-        return this.createJSONString(messageData);
+        return super.toJSONString();
     }
 
     @Override
-    public Response createCopyWithDifferentClientID(ClientID clientID) {
+    public Command createCopyWithDifferentClientID(ClientID clientID) {
         return new RegisteredCommand(this, clientID);
     }
 }

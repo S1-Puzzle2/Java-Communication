@@ -1,15 +1,14 @@
 package at.fhv.puzzle2.communication.application.command.commands;
 
 import at.fhv.puzzle2.communication.ClientID;
-import at.fhv.puzzle2.communication.application.command.Response;
+import at.fhv.puzzle2.communication.application.command.Command;
+import at.fhv.puzzle2.communication.application.command.MultipleReceiversCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MobileGameStateResponseCommand extends Response {
+public class MobileGameStateResponseCommand extends Command implements MultipleReceiversCommand {
     private String _teamName;
     private String _gameName;
 
@@ -52,16 +51,15 @@ public class MobileGameStateResponseCommand extends Response {
 
     @Override
     public String toJSONString() {
-        HashMap<String, Object> messageData = new LinkedHashMap<>();
-        messageData.put("teamName", _teamName);
-        messageData.put("gameName", _gameName);
-        messageData.put("puzzleParts", _puzzlePartList);
+        _messageData.put("teamName", _teamName);
+        _messageData.put("gameName", _gameName);
+        _messageData.put("puzzleParts", _puzzlePartList);
 
-        return this.createJSONString(messageData);
+        return super.toJSONString();
     }
 
     @Override
-    public Response createCopyWithDifferentClientID(ClientID clientID) {
+    public Command createCopyWithDifferentClientID(ClientID clientID) {
         return new MobileGameStateResponseCommand(this, clientID);
     }
 }

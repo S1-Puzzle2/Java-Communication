@@ -20,6 +20,9 @@ public class CommandFactory {
         _parserList.add(new ReadyCommandParser());
         _parserList.add(new GetGameStateCommandParser());
         _parserList.add(new GetPuzzlePartCommandParser());
+        _parserList.add(new RegisteredCommandParser());
+        _parserList.add(new BarcodeScannedCommandParser());
+        _parserList.add(new QuestionAnsweredCommandParser());
     }
 
     public static Command parseCommand(ApplicationMessage message) {
