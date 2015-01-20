@@ -17,10 +17,6 @@ public enum CommandType {
         _type = type;
     }
 
-    public String getTypeString() {
-        return _type;
-    }
-
     public boolean isRightType(String commandType) {
         return Objects.equals(_type, commandType);
     }
@@ -29,7 +25,7 @@ public enum CommandType {
     private static final HashMap<String, CommandType> _typeList = new LinkedHashMap<>();
     static {
         for(CommandType type : values()) {
-            _typeList.put(type.getTypeString(), type);
+            _typeList.put(type.toString(), type);
         }
     }
 
@@ -39,5 +35,10 @@ public enum CommandType {
         }
 
         return Unknown;
+    }
+
+    @Override
+    public String toString() {
+        return _type;
     }
 }

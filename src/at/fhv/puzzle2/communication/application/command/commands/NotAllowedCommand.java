@@ -18,7 +18,7 @@ public class NotAllowedCommand extends Command {
 
     @Override
     public String toJSONString() {
-        _messageData.put(CommandConstants.NOT_ALLOWED_COMMAND_TYPE, _commandType.getTypeString());
+        _messageData.put(CommandConstants.NOT_ALLOWED_COMMAND_TYPE, _commandType.toString());
 
         return  super.toJSONString();
     }

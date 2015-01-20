@@ -55,7 +55,7 @@ public abstract class Command implements JSONAware {
         } else {
             message.put(CommandConstants.CLIENT_ID, _clientID.toString());
         }
-        message.put(CommandConstants.MESSAGE_TYPE, _commandType.getTypeString());
+        message.put(CommandConstants.MESSAGE_TYPE, _commandType.toString());
 
         message.put(CommandConstants.MESSAGE_DATA, _messageData);
 
