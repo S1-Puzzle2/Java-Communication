@@ -1,8 +1,8 @@
 package at.fhv.puzzle2.communication.application.command;
 
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
-import at.fhv.puzzle2.communication.application.command.commands.MalformedCommand;
-import at.fhv.puzzle2.communication.application.command.commands.UnknownCommand;
+import at.fhv.puzzle2.communication.application.command.commands.error.MalformedCommand;
+import at.fhv.puzzle2.communication.application.command.commands.error.UnknownCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.parser.*;
 import org.json.simple.JSONValue;

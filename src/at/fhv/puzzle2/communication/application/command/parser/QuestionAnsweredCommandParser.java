@@ -10,10 +10,6 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import java.util.HashMap;
 
 public class QuestionAnsweredCommandParser extends CommandParser {
-    public QuestionAnsweredCommandParser() {
-        super(false);
-    }
-
     @Override
     public boolean canProcessMessage(String messageType) {
         return CommandType.QuestionAnswered.isRightType(messageType);

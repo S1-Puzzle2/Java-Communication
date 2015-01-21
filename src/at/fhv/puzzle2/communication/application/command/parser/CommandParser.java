@@ -21,6 +21,10 @@ public abstract class CommandParser {
     protected CommandParser(boolean _omitMessageDataAllowed) {
         this(_omitMessageDataAllowed, false);
     }
+
+    protected CommandParser() {
+        this(false, false);
+    }
     public abstract boolean canProcessMessage(String messageType);
     protected abstract Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException;
 

@@ -5,8 +5,8 @@ import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.CommandFactory;
-import at.fhv.puzzle2.communication.application.command.commands.MalformedCommand;
-import at.fhv.puzzle2.communication.application.command.commands.UnknownCommand;
+import at.fhv.puzzle2.communication.application.command.commands.error.MalformedCommand;
+import at.fhv.puzzle2.communication.application.command.commands.error.UnknownCommand;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;

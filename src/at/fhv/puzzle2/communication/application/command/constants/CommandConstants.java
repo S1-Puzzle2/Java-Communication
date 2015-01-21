@@ -24,4 +24,8 @@ public class CommandConstants {
     public static final String QUESTION_TEXT = "questionText";
     public static final String QUESTION_ANSWERS = "questionAnswers";
     public static final String ANSWER_ID = "answerID";
+
+    public static final String IS_CORRECT = "isCorrect";
+    public static final String UNLOCKED_PARTS = "unlockedParts";
+    public static final String PUZZLE_LIST = "puzzleList";
 }

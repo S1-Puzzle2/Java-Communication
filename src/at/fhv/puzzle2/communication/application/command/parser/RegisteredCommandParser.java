@@ -10,9 +10,6 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import java.util.HashMap;
 
 public class RegisteredCommandParser extends CommandParser {
-    public RegisteredCommandParser() {
-        super(false, false);
-    }
     @Override
     public boolean canProcessMessage(String messageType) {
         return CommandType.Registered.isRightType(messageType);

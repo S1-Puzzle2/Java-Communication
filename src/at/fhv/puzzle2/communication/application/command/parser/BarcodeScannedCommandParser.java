@@ -10,10 +10,6 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import java.util.HashMap;
 
 public class BarcodeScannedCommandParser extends CommandParser {
-    public BarcodeScannedCommandParser() {
-        super(false);
-    }
-
     @Override
     public boolean canProcessMessage(String messageType) {
         return CommandType.BarcodeScanned.isRightType(messageType);
