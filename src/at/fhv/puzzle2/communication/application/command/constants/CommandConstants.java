@@ -15,7 +15,7 @@ public class CommandConstants {
     public static final String SUCCESS = "success";
 
     //GetPuzzlePart-Command
-    public static final String PUZZLE_PART_ID = "puzzlePartID";
+    public static final String PUZZLE_PART_ID = "imageID";
     public static final String BAR_CODE = "barCode";
     public static final String NOT_ALLOWED_COMMAND_TYPE = "notAllowedCommandType";
 
@@ -28,7 +28,9 @@ public class CommandConstants {
     public static final String IS_CORRECT = "isCorrect";
     public static final String UNLOCKED_PARTS = "unlockedParts";
     public static final String PUZZLE_LIST = "puzzleList";
-    public static final String PUZZLE_NAME = "puzzleName";
+    public static final String PUZZLE_NAME = "gameName";
     public static final String TEAM_NAME = "teamName";
-    public static final String PUZZLE_PARTS_LIST = "puzzlePartsList";
+    public static final String PUZZLE_PARTS_LIST = "imageIDs";
+    public static final String IMAGE = "base64Image";
+    public static final String QR_CODE = "qrCode";
 }

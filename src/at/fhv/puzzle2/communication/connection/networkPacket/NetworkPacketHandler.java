@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.util.Date;
 
 public class NetworkPacketHandler {
-    private static int _sequenceID = 2333;
+    private volatile static int _sequenceID = 2333;
     private NetworkConnection _networkConnection;
 
     public NetworkPacketHandler(NetworkConnection networkConnection) {
