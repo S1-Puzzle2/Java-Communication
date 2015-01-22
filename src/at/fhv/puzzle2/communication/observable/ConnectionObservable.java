@@ -49,7 +49,7 @@ public class ConnectionObservable<T extends ConnectionObserver> {
         new Thread(runnable).start();
     }
 
-    public List<CommandConnection> getConnectionList() {
+    public synchronized List<CommandConnection> getConnectionList() {
         List<CommandConnection> tmpList = _connectionQueue.stream().collect(toCollection(LinkedList::new));
 
         _connectionQueue.clear();

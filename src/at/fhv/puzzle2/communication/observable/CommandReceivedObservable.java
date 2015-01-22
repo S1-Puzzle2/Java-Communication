@@ -45,7 +45,7 @@ public class CommandReceivedObservable {
         new Thread(runnable).start();
     }
 
-    public List<Command> getMessageList() {
+    public synchronized List<Command> getMessageList() {
         List<Command> tmpList = _messageQueue.stream().collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
 
         _messageQueue.clear();
