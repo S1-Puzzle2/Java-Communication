@@ -28,4 +28,7 @@ public class CommandConstants {
     public static final String IS_CORRECT = "isCorrect";
     public static final String UNLOCKED_PARTS = "unlockedParts";
     public static final String PUZZLE_LIST = "puzzleList";
+    public static final String PUZZLE_NAME = "puzzleName";
+    public static final String TEAM_NAME = "teamName";
+    public static final String PUZZLE_PARTS_LIST = "puzzlePartsList";
 }

@@ -4,7 +4,7 @@ import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class AnswerCorrectCommand extends IsCorrectCommand {
-    protected AnswerCorrectCommand(ClientID clientID) {
+    public AnswerCorrectCommand(ClientID clientID) {
         super(clientID, CommandType.AnswerCorrect);
     }
 }

@@ -13,7 +13,7 @@ public enum CommandType {
     ShowQuestion("SHOW_QUESTION"), SearchPuzzlePart("SEARCH_PUZZLE_PART"),
     QuestionAnswered("QUESTION_ANSWERED"), BarcodeCorrect("BARCODE_CORRECT"),
     AnswerCorrect("ANSWER_CORRECT"), PartsUnlocked("PARTS_UNLOCKED"), PuzzleFinished("PUZZLE_FINISHED"),
-    PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR");
+    PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR"), GameState("GAME_STATE");
 
     private String _type;
     CommandType(String type) {

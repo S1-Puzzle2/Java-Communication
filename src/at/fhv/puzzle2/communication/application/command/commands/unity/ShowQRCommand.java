@@ -8,6 +8,4 @@ public class ShowQRCommand extends Command {
     protected ShowQRCommand(ClientID clientID) {
         super(clientID, CommandType.ShowQR);
     }
-
-    public
 }
