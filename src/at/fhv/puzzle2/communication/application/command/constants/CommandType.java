@@ -10,7 +10,7 @@ public enum CommandType {
     GetGameState("GET_GAME_STATE"), MobileGameStateResponse("MOBILE_GAME_STATE_RESPONSE"),
     UnityGameStateResponse("UNITY_GAME_STATE_RESPONSE"), GetPuzzlePart("GET_IMAGE"),
     Pause("PAUSE"), BarcodeScanned("BARCODE_SCANNED"), NotAllowed("NOT_ALLOWED"),
-    ShowQuestion("SHOW_QUESTION"), SearchPuzzlePart("SEARCH_PUZZLE_PART"),
+    ShowQuestion("SHOW_QUESTION"), SearchPuzzlePart("SHOW_IMAGE_SCREEN"),
     QuestionAnswered("QUESTION_ANSWERED"), BarcodeCorrect("BARCODE_CORRECT"),
     AnswerCorrect("ANSWER_CORRECT"), PartsUnlocked("PARTS_UNLOCKED"), PuzzleFinished("PUZZLE_FINISHED"),
     PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR"), GameState("GAME_STATE"), PuzzlePart("IMAGE");

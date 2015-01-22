@@ -8,7 +8,7 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 public class SearchPuzzlePartCommand extends Command {
     private int _id;
 
-    protected SearchPuzzlePartCommand(ClientID clientID) {
+    public SearchPuzzlePartCommand(ClientID clientID) {
         super(clientID, CommandType.SearchPuzzlePart);
     }
 
