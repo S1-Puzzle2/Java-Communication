@@ -47,6 +47,8 @@ public class CommunicationManager {
         _connectionList = Collections.synchronizedList(new LinkedList<>());
 
         _encryption = encryption;
+
+        Logger.getLogger().info(TAG, "Communication-Stack initialized...");
     }
 
     public CommunicationManager(String broadcastTresponse) {
@@ -132,7 +134,7 @@ public class CommunicationManager {
 
         //If the user provided an encryption, use it
         if(_encryption != null) {
-            Logger.getLogger().debug(TAG, "Encryption is enabled");
+            Logger.getLogger().info(TAG, "Encryption is enabled");
 
             applicationConnection = new EncryptedApplicationConnection(applicationConnection, _encryption);
         }

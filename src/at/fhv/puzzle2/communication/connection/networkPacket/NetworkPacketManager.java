@@ -47,7 +47,7 @@ public class NetworkPacketManager implements Runnable {
                 }
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //Do nothing here
             }
         }
     }
