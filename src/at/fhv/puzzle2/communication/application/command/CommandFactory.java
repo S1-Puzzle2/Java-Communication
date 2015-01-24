@@ -27,6 +27,8 @@ public class CommandFactory {
         _parserList.add(new QuestionAnsweredCommandParser());
         _parserList.add(new CreatePuzzleCommandParser());
         _parserList.add(new CreatePuzzlePartCommandParser());
+        _parserList.add(new ShowQRCommandParser());
+        _parserList.add(new UnknownCommandParser());
     }
 
 
