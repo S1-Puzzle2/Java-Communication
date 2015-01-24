@@ -150,10 +150,14 @@ public class CommunicationManager {
     void connectionClosed(CommandConnection connection) {
         Logger.getLogger().debug(TAG, "Connection has been lost");
 
-        for(Iterator<CommandConnection> iterator = _connectionList.iterator(); iterator.hasNext(); ) {
+        Iterator<CommandConnection> iterator = _connectionList.iterator();
+        while(iterator.hasNext()) {
             CommandConnection tmpConnection = iterator.next();
 
             if(Objects.equals(tmpConnection, connection)) {
+                //Stop the send-queue, when we lost the connection
+                tmpConnection.stopSendQueue();
+
                 iterator.remove();
                 _closedConnectionObservable.appendConnection(connection);
 
