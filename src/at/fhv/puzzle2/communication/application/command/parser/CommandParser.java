@@ -10,33 +10,34 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public abstract class CommandParser {
-    boolean _omitMessageDataAllowed = false;
-    boolean _clientIDNullAllowed = false;
+    private boolean _omitMessageDataAllowed = false;
+    private boolean _clientIDNullAllowed = false;
 
-    protected CommandParser(boolean omitMessageDataAllowed, boolean clientIDNullAllowed) {
+    CommandParser(boolean omitMessageDataAllowed, boolean clientIDNullAllowed) {
         _omitMessageDataAllowed = omitMessageDataAllowed;
         _clientIDNullAllowed = clientIDNullAllowed;
     }
 
-    protected CommandParser(boolean _omitMessageDataAllowed) {
+    CommandParser(boolean _omitMessageDataAllowed) {
         this(_omitMessageDataAllowed, false);
     }
 
-    protected CommandParser() {
+    CommandParser() {
         this(false, false);
     }
     public abstract boolean canProcessMessage(String messageType);
     protected abstract Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException;
 
-    public Command parseCommand(HashMap<String, Object> message) throws  MalformedCommandException {
+    public Command parseCommand(HashMap<String, Object> message) throws MalformedCommandException {
         try {
             boolean containsMessageData = message.containsKey(CommandConstants.MESSAGE_DATA);
             if(!_omitMessageDataAllowed && !containsMessageData) {
-                throw new MalformedCommandException();
+                throw new MalformedCommandException(message);
             }
 
             HashMap<String, Object> messageData;
             if(containsMessageData) {
+                //noinspection unchecked
                 messageData = (HashMap<String, Object>) message.get(CommandConstants.MESSAGE_DATA);
             } else {
                 messageData = new LinkedHashMap<>();
@@ -51,12 +52,12 @@ public abstract class CommandParser {
             }
 
             if(!_clientIDNullAllowed && clientID == null) {
-                throw new MalformedCommandException();
+                throw new MalformedCommandException(message);
             }
 
             return parse(clientID, messageData);
         } catch(Exception e) {
-            throw new MalformedCommandException();
+            throw new MalformedCommandException(message);
         }
     }
 }

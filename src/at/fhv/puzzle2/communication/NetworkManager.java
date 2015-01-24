@@ -12,16 +12,16 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class NetworkManager {
-    private ListenerManager<ConnectionListener> _connectionListenerManager;
-    private ListenerManager<BroadcastListener> _broadcastListenerManager;
+class NetworkManager {
+    private final ListenerManager<ConnectionListener> _connectionListenerManager;
+    private final ListenerManager<BroadcastListener> _broadcastListenerManager;
 
-    private String _broadcastResponse;
+    private final String _broadcastResponse;
 
-    private NetworkConnectionManager _networkConnectionManager;
-    private NetworkPacketManager _networkPacketManager;
+    private final NetworkConnectionManager _networkConnectionManager;
+    private final NetworkPacketManager _networkPacketManager;
 
-    private BlockingQueue<NetworkConnection> _newConnectionQueue;
+    private final BlockingQueue<NetworkConnection> _newConnectionQueue;
 
     public NetworkManager(CommunicationManager communicationManager, String broadcastResponse) {
         _newConnectionQueue = new LinkedBlockingQueue<>();
@@ -37,35 +37,35 @@ public class NetworkManager {
         _networkPacketManager = NetworkPacketManager.getInstance();
     }
 
-    protected void addConnectionListener(ListenableEndPoint listenableEndPoint) throws IOException {
+    void addConnectionListener(ListenableEndPoint listenableEndPoint) throws IOException {
         _connectionListenerManager.addListener(new ConnectionListener(listenableEndPoint, _newConnectionQueue));
     }
 
-    protected void removeConnectionListener(ListenableEndPoint listenableEndPoint) throws IOException {
+    void removeConnectionListener(ListenableEndPoint listenableEndPoint) {
         _connectionListenerManager.removeConnectionListener(new ConnectionListener(listenableEndPoint, _newConnectionQueue));
     }
 
-    protected void startListeningForConnections() throws IOException {
+    void startListeningForConnections() throws IOException {
         _connectionListenerManager.startListening();
     }
 
-    protected void stopListeningForConnections() throws IOException {
+    void stopListeningForConnections() throws IOException {
         _connectionListenerManager.stopListening();
     }
 
-    protected void addBroadcastListener(DiscoverableEndPoint discoverableEndPoint) throws IOException {
+    void addBroadcastListener(DiscoverableEndPoint discoverableEndPoint) throws IOException {
         _broadcastListenerManager.addListener(new BroadcastListener(discoverableEndPoint, _broadcastResponse));
     }
 
-    protected void removeBroadcastListener(DiscoverableEndPoint discoverableEndPoint) throws IOException {
+    void removeBroadcastListener(DiscoverableEndPoint discoverableEndPoint) {
         _broadcastListenerManager.removeConnectionListener(new BroadcastListener(discoverableEndPoint, _broadcastResponse));
     }
 
-    protected void startListeningForBroadcasts() throws IOException {
+    void startListeningForBroadcasts() throws IOException {
         _broadcastListenerManager.startListening();
     }
 
-    protected void stopListeningForBroadcasts()  throws IOException {
+    void stopListeningForBroadcasts()  throws IOException {
         _broadcastListenerManager.stopListening();
     }
 

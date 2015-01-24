@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.net.*;
 
 public class UDPNetworkConnection implements NetworkConnection {
-    private InetAddress _host;
-    private int _port;
+    private final InetAddress _host;
+    private final int _port;
 
     private DatagramSocket _socket;
 

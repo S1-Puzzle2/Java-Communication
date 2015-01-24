@@ -13,8 +13,8 @@ import java.util.function.Consumer;
 import static java.util.stream.Collectors.toCollection;
 
 public class ConnectionObservable<T extends ConnectionObserver> {
-    private List<T> _observableList;
-    private BlockingQueue<CommandConnection> _connectionQueue;
+    private final List<T> _observableList;
+    private final BlockingQueue<CommandConnection> _connectionQueue;
 
     public ConnectionObservable() {
         _observableList = Collections.synchronizedList(new LinkedList<>());
@@ -41,7 +41,7 @@ public class ConnectionObservable<T extends ConnectionObserver> {
      *
      * @param consumer Consumer<ConnectionObservable>
      */
-    protected void notifyInThread(Consumer<ConnectionObservable> consumer) {
+    void notifyInThread(Consumer<ConnectionObservable> consumer) {
         //Run the notification in its own thread per listener, so the listeners wont block our network stack
 
         Runnable runnable = () -> consumer.accept(this);

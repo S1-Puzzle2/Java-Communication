@@ -26,11 +26,17 @@ public class CommandConstants {
     public static final String ANSWER_ID = "answerID";
 
     public static final String IS_CORRECT = "isCorrect";
-    public static final String UNLOCKED_PARTS = "unlockedParts";
+    public static final String UNLOCKED_PART = "unlockedImage";
     public static final String PUZZLE_LIST = "puzzleList";
     public static final String PUZZLE_NAME = "gameName";
     public static final String TEAM_NAME = "teamName";
     public static final String PUZZLE_PARTS_LIST = "imageIDs";
     public static final String IMAGE = "base64Image";
     public static final String QR_CODE = "qrCode";
+    public static final String TIME = "time";
+    public static final String CORRECT_ANSWER_ID = "correctAnswerID";
+    public static final String IS_WINNING = "isWinning";
+    public static final String PUZZLE_ID = "puzzleID";
+    public static final String PUZZLE_PART_ORDER = "partOrder";
+    public static final String UNLOCKED_PARTS_LIST = "unlockedImageIDs";
 }

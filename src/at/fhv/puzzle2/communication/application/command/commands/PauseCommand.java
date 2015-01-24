@@ -5,7 +5,7 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class PauseCommand extends Command {
-    protected PauseCommand(ClientID clientID) {
+    public PauseCommand(ClientID clientID) {
         super(clientID, CommandType.Pause);
     }
 

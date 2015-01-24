@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class NetworkPacketFlags implements JSONAware {
-    public static final String CLOSE = "close";
-    public static final String ACK = "ack";
+    private static final String CLOSE = "close";
+    private static final String ACK = "ack";
 
     private Boolean _acknowledge = null, _close = null;
 

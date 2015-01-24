@@ -11,11 +11,13 @@ public enum CommandType {
     UnityGameStateResponse("UNITY_GAME_STATE_RESPONSE"), GetPuzzlePart("GET_IMAGE"),
     Pause("PAUSE"), BarcodeScanned("BARCODE_SCANNED"), NotAllowed("NOT_ALLOWED"),
     ShowQuestion("SHOW_QUESTION"), SearchPuzzlePart("SHOW_IMAGE_SCREEN"),
-    QuestionAnswered("QUESTION_ANSWERED"), BarcodeCorrect("BARCODE_CORRECT"),
+    QuestionAnswered("ANSWERED_QUESTION"), BarcodeCorrect("BARCODE_CORRECT"),
     AnswerCorrect("ANSWER_CORRECT"), PartsUnlocked("PARTS_UNLOCKED"), PuzzleFinished("PUZZLE_FINISHED"),
-    PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR"), GameState("GAME_STATE"), PuzzlePart("IMAGE");
+    PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR"), GameState("GAME_STATE"), PuzzlePart("IMAGE"),
+    GameFinished("GAME_FINISHED"), CreatePuzzle("CREATE_PUZZLE"), CreatePuzzlePart("CREATE_PUZZLE_PART"),
+    SolvePuzzle("SOLVE_PUZZLE");
 
-    private String _type;
+    private final String _type;
     CommandType(String type) {
         _type = type;
     }

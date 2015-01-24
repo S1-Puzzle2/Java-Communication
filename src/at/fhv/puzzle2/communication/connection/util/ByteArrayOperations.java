@@ -13,7 +13,7 @@ public abstract class ByteArrayOperations {
         return appendByteArray(destination, source, source.length);
     }
 
-    public static byte[] appendByteArray(byte[] destination, byte[] source, int length) {
+    private static byte[] appendByteArray(byte[] destination, byte[] source, int length) {
         byte[] tmpArray = new byte[destination.length + length];
         System.arraycopy(destination, 0, tmpArray, 0, destination.length);
 

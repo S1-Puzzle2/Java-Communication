@@ -28,7 +28,7 @@ public class RegisterCommandParser extends CommandParser {
 
             return registerCommand;
         } catch(Exception e) {
-            throw new MalformedCommandException();
+            throw new MalformedCommandException(messageData);
         }
     }
 }

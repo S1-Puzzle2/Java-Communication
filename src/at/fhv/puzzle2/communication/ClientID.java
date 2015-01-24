@@ -3,7 +3,7 @@ package at.fhv.puzzle2.communication;
 import java.util.UUID;
 
 public class ClientID {
-    private UUID _uuid;
+    private final UUID _uuid;
 
     public ClientID(UUID uuid) {
         _uuid = uuid;

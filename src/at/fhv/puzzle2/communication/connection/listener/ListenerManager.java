@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ListenerManager<T extends Listener> {
-    private List<T> _listenerList;
+    private final List<T> _listenerList;
     private boolean _listeningForConnections = false;
 
     public ListenerManager() {

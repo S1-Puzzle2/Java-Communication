@@ -17,7 +17,7 @@ public abstract class Command implements JSONAware {
     private ClientID _clientID;
     private final CommandType _commandType;
 
-    protected HashMap<String, Object> _messageData;
+    protected final HashMap<String, Object> _messageData;
 
     protected Command(ClientID clientID, CommandType commandType) {
         _messageData = new LinkedHashMap<>();
@@ -42,7 +42,11 @@ public abstract class Command implements JSONAware {
         return _clientID;
     }
 
-    public CommandType getCommandType() {
+    public void setClientID(ClientID clientID) {
+        _clientID = clientID;
+    }
+
+    protected CommandType getCommandType() {
         return _commandType;
     }
 

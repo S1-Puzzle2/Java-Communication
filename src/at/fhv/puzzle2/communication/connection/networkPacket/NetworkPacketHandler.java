@@ -5,11 +5,10 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Date;
 
 public class NetworkPacketHandler {
     private volatile static int _sequenceID = 2333;
-    private NetworkConnection _networkConnection;
+    private final NetworkConnection _networkConnection;
 
     public NetworkPacketHandler(NetworkConnection networkConnection) {
         _networkConnection = networkConnection;

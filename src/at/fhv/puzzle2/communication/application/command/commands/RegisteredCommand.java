@@ -13,7 +13,7 @@ public class RegisteredCommand extends Command implements MultipleReceiversComma
         super(playerID, CommandType.Registered);
     }
 
-    public RegisteredCommand(RegisteredCommand registeredCommand, ClientID clientID) {
+    private RegisteredCommand(RegisteredCommand registeredCommand, ClientID clientID) {
         super(clientID, registeredCommand.getCommandType());
 
         _registered = registeredCommand.getRegistered();
@@ -23,7 +23,7 @@ public class RegisteredCommand extends Command implements MultipleReceiversComma
         _registered = registered;
     }
 
-    public boolean getRegistered() {
+    boolean getRegistered() {
         return _registered;
     }
 

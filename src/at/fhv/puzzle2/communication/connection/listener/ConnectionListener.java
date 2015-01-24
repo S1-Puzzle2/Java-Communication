@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionListener implements Listener, Runnable {
-    private ListenableEndPoint _endPoint;
+    private final ListenableEndPoint _endPoint;
     private volatile boolean _isRunning = false;
     private final BlockingQueue<NetworkConnection> _queue;
-    private Thread _localThread;
+    private final Thread _localThread;
 
     public ConnectionListener(ListenableEndPoint endPoint, BlockingQueue<NetworkConnection> newConnectionQueue) {
         _endPoint = endPoint;

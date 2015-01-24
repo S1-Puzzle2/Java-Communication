@@ -18,24 +18,21 @@ import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 import at.fhv.puzzle2.communication.observer.NewConnectionObserver;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CommunicationManager {
-    private List<CommandConnection> _connectionList;
+    private final List<CommandConnection> _connectionList;
 
-    private NetworkManager _networkManager;
-    private ApplicationConnectionManager _appConnectionManager;
+    private final NetworkManager _networkManager;
+    private final ApplicationConnectionManager _appConnectionManager;
 
-    private ConnectionObservable<NewConnectionObserver> _newConnectionObservable;
-    private ConnectionObservable<ClosedConnectionObserver> _closedConnectionObservable;
-    private CommandReceivedObservable _commandReceivedObservable;
+    private final ConnectionObservable<NewConnectionObserver> _newConnectionObservable;
+    private final ConnectionObservable<ClosedConnectionObserver> _closedConnectionObservable;
+    private final CommandReceivedObservable _commandReceivedObservable;
 
     private Encryption _encryption = null;
 
-    public CommunicationManager(String broadcastResponse, Encryption encryption) {
+    private CommunicationManager(String broadcastResponse, Encryption encryption) {
         _appConnectionManager = new ApplicationConnectionManager(this);
 
         _newConnectionObservable = new ConnectionObservable<>();
@@ -110,11 +107,11 @@ public class CommunicationManager {
         return _commandReceivedObservable.removeObserver(observable);
     }
 
-    protected void commandRecieved(Command message) {
+    void commandRecieved(Command message) {
         _commandReceivedObservable.appendMessage(message);
     }
 
-    protected void newConnectionEstablished(NetworkConnection networkConnection) {
+    void newConnectionEstablished(NetworkConnection networkConnection) {
         ApplicationConnection applicationConnection = new BaseApplicationConnection(new NetworkPacketHandler(networkConnection));
         applicationConnection = new Base64ApplicationConnection(applicationConnection);
 
@@ -131,30 +128,30 @@ public class CommunicationManager {
         _newConnectionObservable.appendConnection(commandConnection);
     }
 
-    protected void connectionClosed(CommandConnection connection) {
-        boolean found = false;
-        int i;
-        for(i = 0; i < _connectionList.size(); i++) {
-            if(Objects.equals(_connectionList.get(i), (connection))) {
-                found = true;
-                break;
-            }
-        }
+    void connectionClosed(CommandConnection connection) {
+        for(Iterator<CommandConnection> iterator = _connectionList.iterator(); iterator.hasNext(); ) {
+            CommandConnection tmpConnection = iterator.next();
 
-        //Its possible, that we receive 2 different connection closed events for a single connection, so only propagate one
-        if(found) {
-            _connectionList.remove(i);
-            _closedConnectionObservable.appendConnection(connection);
+            if(Objects.equals(tmpConnection, connection)) {
+                iterator.remove();
+                _closedConnectionObservable.appendConnection(connection);
+
+                return;
+            }
         }
     }
 
-    protected void connectionClosed(NetworkConnection networkConnection) {
+    void connectionClosed(NetworkConnection networkConnection) {
         connectionClosed(new CommandConnection(_appConnectionManager,
                 new BaseApplicationConnection(new NetworkPacketHandler(networkConnection))));
     }
 
     public void close() throws IOException {
+        //First stop all the send queues
+        _connectionList.forEach(CommandConnection::stopSendQueue);
+
         _appConnectionManager.close();
         _networkManager.close();
+
     }
 }

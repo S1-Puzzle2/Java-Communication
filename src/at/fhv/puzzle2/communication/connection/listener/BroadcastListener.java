@@ -8,12 +8,12 @@ import java.net.SocketException;
 import java.nio.charset.Charset;
 
 public class BroadcastListener implements Listener, Runnable {
-    private DiscoverableEndPoint _discoverableEndPoint;
+    private final DiscoverableEndPoint _discoverableEndPoint;
 
-    private Thread _localThread;
+    private final Thread _localThread;
     private volatile boolean _isRunning = false;
 
-    private String _broadcastResponse;
+    private final String _broadcastResponse;
 
     public BroadcastListener(DiscoverableEndPoint discoverableEndPoint, String broadcastResponse) {
         _discoverableEndPoint = discoverableEndPoint;

@@ -8,7 +8,7 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 public abstract class IsCorrectCommand extends Command {
     private boolean _isCorrect;
 
-    protected IsCorrectCommand(ClientID clientID, CommandType commandType) {
+    IsCorrectCommand(ClientID clientID, CommandType commandType) {
         super(clientID, commandType);
     }
 

@@ -2,7 +2,6 @@ package at.fhv.puzzle2.communication.application.command;
 
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.command.commands.error.MalformedCommand;
-import at.fhv.puzzle2.communication.application.command.commands.error.UnknownCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.parser.*;
 import org.json.simple.JSONValue;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CommandFactory {
-    private static List<CommandParser> _parserList = new LinkedList<>();
+    private static final List<CommandParser> _parserList = new LinkedList<>();
 
     static {
         _parserList.add(new RegisterCommandParser());
@@ -23,14 +22,16 @@ public class CommandFactory {
         _parserList.add(new RegisteredCommandParser());
         _parserList.add(new BarcodeScannedCommandParser());
         _parserList.add(new QuestionAnsweredCommandParser());
+        _parserList.add(new CreatePuzzleCommandParser());
+        _parserList.add(new CreatePuzzlePartCommandParser());
     }
 
-    public static Command parseCommand(ApplicationMessage message) {
+    public static Command parseCommand(ApplicationMessage message) throws MalformedCommandException, UnknownCommandException {
         try {
-            HashMap<String, Object> messageData = (HashMap<String, Object>) JSONValue.parse(message.getMessage());
+            @SuppressWarnings("unchecked") HashMap<String, Object> messageData = (HashMap<String, Object>) JSONValue.parse(message.getMessage());
 
             if(!messageData.containsKey(CommandConstants.MESSAGE_TYPE)) {
-                return new MalformedCommand(message);
+                return new MalformedCommand(message.getMessage());
             }
 
             Optional<CommandParser> optionalParser = _parserList.stream()
@@ -40,10 +41,10 @@ public class CommandFactory {
             if(optionalParser.isPresent()) {
                 return optionalParser.get().parseCommand(messageData);
             }
-
-            return new UnknownCommand(message);
         } catch(Exception e) {
-            return new MalformedCommand(message);
+            throw new MalformedCommandException(message.getMessage());
         }
+
+        throw new UnknownCommandException(message.getMessage());
     }
 }

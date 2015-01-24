@@ -4,12 +4,10 @@ import at.fhv.puzzle2.communication.ApplicationConnectionManager;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 
-import java.io.IOException;
-
 public class CommandListener implements Runnable {
-    private ApplicationConnectionManager _connectionManager;
-    private CommandConnection _connection;
-    private Thread _localThread;
+    private final ApplicationConnectionManager _connectionManager;
+    private final CommandConnection _connection;
+    private final Thread _localThread;
     private volatile boolean _isRunning = false;
 
     public CommandListener(ApplicationConnectionManager connectionManager, CommandConnection connection) {
@@ -21,7 +19,7 @@ public class CommandListener implements Runnable {
         _localThread.start();
     }
 
-    public void close() throws IOException {
+    public void close() {
         if(_localThread != null) {
             _localThread.interrupt();
         }

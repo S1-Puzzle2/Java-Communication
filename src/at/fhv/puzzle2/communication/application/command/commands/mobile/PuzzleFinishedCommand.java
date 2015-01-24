@@ -1,4 +1,5 @@
-package at.fhv.puzzle2.communication.application.command.commands.unity;
+package at.fhv.puzzle2.communication.application.command.commands.mobile;
+
 
 import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.Command;

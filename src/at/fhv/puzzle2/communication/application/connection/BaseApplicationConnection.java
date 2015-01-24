@@ -7,7 +7,7 @@ import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandle
 import java.io.IOException;
 
 public class BaseApplicationConnection implements ApplicationConnection {
-    private NetworkPacketHandler _packetManager;
+    private final NetworkPacketHandler _packetManager;
 
     public BaseApplicationConnection(NetworkPacketHandler packetManager) {
         _packetManager = packetManager;

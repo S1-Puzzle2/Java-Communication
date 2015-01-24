@@ -29,7 +29,7 @@ public class MobileGameStateResponseCommand extends Command implements MultipleR
         _puzzlePartList = command._puzzlePartList;
     }
 
-    public String getTeamName() {
+    String getTeamName() {
         return _teamName;
     }
 
@@ -37,7 +37,7 @@ public class MobileGameStateResponseCommand extends Command implements MultipleR
         this._teamName = teamName;
     }
 
-    public String getGameName() {
+    String getGameName() {
         return _gameName;
     }
 

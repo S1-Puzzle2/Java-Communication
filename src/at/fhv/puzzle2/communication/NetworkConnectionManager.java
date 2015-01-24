@@ -5,11 +5,11 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import java.util.concurrent.BlockingQueue;
 
 public class NetworkConnectionManager implements Runnable {
-    private CommunicationManager _communicationManager;
+    private final CommunicationManager _communicationManager;
 
     private final BlockingQueue<NetworkConnection> _newConnectionQueue;
 
-    private Thread _localThread;
+    private final Thread _localThread;
     private volatile boolean _isRunning;
 
     public NetworkConnectionManager(CommunicationManager communicationManager, BlockingQueue<NetworkConnection> newConnectionQueue) {

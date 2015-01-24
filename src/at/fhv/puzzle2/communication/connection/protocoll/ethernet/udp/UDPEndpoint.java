@@ -12,8 +12,8 @@ import java.nio.charset.Charset;
 public class UDPEndpoint implements DiscoverableEndPoint {
     private DatagramSocket _serverSocket;
 
-    private String _host;
-    private int _port;
+    private final String _host;
+    private final int _port;
 
     public UDPEndpoint(String host, int port) {
         _host = host;
@@ -31,7 +31,7 @@ public class UDPEndpoint implements DiscoverableEndPoint {
     }
 
     @Override
-    public void freeBroadcastListener() throws IOException {
+    public void freeBroadcastListener() {
         _serverSocket.close();
 
         _serverSocket = null;

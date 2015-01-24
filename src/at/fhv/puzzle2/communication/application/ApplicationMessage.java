@@ -4,9 +4,6 @@ import at.fhv.puzzle2.communication.application.connection.ApplicationConnection
 
 import java.nio.charset.Charset;
 
-/**
- * Created by sinz on 14.01.2015.
- */
 public class ApplicationMessage {
     private String _message;
     private ApplicationConnection _sender = null;

@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public class TCPNetworkConnection implements NetworkConnection {
-    private Socket _socket;
+    private final Socket _socket;
 
     public TCPNetworkConnection(Socket socket) {
         _socket = socket;

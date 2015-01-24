@@ -5,10 +5,10 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import java.io.IOException;
 import java.util.Date;
 
-public class SentNetworkPacket {
-    private NetworkPacketHandler _destination;
+class SentNetworkPacket {
+    private final NetworkPacketHandler _destination;
     private Date _sentDate;
-    private NetworkPacket _packet;
+    private final NetworkPacket _packet;
 
     public SentNetworkPacket(NetworkPacketHandler destination, NetworkPacket packet) {
         this._destination = destination;

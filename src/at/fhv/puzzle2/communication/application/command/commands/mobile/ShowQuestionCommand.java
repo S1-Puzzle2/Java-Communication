@@ -12,7 +12,7 @@ public class ShowQuestionCommand extends Command {
     private String _questionText;
     private HashMap<Integer, String> _answerMap;
 
-    protected ShowQuestionCommand(ClientID clientID) {
+    public ShowQuestionCommand(ClientID clientID) {
         super(clientID, CommandType.ShowQuestion);
     }
 

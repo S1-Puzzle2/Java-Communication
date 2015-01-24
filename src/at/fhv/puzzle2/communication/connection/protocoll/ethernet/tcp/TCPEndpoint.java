@@ -11,8 +11,8 @@ import java.util.Objects;
 
 public class TCPEndpoint implements ListenableEndPoint {
     private ServerSocket _socket;
-    private String _host;
-    private int _port;
+    private final String _host;
+    private final int _port;
 
     public TCPEndpoint(String host, int port) {
         _host = host;

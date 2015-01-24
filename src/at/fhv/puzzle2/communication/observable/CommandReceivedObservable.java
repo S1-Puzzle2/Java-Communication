@@ -11,8 +11,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
 public class CommandReceivedObservable {
-    private List<MessageReceivedObserver> _observerList;
-    private BlockingQueue<Command> _messageQueue;
+    private final List<MessageReceivedObserver> _observerList;
+    private final BlockingQueue<Command> _messageQueue;
 
     public CommandReceivedObservable() {
         _observerList = Collections.synchronizedList(new LinkedList<>());

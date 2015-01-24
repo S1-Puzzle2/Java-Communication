@@ -1,7 +1,6 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
 import at.fhv.puzzle2.communication.NetworkConnectionManager;
-import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -11,10 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class NetworkPacketManager implements Runnable {
-    private NetworkConnectionManager _netNetworkConnectionManager;
+    private final NetworkConnectionManager _netNetworkConnectionManager;
     private List<SentNetworkPacket> _packetSentList;
 
-    private Thread _localThread;
+    private final Thread _localThread;
     private final Object _lock = new Object();
 
     private NetworkPacketManager(NetworkConnectionManager networkConnectionManager) {
@@ -26,6 +25,7 @@ public class NetworkPacketManager implements Runnable {
     }
 
     private volatile boolean _isRunning = true;
+
     @Override
     public void run() {
         while(_isRunning) {
@@ -64,7 +64,7 @@ public class NetworkPacketManager implements Runnable {
         }
     }
 
-    public void receivedAcknowledge(NetworkPacket packet) throws IOException {
+    public void receivedAcknowledge(NetworkPacket packet) {
         if(packet.getNetworkFlags().getAcknowledge()) {
             //The _packet was successfully sent, so we dont need to send it again
             removePacket(packet.getSequenceID());

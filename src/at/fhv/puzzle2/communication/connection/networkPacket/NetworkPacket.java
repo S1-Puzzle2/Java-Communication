@@ -12,15 +12,15 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 public class NetworkPacket implements JSONAware {
-    public static final String CHECKSUM = "checkSum";
-    public static final String SEQUENCE_ID = "seqID";
-    public static final String APP_MSG = "appMsg";
-    public static final String FLAGS = "flags";
+    private static final String CHECKSUM = "checkSum";
+    private static final String SEQUENCE_ID = "seqID";
+    private static final String APP_MSG = "appMsg";
+    private static final String FLAGS = "flags";
     private int _sequenceID;
     private long _checkSum;
     private String _appMsg;
 
-    NetworkPacketFlags _flags;
+    private NetworkPacketFlags _flags;
 
     public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg) {
         _sequenceID = sequenceID;
@@ -29,7 +29,7 @@ public class NetworkPacket implements JSONAware {
         _checkSum = this.generateChecksum();
     }
 
-    public NetworkPacket() {
+    private NetworkPacket() {
 
     }
 
@@ -47,7 +47,8 @@ public class NetworkPacket implements JSONAware {
 
     public static NetworkPacket parse(byte[] packetData) throws MalformedNetworkPacketException {
         String packetString = new String(packetData, Charset.forName("UTF-8"));
-        HashMap<String, Object> packetJSON = (HashMap<String, Object>) JSONValue.parse(packetString);
+
+        @SuppressWarnings("unchecked") HashMap<String, Object> packetJSON = (HashMap<String, Object>) JSONValue.parse(packetString);
 
         if(packetJSON == null) {
             throw new MalformedNetworkPacketException(packetString);
@@ -75,7 +76,7 @@ public class NetworkPacket implements JSONAware {
         return generateChecksum() == this._checkSum;
     }
 
-    public long generateChecksum() {
+    long generateChecksum() {
         HashMap<String, Object> map = this.getJSONObject();
         Checksum checksum = new CRC32();
 

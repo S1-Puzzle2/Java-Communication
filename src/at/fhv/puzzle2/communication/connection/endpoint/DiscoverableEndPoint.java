@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface DiscoverableEndPoint extends EndPoint {
     public void reserveBroadcastListener() throws IOException;
-    public void freeBroadcastListener() throws IOException;
+    public void freeBroadcastListener();
 
     public Broadcast receiveBroadcast() throws IOException;
 }

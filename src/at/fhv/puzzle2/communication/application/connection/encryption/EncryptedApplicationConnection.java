@@ -11,7 +11,7 @@ import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 
 public class EncryptedApplicationConnection extends ApplicationConnectionDecorator {
-    private Encryption _encryption;
+    private final Encryption _encryption;
 
     public EncryptedApplicationConnection(ApplicationConnection connection, Encryption encryption) {
         super(connection);

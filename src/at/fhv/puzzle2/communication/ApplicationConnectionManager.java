@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ApplicationConnectionManager {
-    private CommunicationManager _communicationManager;
-    private List<CommandListener> _listenerList;
+    private final CommunicationManager _communicationManager;
+    private final List<CommandListener> _listenerList;
 
     public ApplicationConnectionManager(CommunicationManager communicationManager) {
         _communicationManager = communicationManager;
@@ -30,17 +30,9 @@ public class ApplicationConnectionManager {
 
     public synchronized void connectionClosed(CommandConnection connection) {
         //Close the listener now
-        for(int i = 0; i < _listenerList.size(); i++) {
-            CommandListener listener = _listenerList.get(i);
-
-            if(listener.getConnection().equals(connection)) {
-                try {
-                    listener.close();
-                } catch (IOException e) {
-                    //We dont care about it now, we close the listener anyway
-                }
-
-                //_listenerList.remove(i);
+        for (CommandListener listener : _listenerList) {
+            if (listener.getConnection().equals(connection)) {
+                listener.close();
 
                 break;
             }
