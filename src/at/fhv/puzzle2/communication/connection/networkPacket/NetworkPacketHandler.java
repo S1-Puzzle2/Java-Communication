@@ -2,11 +2,14 @@ package at.fhv.puzzle2.communication.connection.networkPacket;
 
 import at.fhv.puzzle2.communication.connection.MalformedNetworkPacketException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
+import at.fhv.puzzle2.logging.Logger;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class NetworkPacketHandler {
+    private static final String TAG = "communication.NetworkPacketHandlertrace";
+
     private volatile static int _sequenceID = 2333;
     private final NetworkConnection _networkConnection;
 
@@ -27,7 +30,7 @@ public class NetworkPacketHandler {
             NetworkPacketManager.getInstance().sentNetworkPacket(packet, this);
         }
 
-        System.out.println("Sent network packet: " + packet.toJSONString());
+        Logger.getLogger().trace(TAG, "Sent network packet: " + packet.toJSONString());
     }
 
     public String receiveMessage() throws IOException {
@@ -49,6 +52,8 @@ public class NetworkPacketHandler {
                 NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
                 this.sendMessage(response, false);
 
+                Logger.getLogger().debug(TAG, "Sending acknowledge true for sequence id " + packet.getSequenceID());
+
                 return packet.getApplicationMessage();
             }
         }
@@ -60,7 +65,9 @@ public class NetworkPacketHandler {
         while(true) {
             try {
                 String read = new String(_networkConnection.readBytes(), Charset.forName("UTF-8"));
-                System.out.println("Received network packet: " + read);
+
+                Logger.getLogger().trace(TAG, "Received network packet: " + read);
+
                 packet = NetworkPacket.parse(read.getBytes());
 
                 if(packet.checkSumCorrect()) {
@@ -75,6 +82,8 @@ public class NetworkPacketHandler {
 
                 flags.setAcknowledge(false);
                 NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
+
+                Logger.getLogger().debug(TAG, "Checksum failed for sequence id " + packet.getSequenceID());
 
                 this.sendMessage(response, false);
             } catch(MalformedNetworkPacketException e) {

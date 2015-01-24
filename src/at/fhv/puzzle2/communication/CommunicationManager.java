@@ -16,11 +16,14 @@ import at.fhv.puzzle2.communication.observable.ConnectionObservable;
 import at.fhv.puzzle2.communication.observer.ClosedConnectionObserver;
 import at.fhv.puzzle2.communication.observer.MessageReceivedObserver;
 import at.fhv.puzzle2.communication.observer.NewConnectionObserver;
+import at.fhv.puzzle2.logging.Logger;
 
 import java.io.IOException;
 import java.util.*;
 
 public class CommunicationManager {
+    private static final String TAG = "communcation.CommunicationManager";
+
     private final List<CommandConnection> _connectionList;
 
     private final NetworkManager _networkManager;
@@ -51,18 +54,26 @@ public class CommunicationManager {
     }
 
     public void startListeningForConnections() throws IOException {
+        Logger.getLogger().trace(TAG, "Starting to listen for connections");
+
         _networkManager.startListeningForConnections();
     }
 
     public void stopListeningForConnections() throws IOException {
+        Logger.getLogger().trace(TAG, "Stopped listening for connections");
+
         _networkManager.stopListeningForConnections();
     }
 
     public void startListeningForBroadcasts() throws IOException {
+        Logger.getLogger().trace(TAG, "Starting to listen for broadcasts");
+
         _networkManager.startListeningForBroadcasts();
     }
 
     public void stopListeningForBroadcasts() throws IOException {
+        Logger.getLogger().trace(TAG, "Stopped listening for broadcasts");
+
         _networkManager.stopListeningForBroadcasts();
     }
 
@@ -76,6 +87,8 @@ public class CommunicationManager {
 
 
     public void addConnectionListener(ListenableEndPoint endPoint) throws IOException {
+        Logger.getLogger().trace(TAG, "Added connection listener");
+
         _networkManager.addConnectionListener(endPoint);
     }
 
@@ -112,11 +125,15 @@ public class CommunicationManager {
     }
 
     void newConnectionEstablished(NetworkConnection networkConnection) {
+        Logger.getLogger().debug(TAG, "New connection has been established");
+
         ApplicationConnection applicationConnection = new BaseApplicationConnection(new NetworkPacketHandler(networkConnection));
         applicationConnection = new Base64ApplicationConnection(applicationConnection);
 
         //If the user provided an encryption, use it
         if(_encryption != null) {
+            Logger.getLogger().debug(TAG, "Encryption is enabled");
+
             applicationConnection = new EncryptedApplicationConnection(applicationConnection, _encryption);
         }
 
@@ -129,6 +146,8 @@ public class CommunicationManager {
     }
 
     void connectionClosed(CommandConnection connection) {
+        Logger.getLogger().debug(TAG, "Connection has been lost");
+
         for(Iterator<CommandConnection> iterator = _connectionList.iterator(); iterator.hasNext(); ) {
             CommandConnection tmpConnection = iterator.next();
 
@@ -147,6 +166,8 @@ public class CommunicationManager {
     }
 
     public void close() throws IOException {
+        Logger.getLogger().info(TAG, "Shutting down the communication-stack...");
+
         //First stop all the send queues
         _connectionList.forEach(CommandConnection::stopSendQueue);
 

@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="com.googlecode.json-simple:json-simple:1.1.1" level="project" />
+    <orderEntry type="module" module-name="Java-Logging" />
   </component>
 </module>

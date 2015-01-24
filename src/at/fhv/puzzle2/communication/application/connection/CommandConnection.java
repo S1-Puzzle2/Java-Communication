@@ -10,6 +10,7 @@ import at.fhv.puzzle2.communication.application.command.UnknownCommandException;
 import at.fhv.puzzle2.communication.application.command.commands.error.MalformedCommand;
 import at.fhv.puzzle2.communication.application.command.commands.error.UnknownCommand;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
+import at.fhv.puzzle2.logging.Logger;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -18,6 +19,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CommandConnection {
+    private static final String TAG = "communication.CommandConnection";
+
     private final ApplicationConnectionManager _connectionManager;
     private final ApplicationConnection _applicationConnection;
     private final ConnectionSendQueue _connectionSendQueue;
@@ -44,6 +47,8 @@ public class CommandConnection {
                 if(receivedMessage == null) {
                     return null;
                 }
+
+                Logger.getLogger().debug(TAG, "Received app-message: " + receivedMessage.getMessage());
 
                 final Command command;
                 try {
@@ -90,6 +95,8 @@ public class CommandConnection {
     }
 
     class ConnectionSendQueue implements Runnable {
+        private static final String TAG = "communication.ConnectionSendQueue";
+
         private final CommandConnection _connection;
         private final BlockingQueue<ApplicationMessage> _sendQueue;
         private volatile boolean _isRunning = true;
@@ -112,7 +119,7 @@ public class CommandConnection {
 
         public void enqueueCommand(Command command) {
             if(!_sendQueue.offer(new ApplicationMessage(command.toJSONString()))) {
-                System.out.println("We lost packets, why?!");
+                Logger.getLogger().warn(TAG, "We lost packets, why?!");
             }
         }
 
@@ -123,6 +130,8 @@ public class CommandConnection {
                     ApplicationMessage message = _sendQueue.take();
 
                     try {
+                        Logger.getLogger().debug(TAG, "Sending app-message: " + message.getMessage());
+
                         _applicationConnection.sendApplicationMessage(message);
                     } catch (IOException e) {
                         if(e instanceof ConnectionClosedException || e instanceof SocketException) {

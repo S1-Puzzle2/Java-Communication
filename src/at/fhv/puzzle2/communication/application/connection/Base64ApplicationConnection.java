@@ -25,8 +25,6 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
 
         message.setMessage(Base64.getDecoder().decode(message.getMessage()));
 
-        System.out.println("\nReceived app-message: " + message.getMessage());
-
         return message;
     }
 

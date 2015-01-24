@@ -4,6 +4,7 @@ import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.command.commands.error.MalformedCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.parser.*;
+import at.fhv.puzzle2.logging.Logger;
 import org.json.simple.JSONValue;
 
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class CommandFactory {
+    private static final String TAG = "communcation.CommandFactory";
+
     private static final List<CommandParser> _parserList = new LinkedList<>();
 
     static {
@@ -25,6 +28,7 @@ public class CommandFactory {
         _parserList.add(new CreatePuzzleCommandParser());
         _parserList.add(new CreatePuzzlePartCommandParser());
     }
+
 
     public static Command parseCommand(ApplicationMessage message) throws MalformedCommandException, UnknownCommandException {
         try {
@@ -40,11 +44,15 @@ public class CommandFactory {
 
             if(optionalParser.isPresent()) {
                 return optionalParser.get().parseCommand(messageData);
+            } else {
+                Logger.getLogger().debug(TAG, "No suitable CommandParser found for " + messageData.get(CommandConstants.MESSAGE_TYPE));
             }
         } catch(Exception e) {
+            Logger.getLogger().debug(TAG, "Following command is malformed: " + message.getMessage());
             throw new MalformedCommandException(message.getMessage());
         }
 
+        Logger.getLogger().debug(TAG, "Received unknown command: " + message.getMessage());
         throw new UnknownCommandException(message.getMessage());
     }
 }
