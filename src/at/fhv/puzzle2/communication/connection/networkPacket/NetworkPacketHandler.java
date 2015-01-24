@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class NetworkPacketHandler {
-    private static final String TAG = "communication.NetworkPacketHandlertrace";
+    private static final String TAG = "communication.NetworkPacketHandler";
 
     private volatile static int _sequenceID = 2333;
     private final NetworkConnection _networkConnection;
@@ -87,7 +87,7 @@ public class NetworkPacketHandler {
 
                 this.sendMessage(response, false);
             } catch(MalformedNetworkPacketException e) {
-                System.out.println(e.getMessage());
+                Logger.getLogger().debug(TAG, "Malformed packet received: " + e.getMessage());
             }
         }
     }
