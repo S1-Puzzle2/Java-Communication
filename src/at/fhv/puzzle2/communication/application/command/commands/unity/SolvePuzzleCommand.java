@@ -11,7 +11,7 @@ import java.util.List;
 public class SolvePuzzleCommand extends Command {
     private List<Integer> _unlockedParts = new LinkedList<>();
 
-    protected SolvePuzzleCommand(ClientID clientID) {
+    public SolvePuzzleCommand(ClientID clientID) {
         super(clientID, CommandType.SolvePuzzle);
     }
 
