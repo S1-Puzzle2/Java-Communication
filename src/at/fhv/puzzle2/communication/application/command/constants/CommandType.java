@@ -15,7 +15,7 @@ public enum CommandType {
     AnswerCorrect("ANSWER_CORRECT"), PartsUnlocked("PARTS_UNLOCKED"), PuzzleFinished("PUZZLE_FINISHED"),
     PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR"), GameState("GAME_STATE"), PuzzlePart("IMAGE"),
     GameFinished("GAME_FINISHED"), CreatePuzzle("CREATE_PUZZLE"), CreatePuzzlePart("CREATE_PUZZLE_PART"),
-    GetPuzzleList("GET_PUZZLE_LIST"), SetPuzzle("SET_PUZZLE");
+    GetPuzzleList("GET_PUZZLE_LIST"), SetPuzzle("SET_PUZZLE"), ResetGame("RESET_GAME"), SolvePuzzle("SOLVE_PUZZLE");
 
     private final String _type;
     CommandType(String type) {
