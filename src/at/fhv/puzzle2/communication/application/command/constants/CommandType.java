@@ -1,7 +1,5 @@
 package at.fhv.puzzle2.communication.application.command.constants;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Objects;
 
 public enum CommandType {
@@ -24,22 +22,6 @@ public enum CommandType {
 
     public boolean isRightType(String commandType) {
         return Objects.equals(_type, commandType);
-    }
-
-    //Construct a static list with all enum values in it
-    private static final HashMap<String, CommandType> _typeList = new LinkedHashMap<>();
-    static {
-        for(CommandType type : values()) {
-            _typeList.put(type.toString(), type);
-        }
-    }
-
-    public CommandType getTypeByString(String commandType) {
-        if(_typeList.containsKey(commandType)) {
-            return _typeList.get(commandType);
-        }
-
-        return Unknown;
     }
 
     @Override
