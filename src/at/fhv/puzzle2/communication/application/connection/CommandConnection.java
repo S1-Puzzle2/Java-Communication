@@ -139,6 +139,8 @@ public class CommandConnection {
                         } else {
                             e.printStackTrace();
                         }
+
+                        break;
                     }
                 } catch (InterruptedException e) {
                     //Do nothing here
