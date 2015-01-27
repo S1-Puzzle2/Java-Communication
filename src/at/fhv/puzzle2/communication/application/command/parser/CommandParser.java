@@ -22,7 +22,7 @@ public abstract class CommandParser {
         this(_omitMessageDataAllowed, false);
     }
 
-    CommandParser() {
+    public CommandParser() {
         this(false, false);
     }
     public abstract boolean canProcessMessage(String messageType);
