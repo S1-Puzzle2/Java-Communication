@@ -37,6 +37,6 @@ public class CommandConstants {
     public static final String CORRECT_ANSWER_ID = "correctAnswerID";
     public static final String IS_WINNING = "isWinning";
     public static final String PUZZLE_ID = "puzzleID";
-    public static final String PUZZLE_PART_ORDER = "partOrder";
+    public static final String PUZZLE_PART_ORDER = "order";
     public static final String UNLOCKED_PARTS_LIST = "unlockedImageIDs";
 }
