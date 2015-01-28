@@ -19,7 +19,7 @@ class SentNetworkPacket {
         this._sentDate = new Date();
     }
 
-    public void resendPacket() throws IOException {
+    public void resendPacket() {
         Logger.getLogger().trace(TAG, "Resending network packet: " + _packet.getApplicationMessage());
 
         this._destination.sendMessage(this._packet, false);

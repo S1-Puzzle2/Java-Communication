@@ -1,12 +1,9 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
 import at.fhv.puzzle2.communication.NetworkConnectionManager;
+import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class NetworkPacketManager implements Runnable {
@@ -35,13 +32,7 @@ public class NetworkPacketManager implements Runnable {
                 synchronized (_lock) {
                     for (SentNetworkPacket sentNetworkPacket : _packetSentList) {
                         if (new Date().getTime() - sentNetworkPacket.getTime() > 10000) {
-                            try {
-                                sentNetworkPacket.resendPacket();
-                            } catch (IOException e) {
-                                removePacket(sentNetworkPacket.getSequenceID());
-
-                                _netNetworkConnectionManager.connectionClosed(sentNetworkPacket.getDestinationConnection());
-                            }
+                            sentNetworkPacket.resendPacket();
                         }
                     }
                 }
@@ -80,6 +71,19 @@ public class NetworkPacketManager implements Runnable {
                     .collect(Collectors.toCollection(() -> tmpList));
 
             _packetSentList = tmpList;
+        }
+    }
+
+    public void removePacketsByConnection(NetworkConnection connection) {
+        synchronized (_lock) {
+            Iterator<SentNetworkPacket> iterator = _packetSentList.iterator();
+            while(iterator.hasNext()) {
+                SentNetworkPacket packet = iterator.next();
+
+                if(Objects.equals(packet.getDestinationConnection(), connection)) {
+                    iterator.remove();
+                }
+            }
         }
     }
 
