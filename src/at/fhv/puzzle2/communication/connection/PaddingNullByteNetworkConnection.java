@@ -1,7 +1,5 @@
 package at.fhv.puzzle2.communication.connection;
 
-import at.fhv.puzzle2.communication.connection.util.ByteArrayOperations;
-
 import java.io.IOException;
 
 public class PaddingNullByteNetworkConnection extends NetworkConnectionDecorator {
@@ -11,7 +9,15 @@ public class PaddingNullByteNetworkConnection extends NetworkConnectionDecorator
 
     @Override
     public void sendBytes(byte[] data) throws IOException {
-        this._connection.sendBytes(ByteArrayOperations.appendByteToArray(data, (byte) '\0'));
+        this._connection.sendBytes(appendByteToArray(data, (byte) '\0'));
+    }
+
+    private static byte[] appendByteToArray(byte[] destination, byte src) {
+        byte[] tmpArray = new byte[destination.length + 1];
+        System.arraycopy(destination, 0, tmpArray, 0, destination.length);
+        tmpArray[tmpArray.length - 1] = src;
+
+        return tmpArray;
     }
 
     @Override
