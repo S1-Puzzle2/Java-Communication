@@ -11,6 +11,7 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.endpoint.DiscoverableEndPoint;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketManager;
 import at.fhv.puzzle2.communication.observable.CommandReceivedObservable;
 import at.fhv.puzzle2.communication.observable.ConnectionObservable;
 import at.fhv.puzzle2.communication.observer.ClosedConnectionObserver;
@@ -129,7 +130,8 @@ public class CommunicationManager {
     void newConnectionEstablished(NetworkConnection networkConnection) {
         Logger.getLogger().debug(TAG, "New connection has been established");
 
-        ApplicationConnection applicationConnection = new BaseApplicationConnection(new NetworkPacketHandler(networkConnection));
+        ApplicationConnection applicationConnection = new BaseApplicationConnection(
+                new NetworkPacketHandler(networkConnection, _networkManager.getNetworkConnectionManager()));
         applicationConnection = new Base64ApplicationConnection(applicationConnection);
 
         //If the user provided an encryption, use it
@@ -153,10 +155,16 @@ public class CommunicationManager {
             CommandConnection tmpConnection = iterator.next();
 
             if(Objects.equals(tmpConnection, connection)) {
-                //Stop the send-queue, when we lost the connection
-                tmpConnection.stopSendQueue();
-
                 iterator.remove();
+
+                //Close the CommandListener of the connection
+                _appConnectionManager.closeListener(tmpConnection);
+
+                //Close the connection itself and the SendQueue
+                tmpConnection.close();
+
+                NetworkPacketManager.getInstance().removePacketsByConnection(tmpConnection.getUnderlyingConnection());
+
                 _closedConnectionObservable.appendConnection(connection);
 
                 Logger.getLogger().debug(TAG, "Connection has been lost");
@@ -168,14 +176,14 @@ public class CommunicationManager {
 
     void connectionClosed(NetworkConnection networkConnection) {
         connectionClosed(new CommandConnection(_appConnectionManager,
-                new BaseApplicationConnection(new NetworkPacketHandler(networkConnection))));
+                new BaseApplicationConnection(new NetworkPacketHandler(networkConnection, null))));
     }
 
     public void close() throws IOException {
         Logger.getLogger().info(TAG, "Shutting down the communication-stack...");
 
-        //First stop all the send queues
-        _connectionList.forEach(CommandConnection::stopSendQueue);
+        //Close all connections
+        _connectionList.forEach(CommandConnection::close);
 
         _appConnectionManager.close();
         _networkManager.close();

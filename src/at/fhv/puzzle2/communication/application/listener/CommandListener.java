@@ -23,8 +23,6 @@ public class CommandListener implements Runnable {
         if(_localThread != null) {
             _localThread.interrupt();
         }
-
-        _connection.close();
     }
 
     @Override

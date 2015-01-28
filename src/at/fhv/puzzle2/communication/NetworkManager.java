@@ -37,6 +37,10 @@ class NetworkManager {
         _networkPacketManager = NetworkPacketManager.getInstance();
     }
 
+    public NetworkConnectionManager getNetworkConnectionManager() {
+        return _networkConnectionManager;
+    }
+
     void addConnectionListener(ListenableEndPoint listenableEndPoint) throws IOException {
         _connectionListenerManager.addListener(new ConnectionListener(listenableEndPoint, _newConnectionQueue));
     }

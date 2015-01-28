@@ -23,21 +23,14 @@ public class CommandConnection {
 
     private final ApplicationConnectionManager _connectionManager;
     private final ApplicationConnection _applicationConnection;
-    private final ConnectionSendQueue _connectionSendQueue;
 
     public CommandConnection(ApplicationConnectionManager connectionManager, ApplicationConnection applicationConnection) {
         _connectionManager = connectionManager;
         _applicationConnection = applicationConnection;
-
-        _connectionSendQueue = new ConnectionSendQueue(this);
     }
 
     public void sendCommand(Command command) {
-        _connectionSendQueue.enqueueCommand(command);
-    }
-
-    public void stopSendQueue() {
-        _connectionSendQueue.stopSendQueue();
+        _applicationConnection.sendApplicationMessage(new ApplicationMessage(command.toJSONString()));
     }
 
     public Command receiveCommand() {
@@ -85,7 +78,7 @@ public class CommandConnection {
         }
     }
 
-    NetworkConnection getUnderlyingConnection() {
+    public NetworkConnection getUnderlyingConnection() {
         return _applicationConnection.getUnderlyingConnection();
     }
 
@@ -94,58 +87,4 @@ public class CommandConnection {
         return object instanceof CommandConnection && Objects.equals(this.getUnderlyingConnection(), ((CommandConnection)object).getUnderlyingConnection());
     }
 
-    class ConnectionSendQueue implements Runnable {
-        private static final String TAG = "communication.ConnectionSendQueue";
-
-        private final CommandConnection _connection;
-        private final BlockingQueue<ApplicationMessage> _sendQueue;
-        private volatile boolean _isRunning = true;
-        private final Thread _localThread;
-
-        public ConnectionSendQueue(CommandConnection connection) {
-            _connection = connection;
-
-            _sendQueue = new LinkedBlockingQueue<>();
-
-            _localThread = new Thread(this);
-            _localThread.start();
-        }
-
-        public void stopSendQueue() {
-            _isRunning = false;
-
-            _localThread.interrupt();
-        }
-
-        public void enqueueCommand(Command command) {
-            if(!_sendQueue.offer(new ApplicationMessage(command.toJSONString()))) {
-                Logger.getLogger().warn(TAG, "We lost packets, why?!");
-            }
-        }
-
-        @Override
-        public void run() {
-            while(_isRunning) {
-                try {
-                    ApplicationMessage message = _sendQueue.take();
-
-                    try {
-                        Logger.getLogger().debug(TAG, "Sending app-message: " + message.getMessage());
-
-                        _applicationConnection.sendApplicationMessage(message);
-                    } catch (IOException e) {
-                        if(e instanceof ConnectionClosedException || e instanceof SocketException) {
-                            _connectionManager.connectionClosed(_connection);
-                        } else {
-                            e.printStackTrace();
-                        }
-
-                        break;
-                    }
-                } catch (InterruptedException e) {
-                    //Do nothing here
-                }
-            }
-        }
-    }
 }

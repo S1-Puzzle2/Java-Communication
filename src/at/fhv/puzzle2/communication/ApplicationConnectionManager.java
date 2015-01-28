@@ -5,9 +5,7 @@ import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.application.listener.CommandListener;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class ApplicationConnectionManager {
     private final CommunicationManager _communicationManager;
@@ -23,20 +21,26 @@ public class ApplicationConnectionManager {
     }
 
     public void close() throws IOException {
-        for(CommandListener listener: _listenerList) {
-            listener.close();
-        }
+        _listenerList.forEach(CommandListener::close);
     }
 
-    public synchronized void connectionClosed(CommandConnection connection) {
-        //Close the listener now
-        for (CommandListener listener : _listenerList) {
-            if (listener.getConnection().equals(connection)) {
+    public synchronized void closeListener(CommandConnection connection) {
+        //Close the listener now and remove it from the list
+        Iterator<CommandListener> iterator = _listenerList.iterator();
+        while(iterator.hasNext()) {
+            CommandListener listener = iterator.next();
+
+            if(Objects.equals(listener.getConnection(), connection)) {
                 listener.close();
+                iterator.remove();
 
                 break;
             }
         }
+    }
+
+    public synchronized void connectionClosed(CommandConnection connection) {
+        closeListener(connection);
 
         _communicationManager.connectionClosed(connection);
     }
