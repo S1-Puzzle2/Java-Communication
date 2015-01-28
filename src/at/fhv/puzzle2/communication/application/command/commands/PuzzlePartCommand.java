@@ -30,7 +30,7 @@ public class PuzzlePartCommand extends Command {
 
     @Override
     public String toJSONString() {
-        _messageData.put(CommandConstants.IMAGE, Base64.getEncoder().encode(_image));
+        _messageData.put(CommandConstants.IMAGE, Base64.getEncoder().encodeToString(_image));
         _messageData.put(CommandConstants.PUZZLE_PART_ID, _imageID);
         _messageData.put(CommandConstants.PUZZLE_PART_ORDER, _order);
 
