@@ -17,32 +17,32 @@ public class ApplicationConnectionManager {
     }
 
     public void listenForMessages(CommandConnection connection) {
-        _listenerList.add(new CommandListener(this, connection));
-    }
-
-    public void close() throws IOException {
-        _listenerList.forEach(CommandListener::close);
-    }
-
-    public synchronized void closeListener(CommandConnection connection) {
-        //Close the listener now and remove it from the list
-        Iterator<CommandListener> iterator = _listenerList.iterator();
-        while(iterator.hasNext()) {
-            CommandListener listener = iterator.next();
-
-            if(Objects.equals(listener.getConnection(), connection)) {
-                listener.close();
-                iterator.remove();
-
-                break;
-            }
+        synchronized (_listenerList) {
+            _listenerList.add(new CommandListener(this, connection));
         }
     }
 
-    public synchronized void connectionClosed(CommandConnection connection) {
-        closeListener(connection);
+    public void close() throws IOException {
+        synchronized (_listenerList) {
+            _listenerList.forEach(CommandListener::close);
+        }
+    }
 
-        _communicationManager.connectionClosed(connection);
+    public void closeListener(CommandConnection connection) {
+        synchronized (_listenerList) {
+            //Close the listener now and remove it from the list
+            Iterator<CommandListener> iterator = _listenerList.iterator();
+            while(iterator.hasNext()) {
+                CommandListener listener = iterator.next();
+
+                if(Objects.equals(listener.getConnection(), connection)) {
+                    listener.close();
+                    iterator.remove();
+
+                    break;
+                }
+            }
+        }
     }
 
     public void commandRecieved(Command command) {
