@@ -148,8 +148,6 @@ public class CommunicationManager {
     }
 
     void connectionClosed(CommandConnection connection) {
-        Logger.getLogger().debug(TAG, "Connection has been lost");
-
         Iterator<CommandConnection> iterator = _connectionList.iterator();
         while(iterator.hasNext()) {
             CommandConnection tmpConnection = iterator.next();
@@ -160,6 +158,8 @@ public class CommunicationManager {
 
                 iterator.remove();
                 _closedConnectionObservable.appendConnection(connection);
+
+                Logger.getLogger().debug(TAG, "Connection has been lost");
 
                 return;
             }
