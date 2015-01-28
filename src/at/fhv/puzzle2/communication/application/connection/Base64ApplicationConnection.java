@@ -20,10 +20,12 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
     }
 
     @Override
-    public ApplicationMessage receiveMessage() throws IOException {
+    public ApplicationMessage receiveMessage() {
         ApplicationMessage message = _connection.receiveMessage();
 
-        message.setMessage(Base64.getDecoder().decode(message.getMessage()));
+        if(message != null) {
+            message.setMessage(Base64.getDecoder().decode(message.getMessage()));
+        }
 
         return message;
     }

@@ -34,18 +34,20 @@ public class EncryptedApplicationConnection extends ApplicationConnectionDecorat
     }
 
     @Override
-    public ApplicationMessage receiveMessage() throws IOException {
+    public ApplicationMessage receiveMessage() {
         ApplicationMessage message = _connection.receiveMessage();
 
-        byte[] messageBytes = message.getMessage().getBytes(Charset.forName("UTF-8"));
+        if(message != null) {
+            byte[] messageBytes = message.getMessage().getBytes(Charset.forName("UTF-8"));
 
-        try {
-            message.setMessage(_encryption.decrypt(messageBytes));
+            try {
+                message.setMessage(_encryption.decrypt(messageBytes));
 
-            return message;
-        } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-            //TODO currently we catch it here, NOT a good idea
-            e.printStackTrace();
+                return message;
+            } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+                //TODO currently we catch it here, NOT a good idea
+                e.printStackTrace();
+            }
         }
 
 

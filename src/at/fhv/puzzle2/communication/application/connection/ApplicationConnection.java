@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public interface ApplicationConnection {
     void sendApplicationMessage(ApplicationMessage command);
-    ApplicationMessage receiveMessage() throws IOException;
+    ApplicationMessage receiveMessage();
     void close() throws IOException;
     NetworkConnection getUnderlyingConnection();
 }

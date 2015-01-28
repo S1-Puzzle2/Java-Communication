@@ -35,36 +35,26 @@ public class CommandConnection {
 
     public Command receiveCommand() {
         while(true) {
-            try {
-                final ApplicationMessage receivedMessage = _applicationConnection.receiveMessage();
-                if(receivedMessage == null) {
-                    return null;
-                }
+            final ApplicationMessage receivedMessage = _applicationConnection.receiveMessage();
 
-                Logger.getLogger().debug(TAG, "Received app-message: " + receivedMessage.getMessage());
-
-                final Command command;
-                try {
-                    command = CommandFactory.parseCommand(receivedMessage);
-                    command.setConnection(this);
-
-                    return command;
-                } catch (UnknownCommandException e) {
-                    UnknownCommand unknownCommand = new UnknownCommand(e.getMessage());
-                    sendCommand(unknownCommand);
-                } catch(MalformedCommandException e) {
-                    MalformedCommand malformedCommand = new MalformedCommand(e.getMessage());
-                    sendCommand(malformedCommand);
-                }
-
-            } catch (IOException e) {
-                if(e instanceof ConnectionClosedException || e instanceof SocketException) {
-                    _connectionManager.connectionClosed(this);
-                } else {
-                    e.printStackTrace();
-                }
-
+            if(receivedMessage == null) {
                 return null;
+            }
+
+            Logger.getLogger().debug(TAG, "Received app-message: " + receivedMessage.getMessage());
+
+            final Command command;
+            try {
+                command = CommandFactory.parseCommand(receivedMessage);
+                command.setConnection(this);
+
+                return command;
+            } catch (UnknownCommandException e) {
+                UnknownCommand unknownCommand = new UnknownCommand(e.getMessage());
+                sendCommand(unknownCommand);
+            } catch(MalformedCommandException e) {
+                MalformedCommand malformedCommand = new MalformedCommand(e.getMessage());
+                sendCommand(malformedCommand);
             }
         }
     }

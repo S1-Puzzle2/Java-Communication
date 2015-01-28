@@ -17,12 +17,14 @@ public class NetworkPacketHandler {
 
     private volatile static int _sequenceID = 2333;
     private final NetworkConnection _networkConnection;
+    private final NetworkConnectionManager _networkConnectionManager;
     private final ConnectionSendQueue _sendQueue;
 
     public NetworkPacketHandler(NetworkConnection networkConnection, NetworkConnectionManager networkConnectionManager) {
         _networkConnection = networkConnection;
+        _networkConnectionManager = networkConnectionManager;
 
-        _sendQueue = new ConnectionSendQueue(networkConnectionManager);
+        _sendQueue = new ConnectionSendQueue();
     }
 
     public void sendMessage(String message) {
@@ -39,29 +41,35 @@ public class NetworkPacketHandler {
         }
     }
 
-    public String receiveMessage() throws IOException {
-        while(true) {
-            NetworkPacket packet = readMessage();
+    public String receiveMessage() {
+        try {
+            while(true) {
+                NetworkPacket packet = readMessage();
 
-            if(packet.getNetworkFlags() != null) {
-                //So it should be an acknowledge, an error or the connection gets closed
-                if(packet.getNetworkFlags().isAcknowledgePresent()) {
-                    NetworkPacketManager.getInstance().receivedAcknowledge(packet);
+                if(packet.getNetworkFlags() != null) {
+                    //So it should be an acknowledge, an error or the connection gets closed
+                    if(packet.getNetworkFlags().isAcknowledgePresent()) {
+                        NetworkPacketManager.getInstance().receivedAcknowledge(packet);
 
-                } else if(packet.getNetworkFlags().isClosePresent() && packet.getNetworkFlags().getClose()) {
-                    _networkConnection.close();
+                    } else if(packet.getNetworkFlags().isClosePresent() && packet.getNetworkFlags().getClose()) {
+                        _networkConnection.close();
+                    }
+                } else {
+                    NetworkPacketFlags flags = new NetworkPacketFlags();
+                    flags.setAcknowledge(true);
+
+                    NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
+                    this.sendMessage(response, false);
+
+                    Logger.getLogger().debug(TAG, "Sending acknowledge true for sequence id " + packet.getSequenceID());
+
+                    return packet.getApplicationMessage();
                 }
-            } else {
-                NetworkPacketFlags flags = new NetworkPacketFlags();
-                flags.setAcknowledge(true);
-
-                NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
-                this.sendMessage(response, false);
-
-                Logger.getLogger().debug(TAG, "Sending acknowledge true for sequence id " + packet.getSequenceID());
-
-                return packet.getApplicationMessage();
             }
+        } catch(IOException e) {
+            _networkConnectionManager.connectionClosed(_networkConnection);
+
+            return null;
         }
     }
 
@@ -120,10 +128,7 @@ public class NetworkPacketHandler {
         private volatile boolean _isRunning = true;
         private final Thread _localThread;
 
-        private final NetworkConnectionManager _connectionManager;
-
-        public ConnectionSendQueue(NetworkConnectionManager connectionManager) {
-            _connectionManager = connectionManager;
+        public ConnectionSendQueue() {
 
             _sendQueue = new LinkedBlockingQueue<>();
 
@@ -154,9 +159,8 @@ public class NetworkPacketHandler {
 
                         _networkConnection.sendBytes(packet.getBytes());
                     } catch (IOException e) {
-                        if(e instanceof ConnectionClosedException || e instanceof SocketException) {
-                            _connectionManager.connectionClosed(_networkConnection);
-                        } else {
+                        _networkConnectionManager.connectionClosed(_networkConnection);
+                        if(!(e instanceof ConnectionClosedException || e instanceof SocketException)) {
                             e.printStackTrace();
                         }
 

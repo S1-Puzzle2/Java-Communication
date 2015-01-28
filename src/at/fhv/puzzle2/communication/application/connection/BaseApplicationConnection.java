@@ -19,8 +19,13 @@ public class BaseApplicationConnection implements ApplicationConnection {
     }
 
     @Override
-    public ApplicationMessage receiveMessage() throws IOException {
-        return new ApplicationMessage(this, _packetManager.receiveMessage());
+    public ApplicationMessage receiveMessage() {
+        String message = _packetManager.receiveMessage();
+        if(message != null) {
+            return new ApplicationMessage(this, message);
+        }
+
+        return null;
     }
 
     @Override
