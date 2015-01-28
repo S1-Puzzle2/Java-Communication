@@ -14,7 +14,7 @@ public class BaseApplicationConnection implements ApplicationConnection {
     }
 
     @Override
-    public void sendApplicationMessage(ApplicationMessage applicationMessage) throws IOException {
+    public void sendApplicationMessage(ApplicationMessage applicationMessage) {
         _packetManager.sendMessage(applicationMessage.getMessage());
     }
 

@@ -9,7 +9,7 @@ import java.io.IOException;
  * Connection represents a Connection, which can send ApplicationMessages
  */
 public interface ApplicationConnection {
-    void sendApplicationMessage(ApplicationMessage command) throws IOException;
+    void sendApplicationMessage(ApplicationMessage command);
     ApplicationMessage receiveMessage() throws IOException;
     void close() throws IOException;
     NetworkConnection getUnderlyingConnection();

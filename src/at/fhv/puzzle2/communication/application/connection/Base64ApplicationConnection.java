@@ -12,7 +12,7 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
     }
 
     @Override
-    public void sendApplicationMessage(ApplicationMessage message) throws IOException {
+    public void sendApplicationMessage(ApplicationMessage message) {
         byte[] messageData = message.getMessage().getBytes(Charset.forName("UTF-8"));
         message.setMessage(Base64.getEncoder().encode(messageData));
 

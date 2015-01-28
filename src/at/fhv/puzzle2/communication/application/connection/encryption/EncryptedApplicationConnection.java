@@ -20,7 +20,7 @@ public class EncryptedApplicationConnection extends ApplicationConnectionDecorat
     }
 
     @Override
-    public void sendApplicationMessage(ApplicationMessage message) throws IOException {
+    public void sendApplicationMessage(ApplicationMessage message) {
         try {
             byte[] data = message.getMessage().getBytes(Charset.forName("UTF-8"));
 
