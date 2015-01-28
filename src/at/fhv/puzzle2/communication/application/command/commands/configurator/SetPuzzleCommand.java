@@ -5,13 +5,17 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class SetPuzzleCommand extends Command {
-    private Integer _puzzleID;
+    private String _puzzleName;
 
     public SetPuzzleCommand(ClientID clientID) {
         super(clientID, CommandType.SetPuzzle);
     }
 
-    public void setPuzzleID(Integer id) {
-        _puzzleID = id;
+    public void setPuzzleName(String puzzleName) {
+        _puzzleName = puzzleName;
+    }
+
+    public String getPuzzleName() {
+        return _puzzleName;
     }
 }

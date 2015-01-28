@@ -27,7 +27,7 @@ public class NetworkPacketManager implements Runnable {
     public void run() {
         while(_isRunning) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(100000);
 
                 synchronized (_lock) {
                     for (SentNetworkPacket sentNetworkPacket : _packetSentList) {
@@ -63,14 +63,15 @@ public class NetworkPacketManager implements Runnable {
     }
 
     private void removePacket(Integer id) {
-        List<SentNetworkPacket> tmpList = Collections.synchronizedList(new LinkedList<>());
-
         synchronized (_lock) {
-            _packetSentList.stream()
-                    .filter(sentPacket -> id.compareTo(sentPacket.getSequenceID()) != 0)
-                    .collect(Collectors.toCollection(() -> tmpList));
+            Iterator<SentNetworkPacket> iterator = _packetSentList.iterator();
+            while(iterator.hasNext()) {
+                SentNetworkPacket packet = iterator.next();
 
-            _packetSentList = tmpList;
+                if(Objects.equals(packet.getSequenceID(), id)) {
+                    iterator.remove();
+                }
+            }
         }
     }
 

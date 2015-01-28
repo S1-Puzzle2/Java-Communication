@@ -32,6 +32,7 @@ public class CommandFactory {
         _parserList.add(new UnknownCommandParser());
         _parserList.add(new GetPuzzleListCommandParser());
         _parserList.add(new SetPuzzleCommandParser());
+        _parserList.add(new PuzzleFinishedCommandParser());
     }
 
 

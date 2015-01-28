@@ -6,15 +6,16 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandConstan
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class PuzzleListCommand extends Command {
-    private HashMap<Integer, String> _puzzleList;
+    private List<String> _puzzleList;
 
-    protected PuzzleListCommand(ClientID clientID) {
+    public PuzzleListCommand(ClientID clientID) {
         super(clientID, CommandType.PuzzleList);
     }
 
-    public void setPuzzleList(HashMap<Integer, String> puzzleList) {
+    public void setPuzzleList(List<String> puzzleList) {
         _puzzleList = puzzleList;
     }
 

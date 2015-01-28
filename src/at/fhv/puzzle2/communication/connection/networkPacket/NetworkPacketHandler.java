@@ -11,6 +11,7 @@ import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class NetworkPacketHandler {
     private static final String TAG = "communication.NetworkPacketHandler";
@@ -59,7 +60,7 @@ public class NetworkPacketHandler {
                     flags.setAcknowledge(true);
 
                     NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
-                    this.sendMessage(response, false);
+                    this.sendDirectMessage(response);
 
                     Logger.getLogger().debug(TAG, "Sending acknowledge true for sequence id " + packet.getSequenceID());
 
@@ -70,6 +71,14 @@ public class NetworkPacketHandler {
             _networkConnectionManager.connectionClosed(_networkConnection);
 
             return null;
+        }
+    }
+
+    private void sendDirectMessage(NetworkPacket response) {
+        try {
+            _networkConnection.sendBytes(response.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -99,7 +108,8 @@ public class NetworkPacketHandler {
 
                 Logger.getLogger().debug(TAG, "Checksum failed for sequence id " + packet.getSequenceID());
 
-                this.sendMessage(response, false);
+                //this.sendMessage(response, false);
+                this.sendDirectMessage(response);
             } catch(MalformedNetworkPacketException e) {
                 Logger.getLogger().debug(TAG, "Malformed packet received: " + e.getMessage());
             }

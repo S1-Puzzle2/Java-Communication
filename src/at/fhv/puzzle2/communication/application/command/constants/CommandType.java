@@ -9,7 +9,7 @@ public enum CommandType {
     GetPuzzlePart("GET_IMAGE"), Pause("PAUSE"), BarcodeScanned("BARCODE_SCANNED"), NotAllowed("NOT_ALLOWED"),
     ShowQuestion("SHOW_QUESTION"), SearchPuzzlePart("SHOW_IMAGE_SCREEN"),
     QuestionAnswered("ANSWERED_QUESTION"), BarcodeCorrect("BARCODE_CORRECT"),
-    AnswerCorrect("ANSWER_CORRECT"), PartsUnlocked("PARTS_UNLOCKED"), PuzzleFinished("PUZZLE_FINISHED"),
+    AnswerCorrect("ANSWER_CORRECT"), PartsUnlocked("PART_UNLOCKED"), PuzzleFinished("PUZZLE_FINISHED"),
     PuzzleList("PUZZLE_LIST"), ShowQR("SHOW_QR"), GameState("GAME_STATE"), PuzzlePart("IMAGE"),
     GameFinished("GAME_FINISHED"), CreatePuzzle("CREATE_PUZZLE"), CreatePuzzlePart("CREATE_PUZZLE_PART"),
     GetPuzzleList("GET_PUZZLE_LIST"), SetPuzzle("SET_PUZZLE"), ResetGame("RESET_GAME"), SolvePuzzle("SOLVE_PUZZLE");

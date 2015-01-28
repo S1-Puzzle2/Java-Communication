@@ -5,6 +5,7 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
+import java.io.*;
 import java.util.Base64;
 
 public class PuzzlePartCommand extends Command {
@@ -33,6 +34,7 @@ public class PuzzlePartCommand extends Command {
         _messageData.put(CommandConstants.IMAGE, Base64.getEncoder().encodeToString(_image));
         _messageData.put(CommandConstants.PUZZLE_PART_ID, _imageID);
         _messageData.put(CommandConstants.PUZZLE_PART_ORDER, _order);
+
 
         return super.toJSONString();
     }

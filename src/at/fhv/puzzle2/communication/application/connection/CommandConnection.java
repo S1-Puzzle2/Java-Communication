@@ -30,6 +30,7 @@ public class CommandConnection {
     }
 
     public void sendCommand(Command command) {
+        Logger.getLogger().debug(TAG, "Sending app-message: " + command.toJSONString());
         _applicationConnection.sendApplicationMessage(new ApplicationMessage(command.toJSONString()));
     }
 

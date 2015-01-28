@@ -9,7 +9,7 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import java.util.HashMap;
 
 public class PuzzleFinishedCommandParser extends CommandParser {
-    protected PuzzleFinishedCommandParser() {
+    public PuzzleFinishedCommandParser() {
         super(true);
     }
 
