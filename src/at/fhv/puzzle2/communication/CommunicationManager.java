@@ -149,12 +149,12 @@ public class CommunicationManager {
         _newConnectionObservable.appendConnection(commandConnection);
     }
 
-    void connectionClosed(CommandConnection connection) {
+    void connectionClosed(NetworkConnection networkConnection) {
         Iterator<CommandConnection> iterator = _connectionList.iterator();
         while(iterator.hasNext()) {
             CommandConnection tmpConnection = iterator.next();
 
-            if(Objects.equals(tmpConnection, connection)) {
+            if(Objects.equals(tmpConnection.getUnderlyingConnection(), networkConnection)) {
                 iterator.remove();
 
                 //Close the CommandListener of the connection
@@ -165,18 +165,13 @@ public class CommunicationManager {
 
                 NetworkPacketManager.getInstance().removePacketsByConnection(tmpConnection.getUnderlyingConnection());
 
-                _closedConnectionObservable.appendConnection(connection);
+                _closedConnectionObservable.appendConnection(tmpConnection);
 
                 Logger.getLogger().debug(TAG, "Connection has been lost");
 
                 return;
             }
         }
-    }
-
-    void connectionClosed(NetworkConnection networkConnection) {
-        connectionClosed(new CommandConnection(_appConnectionManager,
-                new BaseApplicationConnection(new NetworkPacketHandler(networkConnection, null))));
     }
 
     public void close() throws IOException {
