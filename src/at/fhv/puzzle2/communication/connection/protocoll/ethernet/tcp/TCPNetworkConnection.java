@@ -2,8 +2,8 @@ package at.fhv.puzzle2.communication.connection.protocoll.ethernet.tcp;
 
 import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
-import at.fhv.puzzle2.communication.connection.util.ByteArrayOperations;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,14 +26,13 @@ public class TCPNetworkConnection implements NetworkConnection {
 
     @Override
     public byte[] readBytes() throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
             InputStream inStream = _socket.getInputStream();
 
-            byte[] receivedBytes = new byte[0];
-
             byte tmpByte;
             while((tmpByte = (byte) inStream.read()) != -1) {
-                receivedBytes = ByteArrayOperations.appendByteToArray(receivedBytes, tmpByte);
+                buffer.write(tmpByte);
 
                 if(tmpByte == '\0') {
                     break;
@@ -44,7 +43,7 @@ public class TCPNetworkConnection implements NetworkConnection {
                 throw new ConnectionClosedException();
             }
 
-            return receivedBytes;
+            return buffer.toByteArray();
         } catch(SocketException e) {
             //Occurs when the other end closes the connection
             throw new ConnectionClosedException();
