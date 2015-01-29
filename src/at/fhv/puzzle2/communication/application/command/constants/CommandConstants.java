@@ -30,7 +30,8 @@ public class CommandConstants {
     public static final String PUZZLE_LIST = "puzzleList";
     public static final String PUZZLE_NAME = "gameName";
     public static final String TEAM_NAME = "teamName";
-    public static final String PUZZLE_PARTS_LIST = "imageIDs";
+    public static final String IMAGE_LIST = "imageIDs";
+    public static final String PUZZLE_PART_LIST = "puzzlePartList";
     public static final String IMAGE = "base64Image";
     public static final String QR_CODE = "qrCode";
     public static final String TIME = "time";

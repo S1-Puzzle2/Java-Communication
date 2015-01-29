@@ -36,7 +36,7 @@ public class CommunicationManager {
 
     private Encryption _encryption = null;
 
-    private CommunicationManager(String broadcastResponse, Encryption encryption) {
+    public CommunicationManager(String broadcastResponse, Encryption encryption) {
         _appConnectionManager = new ApplicationConnectionManager(this);
 
         _newConnectionObservable = new ConnectionObservable<>();
@@ -47,7 +47,11 @@ public class CommunicationManager {
 
         _connectionList = Collections.synchronizedList(new LinkedList<>());
 
-        _encryption = encryption;
+        if(encryption != null) {
+            Logger.getLogger().info(TAG, "Encryption is enabled");
+
+            _encryption = encryption;
+        }
 
         Logger.getLogger().info(TAG, "Communication-Stack initialized...");
     }
@@ -136,7 +140,6 @@ public class CommunicationManager {
 
         //If the user provided an encryption, use it
         if(_encryption != null) {
-            Logger.getLogger().info(TAG, "Encryption is enabled");
 
             applicationConnection = new EncryptedApplicationConnection(applicationConnection, _encryption);
         }
@@ -149,7 +152,7 @@ public class CommunicationManager {
         _newConnectionObservable.appendConnection(commandConnection);
     }
 
-    void connectionClosed(NetworkConnection networkConnection) {
+    synchronized void connectionClosed(NetworkConnection networkConnection) {
         Iterator<CommandConnection> iterator = _connectionList.iterator();
         while(iterator.hasNext()) {
             CommandConnection tmpConnection = iterator.next();

@@ -33,7 +33,7 @@ class NetworkManager {
 
         _networkConnectionManager = new NetworkConnectionManager(communicationManager, _newConnectionQueue);
 
-        NetworkPacketManager.initializeNetworkPacketManager(_networkConnectionManager);
+        NetworkPacketManager.initializeNetworkPacketManager();
         _networkPacketManager = NetworkPacketManager.getInstance();
     }
 

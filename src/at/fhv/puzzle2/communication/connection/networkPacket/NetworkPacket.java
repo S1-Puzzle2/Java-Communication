@@ -20,9 +20,15 @@ public class NetworkPacket implements JSONAware {
     private long _checkSum;
     private String _appMsg;
 
+    private boolean _resend = false;
+
     private NetworkPacketFlags _flags;
 
     public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg) {
+        this(sequenceID, flags, appMsg, false);
+    }
+
+    public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg, boolean resend) {
         _sequenceID = sequenceID;
         _flags = flags;
         _appMsg = appMsg;
@@ -31,6 +37,10 @@ public class NetworkPacket implements JSONAware {
 
     private NetworkPacket() {
 
+    }
+
+    public boolean shouldResend() {
+        return _resend;
     }
 
     public static NetworkPacket createResponse(int sequenceID, NetworkPacketFlags flags) {

@@ -33,7 +33,7 @@ public class GameStateCommand extends Command {
         _messageData.put(CommandConstants.PUZZLE_NAME, _puzzleName);
         _messageData.put(CommandConstants.TEAM_NAME, _teamName);
 
-        _messageData.put(CommandConstants.PUZZLE_PARTS_LIST, _partsList);
+        _messageData.put(CommandConstants.IMAGE_LIST, _partsList);
 
         return super.toJSONString();
     }

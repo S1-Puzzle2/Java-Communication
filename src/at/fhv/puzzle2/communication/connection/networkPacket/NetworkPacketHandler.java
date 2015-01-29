@@ -25,21 +25,16 @@ public class NetworkPacketHandler {
         _networkConnection = networkConnection;
         _networkConnectionManager = networkConnectionManager;
 
-        _sendQueue = new ConnectionSendQueue();
+        _sendQueue = new ConnectionSendQueue(this);
     }
 
     public void sendMessage(String message) {
-        NetworkPacket packet = new NetworkPacket(NetworkPacketHandler.getNextSequenceID(), null, message);
-        sendMessage(packet, true);
+        NetworkPacket packet = new NetworkPacket(NetworkPacketHandler.getNextSequenceID(), null, message, true);
+        sendMessage(packet);
     }
 
-    public void sendMessage(NetworkPacket packet, boolean resend) {
+    public void sendMessage(NetworkPacket packet) {
         _sendQueue.enqueuePacket(packet);
-
-        if(resend) {
-            //Store it inside NetworkPacketManager, which waits for an acknowledge or else sends the message again
-            NetworkPacketManager.getInstance().sentNetworkPacket(packet, this);
-        }
     }
 
     public String receiveMessage() {
@@ -137,8 +132,10 @@ public class NetworkPacketHandler {
         private final BlockingQueue<NetworkPacket> _sendQueue;
         private volatile boolean _isRunning = true;
         private final Thread _localThread;
+        private final NetworkPacketHandler _packetHandler;
 
-        public ConnectionSendQueue() {
+        public ConnectionSendQueue(NetworkPacketHandler packetHandler) {
+            _packetHandler = packetHandler;
 
             _sendQueue = new LinkedBlockingQueue<>();
 
@@ -168,6 +165,10 @@ public class NetworkPacketHandler {
                         Logger.getLogger().trace(TAG, "Sending network packet: " + packet.toJSONString());
 
                         _networkConnection.sendBytes(packet.getBytes());
+
+                        if(packet.shouldResend()) {
+                            NetworkPacketManager.getInstance().sentNetworkPacket(packet, _packetHandler);
+                        }
                     } catch (IOException e) {
                         _networkConnectionManager.connectionClosed(_networkConnection);
                         if(!(e instanceof ConnectionClosedException || e instanceof SocketException)) {

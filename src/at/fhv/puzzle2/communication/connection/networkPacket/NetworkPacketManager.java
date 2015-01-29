@@ -7,14 +7,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NetworkPacketManager implements Runnable {
-    private final NetworkConnectionManager _netNetworkConnectionManager;
     private List<SentNetworkPacket> _packetSentList;
 
     private final Thread _localThread;
     private final Object _lock = new Object();
 
-    private NetworkPacketManager(NetworkConnectionManager networkConnectionManager) {
-        _netNetworkConnectionManager = networkConnectionManager;
+    private NetworkPacketManager() {
         _packetSentList = Collections.synchronizedList(new LinkedList<>());
 
         _localThread = new Thread(this);
@@ -30,9 +28,12 @@ public class NetworkPacketManager implements Runnable {
                 Thread.sleep(100000);
 
                 synchronized (_lock) {
-                    for (SentNetworkPacket sentNetworkPacket : _packetSentList) {
+                    Iterator<SentNetworkPacket> iterator = _packetSentList.iterator();
+                    while(iterator.hasNext()) {
+                        SentNetworkPacket sentNetworkPacket = iterator.next();
                         if (new Date().getTime() - sentNetworkPacket.getTime() > 10000) {
                             sentNetworkPacket.resendPacket();
+                            iterator.remove();
                         }
                     }
                 }
@@ -89,8 +90,8 @@ public class NetworkPacketManager implements Runnable {
     }
 
     private static NetworkPacketManager _instance;
-    public static synchronized void initializeNetworkPacketManager(NetworkConnectionManager networkConnectionManager) {
-        _instance = new NetworkPacketManager(networkConnectionManager);
+    public static synchronized void initializeNetworkPacketManager() {
+        _instance = new NetworkPacketManager();
     }
 
     public static NetworkPacketManager getInstance() {
