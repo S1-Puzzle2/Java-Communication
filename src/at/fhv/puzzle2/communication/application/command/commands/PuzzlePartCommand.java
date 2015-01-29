@@ -8,7 +8,7 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import java.util.Base64;
 
 public class PuzzlePartCommand extends Command {
-    private byte[] _image;
+    private String _base64Image;
     private int _imageID;
     private int _order;
 
@@ -17,7 +17,7 @@ public class PuzzlePartCommand extends Command {
     }
 
     public void setImage(byte[] image) {
-        _image = image;
+        _base64Image = Base64.getEncoder().encodeToString(image);
     }
 
     public void setImageID(int id) {
@@ -30,7 +30,7 @@ public class PuzzlePartCommand extends Command {
 
     @Override
     public String toJSONString() {
-        _messageData.put(CommandConstants.IMAGE, Base64.getEncoder().encodeToString(_image));
+        _messageData.put(CommandConstants.IMAGE, _base64Image);
         _messageData.put(CommandConstants.PUZZLE_PART_ID, _imageID);
         _messageData.put(CommandConstants.PUZZLE_PART_ORDER, _order);
 
