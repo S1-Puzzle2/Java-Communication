@@ -5,13 +5,14 @@ import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
+import at.fhv.puzzle2.logging.LoggedObject;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public abstract class Command implements JSONAware {
+public abstract class Command implements JSONAware, LoggedObject {
     private CommandConnection _connection;
 
     private ClientID _clientID;
@@ -64,5 +65,10 @@ public abstract class Command implements JSONAware {
         message.put(CommandConstants.MESSAGE_DATA, _messageData);
 
         return JSONValue.toJSONString(message);
+    }
+
+    @Override
+    public String getLogString() {
+        return toJSONString();
     }
 }
