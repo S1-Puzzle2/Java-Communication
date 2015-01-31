@@ -1,10 +1,8 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
-import at.fhv.puzzle2.communication.NetworkConnectionManager;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class NetworkPacketManager implements Runnable {
     private List<SentNetworkPacket> _packetSentList;
@@ -89,12 +87,11 @@ public class NetworkPacketManager implements Runnable {
         }
     }
 
-    private static NetworkPacketManager _instance;
-    public static synchronized void initializeNetworkPacketManager() {
-        _instance = new NetworkPacketManager();
-    }
-
-    public static NetworkPacketManager getInstance() {
+    private static NetworkPacketManager _instance = null;
+    public synchronized static NetworkPacketManager getInstance() {
+        if(_instance == null) {
+            _instance = new NetworkPacketManager();
+        }
         return _instance;
     }
 }

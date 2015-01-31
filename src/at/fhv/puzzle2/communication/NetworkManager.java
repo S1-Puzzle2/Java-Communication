@@ -19,7 +19,6 @@ class NetworkManager {
     private final String _broadcastResponse;
 
     private final NetworkConnectionManager _networkConnectionManager;
-    private final NetworkPacketManager _networkPacketManager;
 
     private final BlockingQueue<NetworkConnection> _newConnectionQueue;
 
@@ -32,9 +31,6 @@ class NetworkManager {
         _broadcastResponse = broadcastResponse;
 
         _networkConnectionManager = new NetworkConnectionManager(communicationManager, _newConnectionQueue);
-
-        NetworkPacketManager.initializeNetworkPacketManager();
-        _networkPacketManager = NetworkPacketManager.getInstance();
     }
 
     public NetworkConnectionManager getNetworkConnectionManager() {
@@ -78,6 +74,6 @@ class NetworkManager {
         _broadcastListenerManager.stopListening();
 
         _networkConnectionManager.close();
-        _networkPacketManager.close();
+        NetworkPacketManager.getInstance().close();
     }
 }
