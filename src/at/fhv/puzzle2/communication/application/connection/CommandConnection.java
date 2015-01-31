@@ -1,7 +1,6 @@
 package at.fhv.puzzle2.communication.application.connection;
 
 import at.fhv.puzzle2.communication.ApplicationConnectionManager;
-import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.CommandFactory;
@@ -13,10 +12,7 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.logging.Logger;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.Objects;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class CommandConnection {
     private static final String TAG = "communication.CommandConnection";
@@ -30,7 +26,7 @@ public class CommandConnection {
     }
 
     public void sendCommand(Command command) {
-        Logger.getLogger().debug(TAG, "Sending app-message: " + command.toJSONString());
+        Logger.getLogger().debug(TAG, "Sending command:", command);
         _applicationConnection.sendApplicationMessage(new ApplicationMessage(command.toJSONString()));
     }
 
@@ -42,18 +38,23 @@ public class CommandConnection {
                 return null;
             }
 
-            Logger.getLogger().debug(TAG, "Received app-message: " + receivedMessage.getMessage());
 
             final Command command;
             try {
                 command = CommandFactory.parseCommand(receivedMessage);
                 command.setConnection(this);
 
+                Logger.getLogger().debug(TAG, "Received command:", command);
+
                 return command;
             } catch (UnknownCommandException e) {
+                Logger.getLogger().warn(TAG, e.getMessage());
+
                 UnknownCommand unknownCommand = new UnknownCommand(e.getMessage());
                 sendCommand(unknownCommand);
             } catch(MalformedCommandException e) {
+                Logger.getLogger().warn(TAG, e.getMessage());
+
                 MalformedCommand malformedCommand = new MalformedCommand(e.getMessage());
                 sendCommand(malformedCommand);
             }
