@@ -11,7 +11,6 @@ import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
 
 public class NetworkPacketHandler {
     private static final String TAG = "communication.NetworkPacketHandler";
@@ -57,8 +56,6 @@ public class NetworkPacketHandler {
                     NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
                     this.sendDirectMessage(response);
 
-                    Logger.getLogger().debug(TAG, "Sending acknowledge true for sequence id " + packet.getSequenceID());
-
                     return packet.getApplicationMessage();
                 }
             }
@@ -84,9 +81,9 @@ public class NetworkPacketHandler {
             try {
                 String read = new String(_networkConnection.readBytes(), Charset.forName("UTF-8"));
 
-                Logger.getLogger().trace(TAG, "Received network packet: " + read);
-
                 packet = NetworkPacket.parse(read.getBytes());
+
+                Logger.getLogger().trace(TAG, "Received network packet:", packet);
 
                 if(packet.checkSumCorrect()) {
                     return packet;
@@ -106,7 +103,7 @@ public class NetworkPacketHandler {
                 //this.sendMessage(response, false);
                 this.sendDirectMessage(response);
             } catch(MalformedNetworkPacketException e) {
-                Logger.getLogger().debug(TAG, "Malformed packet received: " + e.getMessage());
+                Logger.getLogger().debug(TAG, e.getMessage());
             }
         }
     }
@@ -162,7 +159,7 @@ public class NetworkPacketHandler {
                     NetworkPacket packet = _sendQueue.take();
 
                     try {
-                        Logger.getLogger().trace(TAG, "Sending network packet: " + packet.toJSONString());
+                        Logger.getLogger().trace(TAG, "Sending network packet:", packet);
 
                         _networkConnection.sendBytes(packet.getBytes());
 

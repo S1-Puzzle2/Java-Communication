@@ -1,6 +1,7 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
 import at.fhv.puzzle2.communication.connection.MalformedNetworkPacketException;
+import at.fhv.puzzle2.logging.LoggedObject;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
 
@@ -11,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-public class NetworkPacket implements JSONAware {
+public class NetworkPacket implements JSONAware, LoggedObject {
     private static final String CHECKSUM = "checkSum";
     private static final String SEQUENCE_ID = "seqID";
     private static final String APP_MSG = "appMsg";
@@ -126,5 +127,14 @@ public class NetworkPacket implements JSONAware {
 
     public byte[] getBytes() {
         return toJSONString().getBytes(Charset.forName("UTF-8"));
+    }
+
+    @Override
+    public String getLogString() {
+        HashMap<String, Object> packetData = getJSONObject();
+        //Dont print the App-Message, its base64 so we cant read it anyway
+        packetData.put(APP_MSG, LOG_DATA_OMITTED);
+
+        return JSONValue.toJSONString(packetData);
     }
 }
