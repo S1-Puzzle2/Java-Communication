@@ -11,7 +11,6 @@ import at.fhv.puzzle2.communication.application.command.commands.error.UnknownCo
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.logging.Logger;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class CommandConnection {
@@ -62,12 +61,7 @@ public class CommandConnection {
     }
 
     public void close() {
-        try {
-            _applicationConnection.close();
-        } catch (IOException e) {
-            //We dont really care about exceptions while closing the connection
-            //e.printStackTrace();
-        }
+        _applicationConnection.close();
     }
 
     public NetworkConnection getUnderlyingConnection() {

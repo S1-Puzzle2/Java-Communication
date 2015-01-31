@@ -55,7 +55,7 @@ public class EncryptedApplicationConnection extends ApplicationConnectionDecorat
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         _connection.close();
     }
 }

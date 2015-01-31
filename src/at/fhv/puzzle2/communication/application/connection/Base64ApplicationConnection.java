@@ -2,7 +2,6 @@ package at.fhv.puzzle2.communication.application.connection;
 
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
@@ -31,7 +30,7 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         _connection.close();
     }
 }

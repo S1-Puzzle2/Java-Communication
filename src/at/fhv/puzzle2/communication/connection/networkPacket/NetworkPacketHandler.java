@@ -112,10 +112,14 @@ public class NetworkPacketHandler {
         return _sequenceID++;
     }
 
-    public void close() throws IOException {
-        _networkConnection.close();
+    public void close() {
+        try {
+            _networkConnection.close();
 
-        _sendQueue.closeSendQueue();
+            _sendQueue.closeSendQueue();
+        } catch (IOException e) {
+            //Dont do anything
+        }
     }
 
     public NetworkConnection getUnderlyingConnection() {

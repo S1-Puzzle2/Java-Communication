@@ -4,8 +4,6 @@ import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 
-import java.io.IOException;
-
 public class BaseApplicationConnection implements ApplicationConnection {
     private final NetworkPacketHandler _packetManager;
 
@@ -29,7 +27,7 @@ public class BaseApplicationConnection implements ApplicationConnection {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         _packetManager.close();
     }
 
