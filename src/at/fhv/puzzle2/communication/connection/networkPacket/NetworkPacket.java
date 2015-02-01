@@ -1,5 +1,6 @@
 package at.fhv.puzzle2.communication.connection.networkPacket;
 
+import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.connection.MalformedNetworkPacketException;
 import at.fhv.puzzle2.logging.LoggedObject;
 import org.json.simple.JSONAware;
@@ -12,28 +13,34 @@ import java.util.LinkedHashMap;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
-public class NetworkPacket implements JSONAware, LoggedObject {
+public class NetworkPacket implements JSONAware, LoggedObject, Comparable<NetworkPacket> {
     private static final String CHECKSUM = "checkSum";
     private static final String SEQUENCE_ID = "seqID";
     private static final String APP_MSG = "appMsg";
     private static final String FLAGS = "flags";
+
     private int _sequenceID;
     private long _checkSum;
     private String _appMsg;
+
+    private int _priority;
 
     private boolean _resend = false;
 
     private NetworkPacketFlags _flags;
 
-    public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg) {
-        this(sequenceID, flags, appMsg, false);
+    public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg, int priority) {
+        this(sequenceID, flags, appMsg, priority, false);
     }
 
-    public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg, boolean resend) {
+    public NetworkPacket(int sequenceID, NetworkPacketFlags flags, String appMsg, int priority, boolean resend) {
         _sequenceID = sequenceID;
         _flags = flags;
         _appMsg = appMsg;
         _checkSum = this.generateChecksum();
+
+        _priority = priority;
+        _resend = resend;
     }
 
     private NetworkPacket() {
@@ -45,7 +52,7 @@ public class NetworkPacket implements JSONAware, LoggedObject {
     }
 
     public static NetworkPacket createResponse(int sequenceID, NetworkPacketFlags flags) {
-        return new NetworkPacket(sequenceID, flags, null);
+        return new NetworkPacket(sequenceID, flags, null, NetworkPacketPriority.ACK_PRIORITY);
     }
 
     public NetworkPacketFlags getNetworkFlags() {
@@ -136,5 +143,20 @@ public class NetworkPacket implements JSONAware, LoggedObject {
         packetData.put(APP_MSG, LOG_DATA_OMITTED);
 
         return JSONValue.toJSONString(packetData);
+    }
+
+    @Override
+    public int compareTo(NetworkPacket networkPacket) {
+        if(this._priority == networkPacket._priority) {
+            return 0;
+        } else if(this._priority > networkPacket._priority) {
+            return -1;
+        }
+
+        return 1;
+    }
+
+    public static NetworkPacket createNetworkPacket(ApplicationMessage message, int sequenceID) {
+        return new NetworkPacket(sequenceID, null, message.getMessage(), message.getPriority(), true);
     }
 }

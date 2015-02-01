@@ -5,6 +5,7 @@ import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketPriority;
 import at.fhv.puzzle2.logging.LoggedObject;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
@@ -19,12 +20,19 @@ public abstract class Command implements JSONAware, LoggedObject {
     private final CommandType _commandType;
 
     protected final HashMap<String, Object> _messageData;
+    private int _priority;
 
     protected Command(ClientID clientID, CommandType commandType) {
+        this(clientID, commandType, NetworkPacketPriority.COMMAND_PRIORITY);
+    }
+
+    protected Command(ClientID clientID, CommandType commandType, int priority) {
         _messageData = new LinkedHashMap<>();
 
         _clientID = clientID;
         _commandType = commandType;
+
+        _priority = priority;
     }
 
     protected Command(CommandType commandType) {
@@ -70,5 +78,9 @@ public abstract class Command implements JSONAware, LoggedObject {
     @Override
     public String getLogString() {
         return toJSONString();
+    }
+
+    public int getPriority() {
+        return _priority;
     }
 }

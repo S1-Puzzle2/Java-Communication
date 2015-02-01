@@ -2,6 +2,7 @@ package at.fhv.puzzle2.communication.connection.networkPacket;
 
 import at.fhv.puzzle2.communication.ConnectionClosedException;
 import at.fhv.puzzle2.communication.NetworkConnectionManager;
+import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.connection.MalformedNetworkPacketException;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.logging.Logger;
@@ -9,8 +10,7 @@ import at.fhv.puzzle2.logging.Logger;
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.charset.Charset;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class NetworkPacketHandler {
     private static final String TAG = "communication.NetworkPacketHandler";
@@ -27,8 +27,9 @@ public class NetworkPacketHandler {
         _sendQueue = new ConnectionSendQueue(this);
     }
 
-    public void sendMessage(String message) {
-        NetworkPacket packet = new NetworkPacket(NetworkPacketHandler.getNextSequenceID(), null, message, true);
+    public void sendMessage(ApplicationMessage message) {
+        NetworkPacket packet = NetworkPacket.createNetworkPacket(message, NetworkPacketHandler.getNextSequenceID());
+
         sendMessage(packet);
     }
 
@@ -130,7 +131,7 @@ public class NetworkPacketHandler {
     class ConnectionSendQueue implements Runnable {
         private static final String TAG = "communication.ConnectionSendQueue";
 
-        private final BlockingQueue<NetworkPacket> _sendQueue;
+        private final PriorityBlockingQueue<NetworkPacket> _sendQueue;
         private volatile boolean _isRunning = true;
         private final Thread _localThread;
         private final NetworkPacketHandler _packetHandler;
@@ -138,7 +139,7 @@ public class NetworkPacketHandler {
         public ConnectionSendQueue(NetworkPacketHandler packetHandler) {
             _packetHandler = packetHandler;
 
-            _sendQueue = new LinkedBlockingQueue<>();
+            _sendQueue = new PriorityBlockingQueue<>();
 
             _localThread = new Thread(this);
             _localThread.start();
@@ -151,6 +152,7 @@ public class NetworkPacketHandler {
         }
 
         public void enqueuePacket(NetworkPacket packet) {
+            //TODO we need to order the messages with the same priority (FIFO)
             if(!_sendQueue.offer(packet)) {
                 Logger.getLogger().warn(TAG, "We lost packets, why?!");
             }

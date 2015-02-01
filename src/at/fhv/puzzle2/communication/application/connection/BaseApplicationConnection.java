@@ -13,7 +13,7 @@ public class BaseApplicationConnection implements ApplicationConnection {
 
     @Override
     public void sendApplicationMessage(ApplicationMessage applicationMessage) {
-        _packetManager.sendMessage(applicationMessage.getMessage());
+        _packetManager.sendMessage(applicationMessage);
     }
 
     @Override

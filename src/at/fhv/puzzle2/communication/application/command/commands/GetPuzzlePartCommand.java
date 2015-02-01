@@ -4,12 +4,13 @@ import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
+import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketPriority;
 
 public class GetPuzzlePartCommand extends Command {
     private int _puzzlePartID;
 
     public GetPuzzlePartCommand(ClientID clientID) {
-        super(clientID, CommandType.GetPuzzlePart);
+        super(clientID, CommandType.GetPuzzlePart, NetworkPacketPriority.IMAGE_PRIORITY);
     }
 
     public GetPuzzlePartCommand(GetPuzzlePartCommand getPuzzlePartCommand, ClientID clientID) {
