@@ -1,7 +1,6 @@
 package at.fhv.puzzle2.communication.application.command;
 
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
-import at.fhv.puzzle2.communication.application.command.parser.GetPuzzleListCommandParser;
 import at.fhv.puzzle2.communication.application.command.commands.error.MalformedCommand;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.parser.*;
@@ -34,6 +33,7 @@ public class CommandFactory {
         _parserList.add(new SetPuzzleCommandParser());
         _parserList.add(new PuzzleFinishedCommandParser());
         _parserList.add(new GetPuzzlePartListCommandParser());
+        _parserList.add(new PuzzlePartCommandParser());
     }
 
 
