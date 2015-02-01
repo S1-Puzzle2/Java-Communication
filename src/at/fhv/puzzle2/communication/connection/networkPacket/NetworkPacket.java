@@ -146,7 +146,9 @@ public class NetworkPacket implements JSONAware, LoggedObject, Comparable<Networ
     public String getLogString() {
         HashMap<String, Object> packetData = getJSONObject();
         //Dont print the App-Message, its base64 so we cant read it anyway
-        packetData.put(APP_MSG, LOG_DATA_OMITTED);
+        if(_appMsg != null) {
+            packetData.put(APP_MSG, LOG_DATA_OMITTED);
+        }
 
         return JSONValue.toJSONString(packetData);
     }
