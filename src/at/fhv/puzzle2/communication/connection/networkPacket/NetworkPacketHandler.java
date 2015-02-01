@@ -15,7 +15,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 public class NetworkPacketHandler {
     private static final String TAG = "communication.NetworkPacketHandler";
 
-    private volatile static int _sequenceID = 2333;
     private final NetworkConnection _networkConnection;
     private final NetworkConnectionManager _networkConnectionManager;
     private final ConnectionSendQueue _sendQueue;
@@ -28,7 +27,7 @@ public class NetworkPacketHandler {
     }
 
     public void sendMessage(ApplicationMessage message) {
-        NetworkPacket packet = NetworkPacket.createNetworkPacket(message, NetworkPacketHandler.getNextSequenceID());
+        NetworkPacket packet = NetworkPacket.createNetworkPacket(message, SequenceIDGenerator.getNextSequenceID());
 
         sendMessage(packet);
     }
@@ -107,10 +106,6 @@ public class NetworkPacketHandler {
                 Logger.getLogger().debug(TAG, e.getMessage());
             }
         }
-    }
-
-    private static int getNextSequenceID() {
-        return _sequenceID++;
     }
 
     public void close() {
