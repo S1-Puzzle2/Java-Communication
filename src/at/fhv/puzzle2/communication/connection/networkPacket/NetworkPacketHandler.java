@@ -111,7 +111,7 @@ public class NetworkPacketHandler {
     class ConnectionSendQueue implements Runnable {
         private static final String TAG = "communication.ConnectionSendQueue";
 
-        private final PriorityBlockingQueue<NetworkPacket> _sendQueue;
+        private final PriorityBlockingQueue<FIFOElement<NetworkPacket>> _sendQueue;
         private volatile boolean _isRunning = true;
         private final Thread _localThread;
         private final NetworkPacketHandler _packetHandler;
@@ -133,7 +133,7 @@ public class NetworkPacketHandler {
 
         public void enqueuePacket(NetworkPacket packet) {
             //TODO we need to order the messages with the same priority (FIFO)
-            if(!_sendQueue.offer(packet)) {
+            if(!_sendQueue.offer(new FIFOElement<>(packet))) {
                 Logger.getLogger().warn(TAG, "We lost packets, why?!");
             }
         }
@@ -142,7 +142,7 @@ public class NetworkPacketHandler {
         public void run() {
             while(_isRunning) {
                 try {
-                    NetworkPacket packet = _sendQueue.take();
+                    NetworkPacket packet = _sendQueue.take().getElement();
 
                     try {
                         Logger.getLogger().trace(TAG, "Sending network packet:", packet);
