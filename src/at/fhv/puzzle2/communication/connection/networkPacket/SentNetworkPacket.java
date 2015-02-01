@@ -3,7 +3,6 @@ package at.fhv.puzzle2.communication.connection.networkPacket;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.logging.Logger;
 
-import java.io.IOException;
 import java.util.Date;
 
 class SentNetworkPacket {
@@ -22,7 +21,7 @@ class SentNetworkPacket {
     public void resendPacket() {
         Logger.getLogger().trace(TAG, "Resending network packet: " + _packet.getApplicationMessage());
 
-        this._destination.sendMessage(this._packet);
+        this._destination.sendPacket(this._packet);
         this._sentDate = new Date();
     }
 

@@ -27,12 +27,12 @@ public class NetworkPacketHandler {
     }
 
     public void sendMessage(ApplicationMessage message) {
-        NetworkPacket packet = NetworkPacket.createNetworkPacket(message, SequenceIDGenerator.getNextSequenceID());
+        NetworkPacket packet = new NetworkPacket(message, SequenceIDGenerator.getNextSequenceID());
 
-        sendMessage(packet);
+        sendPacket(packet);
     }
 
-    public void sendMessage(NetworkPacket packet) {
+    public void sendPacket(NetworkPacket packet) {
         _sendQueue.enqueuePacket(packet);
     }
 
@@ -50,11 +50,8 @@ public class NetworkPacketHandler {
                         _networkConnection.close();
                     }
                 } else {
-                    NetworkPacketFlags flags = new NetworkPacketFlags();
-                    flags.setAcknowledge(true);
-
-                    NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
-                    this.sendDirectMessage(response);
+                    NetworkPacket response = NetworkPacket.createAcknowledge(packet, true);
+                    this.sendPacket(response);
 
                     return packet.getApplicationMessage();
                 }
@@ -63,14 +60,6 @@ public class NetworkPacketHandler {
             _networkConnectionManager.connectionClosed(_networkConnection);
 
             return null;
-        }
-    }
-
-    private void sendDirectMessage(NetworkPacket response) {
-        try {
-            _networkConnection.sendBytes(response.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -93,15 +82,11 @@ public class NetworkPacketHandler {
                     continue;
                 }
 
-                NetworkPacketFlags flags = new NetworkPacketFlags();
-
-                flags.setAcknowledge(false);
-                NetworkPacket response = NetworkPacket.createResponse(packet.getSequenceID(), flags);
+                NetworkPacket response = NetworkPacket.createAcknowledge(packet, false);
 
                 Logger.getLogger().debug(TAG, "Checksum failed for sequence id " + packet.getSequenceID());
 
-                //this.sendMessage(response, false);
-                this.sendDirectMessage(response);
+                this.sendPacket(response);
             } catch(MalformedNetworkPacketException e) {
                 Logger.getLogger().debug(TAG, e.getMessage());
             }

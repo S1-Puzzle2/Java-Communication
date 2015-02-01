@@ -47,12 +47,18 @@ public class NetworkPacket implements JSONAware, LoggedObject, Comparable<Networ
 
     }
 
+    public NetworkPacket(ApplicationMessage message, int sequenceID) {
+        this(sequenceID, null, message.getMessage(), message.getPriority(), true);
+    }
+
     public boolean shouldResend() {
         return _resend;
     }
 
-    public static NetworkPacket createResponse(int sequenceID, NetworkPacketFlags flags) {
-        return new NetworkPacket(sequenceID, flags, null, NetworkPacketPriority.ACK_PRIORITY);
+    public static NetworkPacket createAcknowledge(NetworkPacket packet, boolean checkSumMatch) {
+        NetworkPacketFlags flags = new NetworkPacketFlags(checkSumMatch, null);
+
+        return new NetworkPacket(packet.getSequenceID(), flags, null, NetworkPacketPriority.ACK_PRIORITY);
     }
 
     public NetworkPacketFlags getNetworkFlags() {
@@ -154,9 +160,5 @@ public class NetworkPacket implements JSONAware, LoggedObject, Comparable<Networ
         }
 
         return 1;
-    }
-
-    public static NetworkPacket createNetworkPacket(ApplicationMessage message, int sequenceID) {
-        return new NetworkPacket(sequenceID, null, message.getMessage(), message.getPriority(), true);
     }
 }
