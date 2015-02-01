@@ -26,7 +26,7 @@ public class CommandConnection {
 
     public void sendCommand(Command command) {
         Logger.getLogger().debug(TAG, "Sending command:", command);
-        _applicationConnection.sendApplicationMessage(ApplicationMessage.createApplicationMessage(command));
+        _applicationConnection.sendApplicationMessage(new ApplicationMessage(command));
     }
 
     public Command receiveCommand() {

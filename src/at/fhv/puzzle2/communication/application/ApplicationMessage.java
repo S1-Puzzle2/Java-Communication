@@ -20,6 +20,10 @@ public class ApplicationMessage {
         _priority = priority;
     }
 
+    public ApplicationMessage(Command command) {
+        this(command.toJSONString(), command.getPriority());
+    }
+
     public ApplicationMessage(String message, int priority) {
         this(null, message, priority);
     }
@@ -38,9 +42,5 @@ public class ApplicationMessage {
 
     public int getPriority() {
         return _priority;
-    }
-
-    public static ApplicationMessage createApplicationMessage(Command command) {
-        return new ApplicationMessage(command.toJSONString(), command.getPriority());
     }
 }
