@@ -1,6 +1,5 @@
 package at.fhv.puzzle2.communication.application.connection;
 
-import at.fhv.puzzle2.communication.ApplicationConnectionManager;
 import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.CommandFactory;
@@ -16,11 +15,9 @@ import java.util.Objects;
 public class CommandConnection {
     private static final String TAG = "communication.CommandConnection";
 
-    private final ApplicationConnectionManager _connectionManager;
     private final ApplicationConnection _applicationConnection;
 
-    public CommandConnection(ApplicationConnectionManager connectionManager, ApplicationConnection applicationConnection) {
-        _connectionManager = connectionManager;
+    public CommandConnection(ApplicationConnection applicationConnection) {
         _applicationConnection = applicationConnection;
     }
 

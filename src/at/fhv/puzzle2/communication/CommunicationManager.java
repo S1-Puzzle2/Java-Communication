@@ -144,7 +144,7 @@ public class CommunicationManager {
             applicationConnection = new EncryptedApplicationConnection(applicationConnection, _encryption);
         }
 
-        CommandConnection commandConnection = new CommandConnection(_appConnectionManager, applicationConnection);
+        CommandConnection commandConnection = new CommandConnection(applicationConnection);
 
         _connectionList.add(commandConnection);
 
