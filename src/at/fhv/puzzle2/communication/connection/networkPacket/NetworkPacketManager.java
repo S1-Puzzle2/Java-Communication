@@ -23,7 +23,7 @@ public class NetworkPacketManager implements Runnable {
     public void run() {
         while(_isRunning) {
             try {
-                Thread.sleep(100000);
+                Thread.sleep(10000);
 
                 synchronized (_lock) {
                     Iterator<SentNetworkPacket> iterator = _packetSentList.iterator();
