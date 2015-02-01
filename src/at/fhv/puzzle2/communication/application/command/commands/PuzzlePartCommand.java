@@ -20,6 +20,10 @@ public class PuzzlePartCommand extends Command {
         _base64Image = Base64.getEncoder().encodeToString(image);
     }
 
+    public void setImage(String base64Image) {
+        _base64Image = base64Image;
+    }
+
     public void setImageID(int id) {
         _imageID = id;
     }
