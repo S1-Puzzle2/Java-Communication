@@ -4,6 +4,7 @@ import at.fhv.puzzle2.communication.application.ApplicationMessage;
 
 import java.nio.charset.Charset;
 import java.util.Base64;
+import java.util.Optional;
 
 public class Base64ApplicationConnection extends ApplicationConnectionDecorator {
     public Base64ApplicationConnection(ApplicationConnection connection) {
@@ -19,11 +20,11 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
     }
 
     @Override
-    public ApplicationMessage receiveMessage() {
-        ApplicationMessage message = _connection.receiveMessage();
+    public Optional<ApplicationMessage> receiveMessage() {
+        Optional<ApplicationMessage> message = _connection.receiveMessage();
 
-        if(message != null) {
-            message.setMessage(Base64.getDecoder().decode(message.getMessage()));
+        if(message.isPresent()) {
+            message.get().setMessage(Base64.getDecoder().decode(message.get().getMessage()));
         }
 
         return message;

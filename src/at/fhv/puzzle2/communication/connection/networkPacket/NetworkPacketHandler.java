@@ -10,6 +10,7 @@ import at.fhv.puzzle2.logging.Logger;
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.charset.Charset;
+import java.util.Optional;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class NetworkPacketHandler {
@@ -36,7 +37,7 @@ public class NetworkPacketHandler {
         _sendQueue.enqueuePacket(packet);
     }
 
-    public String receiveMessage() {
+    public Optional<String> receiveMessage() {
         try {
             while(true) {
                 NetworkPacket packet = readMessage();
@@ -53,13 +54,13 @@ public class NetworkPacketHandler {
                     NetworkPacket response = NetworkPacket.createAcknowledge(packet, true);
                     this.sendPacket(response);
 
-                    return packet.getApplicationMessage();
+                    return Optional.of(packet.getApplicationMessage());
                 }
             }
         } catch(IOException e) {
             _networkConnectionManager.connectionClosed(_networkConnection);
 
-            return null;
+            return Optional.empty();
         }
     }
 

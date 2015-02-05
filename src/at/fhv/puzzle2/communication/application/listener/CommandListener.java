@@ -4,6 +4,8 @@ import at.fhv.puzzle2.communication.ApplicationConnectionManager;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 
+import java.util.Optional;
+
 public class CommandListener implements Runnable {
     private final ApplicationConnectionManager _connectionManager;
     private final CommandConnection _connection;
@@ -28,10 +30,10 @@ public class CommandListener implements Runnable {
     @Override
     public void run() {
         while(_isRunning) {
-            Command command = _connection.receiveCommand();
+            Optional<Command> command = _connection.receiveCommand();
 
-            if(command != null) {
-                _connectionManager.commandRecieved(command);
+            if(command.isPresent()) {
+                _connectionManager.commandRecieved(command.get());
             } else {
                 //We received a null message, so the connection is closed and this listener should stop
                 _isRunning = false;

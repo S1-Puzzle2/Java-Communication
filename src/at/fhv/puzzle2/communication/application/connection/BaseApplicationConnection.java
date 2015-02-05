@@ -4,6 +4,8 @@ import at.fhv.puzzle2.communication.application.ApplicationMessage;
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketHandler;
 
+import java.util.Optional;
+
 public class BaseApplicationConnection implements ApplicationConnection {
     private final NetworkPacketHandler _packetManager;
 
@@ -17,13 +19,13 @@ public class BaseApplicationConnection implements ApplicationConnection {
     }
 
     @Override
-    public ApplicationMessage receiveMessage() {
-        String message = _packetManager.receiveMessage();
-        if(message != null) {
-            return new ApplicationMessage(this, message);
+    public Optional<ApplicationMessage> receiveMessage() {
+        Optional<String> message = _packetManager.receiveMessage();
+        if(message.isPresent()) {
+            return Optional.of(new ApplicationMessage(this, message.get()));
         }
 
-        return null;
+        return Optional.empty();
     }
 
     @Override

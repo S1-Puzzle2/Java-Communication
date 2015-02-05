@@ -11,6 +11,7 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.logging.Logger;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class CommandConnection {
     private static final String TAG = "communication.CommandConnection";
@@ -26,23 +27,23 @@ public class CommandConnection {
         _applicationConnection.sendApplicationMessage(new ApplicationMessage(command));
     }
 
-    public Command receiveCommand() {
+    public Optional<Command> receiveCommand() {
         while(true) {
-            final ApplicationMessage receivedMessage = _applicationConnection.receiveMessage();
+            Optional<ApplicationMessage> message = _applicationConnection.receiveMessage();
 
-            if(receivedMessage == null) {
-                return null;
+            if(!message.isPresent()) {
+                return Optional.empty();
             }
 
 
             final Command command;
             try {
-                command = CommandFactory.parseCommand(receivedMessage);
+                command = CommandFactory.parseCommand(message.get());
                 command.setConnection(this);
 
                 Logger.getLogger().debug(TAG, "Received command:", command);
 
-                return command;
+                return Optional.of(command);
             } catch (UnknownCommandException e) {
                 Logger.getLogger().warn(TAG, e.getMessage());
 

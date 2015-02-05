@@ -6,9 +6,9 @@ import at.fhv.puzzle2.communication.application.connection.ApplicationConnection
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
+import java.util.Optional;
 
 public class EncryptedApplicationConnection extends ApplicationConnectionDecorator {
     private final Encryption _encryption;
@@ -34,14 +34,14 @@ public class EncryptedApplicationConnection extends ApplicationConnectionDecorat
     }
 
     @Override
-    public ApplicationMessage receiveMessage() {
-        ApplicationMessage message = _connection.receiveMessage();
+    public Optional<ApplicationMessage> receiveMessage() {
+        Optional<ApplicationMessage> message = _connection.receiveMessage();
 
-        if(message != null) {
-            byte[] messageBytes = message.getMessage().getBytes(Charset.forName("UTF-8"));
+        if(message.isPresent()) {
+            byte[] messageBytes = message.get().getMessage().getBytes(Charset.forName("UTF-8"));
 
             try {
-                message.setMessage(_encryption.decrypt(messageBytes));
+                message.get().setMessage(_encryption.decrypt(messageBytes));
 
                 return message;
             } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
