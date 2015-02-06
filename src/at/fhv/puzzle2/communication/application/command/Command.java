@@ -55,7 +55,7 @@ public abstract class Command implements JSONAware, LoggedObject {
         _clientID = clientID;
     }
 
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return _commandType;
     }
 
