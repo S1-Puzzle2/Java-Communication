@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ListenerManager<T extends Listener> {
     private final List<T> _listenerList;
-    private boolean _listeningForConnections = false;
+    private volatile boolean _listeningForConnections = false;
 
     public ListenerManager() {
         _listenerList = Collections.synchronizedList(new LinkedList<>());
