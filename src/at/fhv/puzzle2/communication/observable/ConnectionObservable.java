@@ -1,5 +1,6 @@
 package at.fhv.puzzle2.communication.observable;
 
+import at.fhv.puzzle2.communication.ThreadUtil;
 import at.fhv.puzzle2.communication.application.connection.CommandConnection;
 import at.fhv.puzzle2.communication.observer.ConnectionObserver;
 
@@ -8,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -33,20 +33,7 @@ public class ConnectionObservable<T extends ConnectionObserver> {
     public void appendConnection(CommandConnection newConnection) {
         _connectionQueue.add(newConnection);
 
-        _observableList.forEach(listener -> notifyInThread(listener::notify));
-    }
-
-
-    /**
-     *
-     * @param consumer Consumer<ConnectionObservable>
-     */
-    void notifyInThread(Consumer<ConnectionObservable> consumer) {
-        //Run the notification in its own thread per listener, so the listeners wont block our network stack
-
-        Runnable runnable = () -> consumer.accept(this);
-
-        new Thread(runnable).start();
+        _observableList.forEach(listener -> ThreadUtil.runInThread(listener::notify, this));
     }
 
     public synchronized List<CommandConnection> getConnectionList() {
