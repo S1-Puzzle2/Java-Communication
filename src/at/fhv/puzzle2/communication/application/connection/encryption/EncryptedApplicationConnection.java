@@ -37,21 +37,20 @@ public class EncryptedApplicationConnection extends ApplicationConnectionDecorat
     public Optional<ApplicationMessage> receiveMessage() {
         Optional<ApplicationMessage> message = _connection.receiveMessage();
 
-        if(message.isPresent()) {
-            byte[] messageBytes = message.get().getMessage().getBytes(Charset.forName("UTF-8"));
+        return message.map(appMessage -> {
+            byte[] messageBytes = appMessage.getMessage().getBytes(Charset.forName("UTF-8"));
 
             try {
-                message.get().setMessage(_encryption.decrypt(messageBytes));
+                appMessage.setMessage(_encryption.decrypt(messageBytes));
 
-                return message;
+                return appMessage;
             } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
                 //TODO currently we catch it here, NOT a good idea
                 e.printStackTrace();
+
+                return null;
             }
-        }
-
-
-        return null;
+        });
     }
 
     @Override

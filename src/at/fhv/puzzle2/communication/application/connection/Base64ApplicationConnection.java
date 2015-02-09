@@ -22,12 +22,11 @@ public class Base64ApplicationConnection extends ApplicationConnectionDecorator 
     @Override
     public Optional<ApplicationMessage> receiveMessage() {
         Optional<ApplicationMessage> message = _connection.receiveMessage();
+        return message.map(appMessage -> {
+           appMessage.setMessage(Base64.getDecoder().decode(appMessage.getMessage()));
 
-        if(message.isPresent()) {
-            message.get().setMessage(Base64.getDecoder().decode(message.get().getMessage()));
-        }
-
-        return message;
+            return appMessage;
+        });
     }
 
     @Override

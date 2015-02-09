@@ -21,11 +21,8 @@ public class BaseApplicationConnection implements ApplicationConnection {
     @Override
     public Optional<ApplicationMessage> receiveMessage() {
         Optional<String> message = _packetManager.receiveMessage();
-        if(message.isPresent()) {
-            return Optional.of(new ApplicationMessage(this, message.get()));
-        }
 
-        return Optional.empty();
+        return message.map(string -> new ApplicationMessage(this, string));
     }
 
     @Override

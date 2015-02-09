@@ -31,31 +31,41 @@ public class CommandConnection {
         while(true) {
             Optional<ApplicationMessage> message = _applicationConnection.receiveMessage();
 
+            //If we received an empty Optional-ApplicatioNmessage, then there is something wrong with the socket
             if(!message.isPresent()) {
                 return Optional.empty();
             }
 
-
-            final Command command;
-            try {
-                command = CommandFactory.parseCommand(message.get());
-                command.setConnection(this);
-
-                Logger.getLogger().debug(TAG, "Received command:", command);
-
-                return Optional.of(command);
-            } catch (UnknownCommandException e) {
-                Logger.getLogger().warn(TAG, e.getMessage());
-
-                UnknownCommand unknownCommand = new UnknownCommand(e.getMessage());
-                sendCommand(unknownCommand);
-            } catch(MalformedCommandException e) {
-                Logger.getLogger().warn(TAG, e.getMessage());
-
-                MalformedCommand malformedCommand = new MalformedCommand(e.getMessage());
-                sendCommand(malformedCommand);
+            //If parsing the command went wrong, we just wait for another message
+            Optional<Command> commandOptional = parseCommand(message.get());
+            if(commandOptional.isPresent()) {
+                return commandOptional;
             }
         }
+    }
+
+    private Optional<Command> parseCommand(ApplicationMessage applicationMessage) {
+        final Command command;
+        try {
+            command = CommandFactory.parseCommand(applicationMessage);
+            command.setConnection(this);
+
+            Logger.getLogger().debug(TAG, "Received command:", command);
+
+            return Optional.of(command);
+        } catch (UnknownCommandException e) {
+            Logger.getLogger().warn(TAG, e.getMessage());
+
+            UnknownCommand unknownCommand = new UnknownCommand(e.getMessage());
+            sendCommand(unknownCommand);
+        } catch(MalformedCommandException e) {
+            Logger.getLogger().warn(TAG, e.getMessage());
+
+            MalformedCommand malformedCommand = new MalformedCommand(e.getMessage());
+            sendCommand(malformedCommand);
+        }
+
+        return Optional.empty();
     }
 
     public void close() {
