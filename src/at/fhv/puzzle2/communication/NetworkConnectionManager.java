@@ -29,12 +29,7 @@ public class NetworkConnectionManager implements Runnable {
             try {
                 synchronized (_newConnectionQueue) {
                     while(_newConnectionQueue.isEmpty()) {
-                        try {
                             _newConnectionQueue.wait();
-                        } catch (InterruptedException e) {
-                            //This happens, when we interrupt the thread and all we need to do now is break out of the wait
-                            break;
-                        }
                     }
 
                     while(!_newConnectionQueue.isEmpty()) {
@@ -42,7 +37,7 @@ public class NetworkConnectionManager implements Runnable {
                     }
                 }
             } catch (InterruptedException e) {
-                    e.printStackTrace();
+                //This happens, when we interrupt the thread
             }
         }
     }
