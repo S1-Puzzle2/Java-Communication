@@ -19,7 +19,7 @@ class SentNetworkPacket {
     }
 
     public void resendPacket() {
-        Logger.getLogger().trace(TAG, "Resending network packet: " + _packet.getApplicationMessage());
+        Logger.getLogger().trace(TAG, "Resending network packet: " + _packet.getSequenceID());
 
         this._destination.sendPacket(this._packet);
         this._sentDate = new Date();
