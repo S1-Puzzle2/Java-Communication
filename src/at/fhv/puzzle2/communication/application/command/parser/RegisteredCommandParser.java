@@ -19,6 +19,7 @@ public class RegisteredCommandParser extends CommandParser {
     protected Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
         RegisteredCommand command = new RegisteredCommand(clientID);
         command.setRegistered((Boolean) messageData.get(CommandConstants.SUCCESS));
+        command.setTeamName((String) messageData.get(CommandConstants.TEAM_NAME));
 
         return command;
     }

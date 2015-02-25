@@ -8,6 +8,7 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class RegisteredCommand extends Command implements MultipleReceiversCommand {
     private boolean _registered;
+    private String _teamName = "";
 
     public RegisteredCommand(ClientID playerID) {
         super(playerID, CommandType.Registered);
@@ -23,6 +24,10 @@ public class RegisteredCommand extends Command implements MultipleReceiversComma
         _registered = registered;
     }
 
+    public void setTeamName(String teamName) {
+        _teamName = teamName;
+    }
+
     boolean getRegistered() {
         return _registered;
     }
@@ -30,6 +35,7 @@ public class RegisteredCommand extends Command implements MultipleReceiversComma
     @Override
     public String toJSONString() {
         _messageData.put(CommandConstants.SUCCESS, _registered);
+        _messageData.put(CommandConstants.TEAM_NAME, _teamName);
 
         return super.toJSONString();
     }
