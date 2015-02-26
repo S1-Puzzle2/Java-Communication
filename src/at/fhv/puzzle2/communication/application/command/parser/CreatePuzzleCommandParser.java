@@ -22,7 +22,7 @@ public class CreatePuzzleCommandParser extends CommandParser {
     protected Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
         CreatePuzzleCommand command = new CreatePuzzleCommand(clientID);
 
-        command.setPuzzleName((String) messageData.get(CommandConstants.PUZZLE_NAME));
+        command.setPuzzleName((String) messageData.get(CommandConstants.NAME));
 
         return command;
     }

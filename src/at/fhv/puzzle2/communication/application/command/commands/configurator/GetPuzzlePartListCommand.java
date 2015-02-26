@@ -5,17 +5,17 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class GetPuzzlePartListCommand extends Command {
-    private String _puzzleName;
+    private int _puzzleID;
 
     public GetPuzzlePartListCommand(ClientID clientID) {
         super(clientID, CommandType.GetPuzzlePartList);
     }
 
-    public void setPuzzleName(String puzzleName) {
-        _puzzleName = puzzleName;
+    public int getPuzzleID() {
+        return _puzzleID;
     }
 
-    public String getPuzzleName() {
-        return _puzzleName;
+    public void setPuzzleID(int puzzleID) {
+        this._puzzleID = puzzleID;
     }
 }

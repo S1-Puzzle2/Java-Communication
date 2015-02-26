@@ -7,6 +7,7 @@ import at.fhv.puzzle2.communication.application.command.commands.configurator.Ge
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class GetPuzzlePartListCommandParser extends CommandParser {
@@ -18,7 +19,7 @@ public class GetPuzzlePartListCommandParser extends CommandParser {
     @Override
     protected Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
         GetPuzzlePartListCommand getPuzzlePartListCommand = new GetPuzzlePartListCommand(clientID);
-        getPuzzlePartListCommand.setPuzzleName((String) messageData.get(CommandConstants.PUZZLE_NAME));
+        getPuzzlePartListCommand.setPuzzleID(new BigDecimal((Long) messageData.get(CommandConstants.ID)).intValueExact());
 
         return getPuzzlePartListCommand;
     }

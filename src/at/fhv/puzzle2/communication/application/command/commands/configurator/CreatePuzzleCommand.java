@@ -6,7 +6,6 @@ import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class CreatePuzzleCommand extends Command {
     private String _puzzleName;
-    private Integer _puzzleID;
 
     public CreatePuzzleCommand(ClientID clientID) {
         super(clientID, CommandType.CreatePuzzle);
@@ -18,13 +17,5 @@ public class CreatePuzzleCommand extends Command {
 
     public String getPuzzleName() {
         return _puzzleName;
-    }
-
-    public void setPuzzleID(Integer id) {
-        _puzzleID = id;
-    }
-
-    public Integer getPuzzleID() {
-        return _puzzleID;
     }
 }

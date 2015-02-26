@@ -20,10 +20,11 @@ public class CommandFactory {
     static {
         _parserList.add(new RegisterCommandParser());
         _parserList.add(new ReadyCommandParser());
-        _parserList.add(new GetGameStateCommandParser());
+        _parserList.add(new GetGameInfoCommandParser());
+        _parserList.add(new RegisterGameListenerCommandParser());
         _parserList.add(new GetPuzzlePartCommandParser());
         _parserList.add(new RegisteredCommandParser());
-        _parserList.add(new BarcodeScannedCommandParser());
+        _parserList.add(new PartScannedCommandParser());
         _parserList.add(new QuestionAnsweredCommandParser());
         _parserList.add(new CreatePuzzleCommandParser());
         _parserList.add(new CreatePuzzlePartCommandParser());
@@ -34,6 +35,8 @@ public class CommandFactory {
         _parserList.add(new PuzzleFinishedCommandParser());
         _parserList.add(new GetPuzzlePartListCommandParser());
         _parserList.add(new PuzzlePartCommandParser());
+        _parserList.add(new RegisterGameStatusListenerCommandParser());
+        _parserList.add(new CheckPuzzleFinishedCommandParser());
     }
 
 

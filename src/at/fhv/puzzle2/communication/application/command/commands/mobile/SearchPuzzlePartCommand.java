@@ -9,7 +9,7 @@ public class SearchPuzzlePartCommand extends Command {
     private int _id;
 
     public SearchPuzzlePartCommand(ClientID clientID) {
-        super(clientID, CommandType.SearchPuzzlePart);
+        super(clientID, CommandType.SearchPart);
     }
 
     public void setPartID(int id) {
@@ -18,7 +18,7 @@ public class SearchPuzzlePartCommand extends Command {
 
     @Override
     public String toJSONString() {
-        _messageData.put(CommandConstants.PUZZLE_PART_ID, _id);
+        _messageData.put(CommandConstants.ID, _id);
 
         return super.toJSONString();
     }

@@ -9,16 +9,16 @@ public class UnlockedPartCommand extends Command {
     private Integer _unlockedPart;
 
     public UnlockedPartCommand(ClientID clientID) {
-        super(clientID, CommandType.PartsUnlocked);
+        super(clientID, CommandType.PartUnlocked);
     }
 
-    public void setUnlockedPartsList(Integer unlockedPart) {
+    public void setUnlockedPartID(Integer unlockedPart) {
         _unlockedPart = unlockedPart;
     }
 
     @Override
     public String toJSONString() {
-        _messageData.put(CommandConstants.UNLOCKED_PART, _unlockedPart);
+        _messageData.put(CommandConstants.ID, _unlockedPart);
 
         return super.toJSONString();
     }

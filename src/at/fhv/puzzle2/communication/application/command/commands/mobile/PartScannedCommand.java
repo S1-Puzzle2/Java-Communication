@@ -5,11 +5,11 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
-public class BarcodeScannedCommand extends Command {
+public class PartScannedCommand extends Command {
     private String _barCode;
 
-    public BarcodeScannedCommand(ClientID clientID) {
-        super(clientID, CommandType.BarcodeScanned);
+    public PartScannedCommand(ClientID clientID) {
+        super(clientID, CommandType.PartScanned);
     }
 
     public void setBarcode(String barcode) {

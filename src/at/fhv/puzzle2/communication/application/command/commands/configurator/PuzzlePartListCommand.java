@@ -4,52 +4,32 @@ import at.fhv.puzzle2.communication.ClientID;
 import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandConstants;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
-import org.json.simple.JSONAware;
-import org.json.simple.JSONObject;
+import at.fhv.puzzle2.communication.application.command.dto.PuzzlePartDTO;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class PuzzlePartListCommand extends Command {
-    private String _puzzleName;
-    private List<DummyPuzzlePart> _partList = new LinkedList<>();
+    private int _id;
+    private List<PuzzlePartDTO> _partList = new LinkedList<>();
 
     public PuzzlePartListCommand(ClientID clientID) {
         super(clientID, CommandType.PuzzlePartList);
     }
 
-    public void setPartList(List<DummyPuzzlePart> partList) {
+    public void setPartList(List<PuzzlePartDTO> partList) {
         _partList = partList;
     }
 
-    public void setPuzzleName(String name) {
-        _puzzleName = name;
+    public void setPuzzleID(int id) {
+        _id = id;
     }
 
     @Override
     public String toJSONString() {
-        _messageData.put(CommandConstants.PUZZLE_NAME, _puzzleName);
-        _messageData.put(CommandConstants.PUZZLE_PART_LIST, _partList);
+        _messageData.put(CommandConstants.ID, _id);
+        _messageData.put(CommandConstants.PART_LIST, _partList);
 
         return super.toJSONString();
-    }
-
-    public class DummyPuzzlePart implements JSONAware {
-        final int puzzlePartID;
-        final String barCode;
-
-        public DummyPuzzlePart(Integer puzzlePartID, String barCode) {
-            this.puzzlePartID = puzzlePartID;
-            this.barCode = barCode;
-        }
-
-        @Override
-        public String toJSONString() {
-            JSONObject json = new JSONObject();
-            json.put(CommandConstants.PUZZLE_PART_ID, puzzlePartID);
-            json.put(CommandConstants.BAR_CODE, barCode);
-
-            return json.toJSONString();
-        }
     }
 }

@@ -24,10 +24,10 @@ public class CreatePuzzlePartCommandParser extends CommandParser {
         CreatePuzzlePartCommand command = new CreatePuzzlePartCommand(clientID);
 
         command.setOrder(new BigDecimal((Long) messageData.get(CommandConstants.PUZZLE_PART_ORDER)).intValueExact());
-        command.setPuzzleName((String) messageData.get(CommandConstants.PUZZLE_NAME));
+        command.setPuzzleID(new BigDecimal((Long) messageData.get(CommandConstants.PUZZLE_ID)).intValueExact());
         command.setUuid((String) messageData.get(CommandConstants.BAR_CODE));
 
-        String base64Image = (String) messageData.get(CommandConstants.IMAGE);
+        String base64Image = (String) messageData.get(CommandConstants.BASE64IMAGE);
         command.setImage(Base64.decode(base64Image));
 
         return command;

@@ -5,23 +5,14 @@ import at.fhv.puzzle2.communication.application.command.Command;
 import at.fhv.puzzle2.communication.application.command.constants.CommandType;
 
 public class CreatePuzzlePartCommand extends Command {
-    private Integer _partID;
+    private int _puzzleID;
 
-    private String _puzzleName;
     private String _uuid;
     private int _order;
     private byte[] _image;
 
     public CreatePuzzlePartCommand(ClientID clientID) {
         super(clientID, CommandType.CreatePuzzlePart);
-    }
-
-    public Integer getPartID() {
-        return _partID;
-    }
-
-    public void setPartID(Integer partID) {
-        this._partID = partID;
     }
 
     public byte[] getImage() {
@@ -40,12 +31,12 @@ public class CreatePuzzlePartCommand extends Command {
         this._order = order;
     }
 
-    public String getPuzzleName() {
-        return _puzzleName;
+    public int getPuzzleID() {
+        return _puzzleID;
     }
 
-    public void setPuzzleName(String puzzleName) {
-        this._puzzleName = puzzleName;
+    public void setPuzzleID(int id) {
+        this._puzzleID = id;
     }
 
     public String getUuid() {

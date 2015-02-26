@@ -19,10 +19,9 @@ public class PuzzlePartCommandParser extends CommandParser {
     @Override
     protected Command parse(ClientID clientID, HashMap<String, Object> messageData) throws MalformedCommandException {
         PuzzlePartCommand puzzlePartCommand = new PuzzlePartCommand(clientID);
-        puzzlePartCommand.setImageID(new BigDecimal((Long) messageData.get(CommandConstants.PUZZLE_PART_ID)).intValueExact());
-        puzzlePartCommand.setOrder(new BigDecimal((Long) messageData.get(CommandConstants.PUZZLE_PART_ORDER)).intValueExact());
+        puzzlePartCommand.setImageID(new BigDecimal((Long) messageData.get(CommandConstants.ID)).intValueExact());
 
-        puzzlePartCommand.setImage((String) messageData.get(CommandConstants.IMAGE));
+        puzzlePartCommand.setImage((String) messageData.get(CommandConstants.BASE64IMAGE));
 
         return puzzlePartCommand;
     }

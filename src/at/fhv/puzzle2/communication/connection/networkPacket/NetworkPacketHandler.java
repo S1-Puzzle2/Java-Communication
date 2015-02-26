@@ -47,6 +47,8 @@ public class NetworkPacketHandler {
                     if(packet.getNetworkFlags().isAcknowledgePresent()) {
                         NetworkPacketManager.getInstance().receivedAcknowledge(packet);
 
+                        //TODO remove from send queue too
+
                     } else if(packet.getNetworkFlags().isClosePresent() && packet.getNetworkFlags().getClose()) {
                         _networkConnection.close();
                     }

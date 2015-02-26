@@ -23,13 +23,13 @@ public class NetworkPacketManager implements Runnable {
     public void run() {
         while(_isRunning) {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(20000);
 
                 synchronized (_lock) {
                     Iterator<SentNetworkPacket> iterator = _packetSentList.iterator();
                     while(iterator.hasNext()) {
                         SentNetworkPacket sentNetworkPacket = iterator.next();
-                        if (new Date().getTime() - sentNetworkPacket.getTime() > 10000) {
+                        if (new Date().getTime() - sentNetworkPacket.getTime() > 20000) {
                             sentNetworkPacket.resendPacket();
                             iterator.remove();
                         }
