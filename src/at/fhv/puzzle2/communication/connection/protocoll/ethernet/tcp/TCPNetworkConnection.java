@@ -5,15 +5,8 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class TCPNetworkConnection implements NetworkConnection {
     private final SocketChannel _socket;
@@ -27,7 +20,6 @@ public class TCPNetworkConnection implements NetworkConnection {
     public void sendBytes(byte[] data) throws IOException {
         ByteBuffer buffer = ByteBuffer.wrap(data);
         _socket.write(buffer);
-        System.out.printf("Written!!");
     }
 
     @Override
@@ -48,34 +40,13 @@ public class TCPNetworkConnection implements NetworkConnection {
                 buffer.write(tmp);
 
                 if(tmp == '\0') {
+                    _localBuffer.compact();
                     return buffer.toByteArray();
                 }
             }
 
             _localBuffer.clear();
         }
-        /*ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        try {
-            InputStream inStream = _socket.getInputStream();
-
-            byte tmpByte;
-            while((tmpByte = (byte) inStream.read()) != -1) {
-                buffer.write(tmpByte);
-
-                if(tmpByte == '\0') {
-                    break;
-                }
-            }
-
-            if(tmpByte == -1) {
-                throw new ConnectionClosedException();
-            }
-
-            return buffer.toByteArray();
-        } catch(SocketException e) {
-            //Occurs when the other end closes the connection
-            throw new ConnectionClosedException();
-        }*/
     }
 
     @Override
