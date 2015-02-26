@@ -9,24 +9,52 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class TCPNetworkConnection implements NetworkConnection {
-    private final Socket _socket;
+    private final SocketChannel _socket;
+    private final ByteBuffer _localBuffer = ByteBuffer.allocate(4096);
 
-    public TCPNetworkConnection(Socket socket) {
+    public TCPNetworkConnection(SocketChannel socket) {
         _socket = socket;
     }
 
     @Override
     public void sendBytes(byte[] data) throws IOException {
-        OutputStream outStream = _socket.getOutputStream();
-        outStream.write(data);
-        outStream.flush();
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+        _socket.write(buffer);
+        System.out.printf("Written!!");
     }
 
     @Override
     public byte[] readBytes() throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        while(true) {
+            int result = _socket.read(_localBuffer);
+
+            _localBuffer.flip();
+
+            if(result == -1) {
+                throw new ConnectionClosedException();
+            }
+
+
+            while(_localBuffer.hasRemaining()) {
+                byte tmp = _localBuffer.get();
+                buffer.write(tmp);
+
+                if(tmp == '\0') {
+                    return buffer.toByteArray();
+                }
+            }
+
+            _localBuffer.clear();
+        }
+        /*ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         try {
             InputStream inStream = _socket.getInputStream();
 
@@ -47,7 +75,7 @@ public class TCPNetworkConnection implements NetworkConnection {
         } catch(SocketException e) {
             //Occurs when the other end closes the connection
             throw new ConnectionClosedException();
-        }
+        }*/
     }
 
     @Override
@@ -57,7 +85,7 @@ public class TCPNetworkConnection implements NetworkConnection {
 
     @Override
     public boolean isConnected() {
-        return _socket != null && _socket.isConnected();
+        return _socket != null && _socket.isOpen();
     }
 
     @Override
