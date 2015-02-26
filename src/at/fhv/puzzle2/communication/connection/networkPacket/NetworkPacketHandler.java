@@ -8,7 +8,7 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.logging.Logger;
 
 import java.io.IOException;
-import java.net.SocketException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -157,7 +157,7 @@ public class NetworkPacketHandler {
                         }
                     } catch (IOException e) {
                         _networkConnectionManager.connectionClosed(_networkConnection);
-                        if(!(e instanceof ConnectionClosedException || e instanceof SocketException)) {
+                        if(!(e instanceof ConnectionClosedException || e instanceof ClosedChannelException)) {
                             e.printStackTrace();
                         }
 
