@@ -27,15 +27,7 @@ public class NetworkConnectionManager implements Runnable {
     public void run() {
         while(_isRunning) {
             try {
-                synchronized (_newConnectionQueue) {
-                    while(_newConnectionQueue.isEmpty()) {
-                            _newConnectionQueue.wait();
-                    }
-
-                    while(!_newConnectionQueue.isEmpty()) {
-                        _communicationManager.newConnectionEstablished(_newConnectionQueue.take());
-                    }
-                }
+                _communicationManager.newConnectionEstablished(_newConnectionQueue.take());
             } catch (InterruptedException e) {
                 //This happens, when we interrupt the thread
             }

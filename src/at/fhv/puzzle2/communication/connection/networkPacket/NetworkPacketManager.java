@@ -17,7 +17,7 @@ public class NetworkPacketManager implements Runnable {
         _localThread.start();
     }
 
-    private volatile boolean _isRunning = true;
+    private volatile boolean _isRunning = false;
 
     @Override
     public void run() {
@@ -51,6 +51,7 @@ public class NetworkPacketManager implements Runnable {
     public void sentNetworkPacket(NetworkPacket packet, NetworkPacketHandler destination) {
         synchronized (_lock) {
             _packetSentList.add(new SentNetworkPacket(destination, packet));
+            System.out.println("Added packet " + packet.getSequenceID() + " added to the queue");
         }
     }
 
@@ -69,6 +70,8 @@ public class NetworkPacketManager implements Runnable {
 
                 if(Objects.equals(packet.getSequenceID(), id)) {
                     iterator.remove();
+
+                    System.out.println("Acknowledge " + id + " removed from the priority-queue, current size: " + _packetSentList.size());
                 }
             }
         }

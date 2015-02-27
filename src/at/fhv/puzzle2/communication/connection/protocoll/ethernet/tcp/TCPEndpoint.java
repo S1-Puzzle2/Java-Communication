@@ -20,7 +20,7 @@ public class TCPEndpoint implements ListenableEndPoint {
     @Override
     public NetworkConnection acceptNetworkConnection() throws IOException {
         SocketChannel connection = _socket.accept();
-        connection.configureBlocking(true);
+        connection.configureBlocking(false);
 
         return new TCPNetworkConnection(connection);
     }

@@ -1,10 +1,10 @@
 package at.fhv.puzzle2.communication.connection.listener;
 
 import at.fhv.puzzle2.communication.connection.NetworkConnection;
-import at.fhv.puzzle2.communication.connection.PaddingNullByteNetworkConnection;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 
 import java.io.IOException;
+import java.nio.channels.ClosedByInterruptException;
 import java.util.concurrent.BlockingQueue;
 
 public class ConnectionListener implements Listener, Runnable {
@@ -38,15 +38,15 @@ public class ConnectionListener implements Listener, Runnable {
                 NetworkConnection connection = _endPoint.acceptNetworkConnection();
                 if (connection != null) {
                     synchronized (_queue) {
-                        _queue.add(new PaddingNullByteNetworkConnection(connection));
-
-                        _queue.notifyAll();
+                        _queue.add(connection);
                     }
                 } else {
                     //We got null, so we wont get a connection anymore
                     _isRunning = false;
                 }
             }
+        } catch(ClosedByInterruptException e) {
+            //Dont do anything here, happens when we interrupt the ServerSocketChannel
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,9 +62,10 @@ public class ConnectionListener implements Listener, Runnable {
         if (_isRunning) {
             _isRunning = false;
 
+            this._localThread.interrupt();
+
             _endPoint.freeListener();
 
-            this._localThread.interrupt();
         }
     }
 

@@ -18,7 +18,12 @@ public class TCPNetworkConnection implements NetworkConnection {
 
     @Override
     public void sendBytes(byte[] data) throws IOException {
-        ByteBuffer buffer = ByteBuffer.wrap(data);
+        ByteBuffer buffer = ByteBuffer.allocate(data.length + 1);
+        buffer.put(data);
+        buffer.put((byte) '\0');
+
+        buffer.flip();
+
         _socket.write(buffer);
     }
 
@@ -37,12 +42,13 @@ public class TCPNetworkConnection implements NetworkConnection {
 
             while(_localBuffer.hasRemaining()) {
                 byte tmp = _localBuffer.get();
-                buffer.write(tmp);
-
                 if(tmp == '\0') {
+                    System.out.println("Received net-packet " + buffer.toString());
                     _localBuffer.compact();
                     return buffer.toByteArray();
                 }
+
+                buffer.write(tmp);
             }
 
             _localBuffer.clear();
