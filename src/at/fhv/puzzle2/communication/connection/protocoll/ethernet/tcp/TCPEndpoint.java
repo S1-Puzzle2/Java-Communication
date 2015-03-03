@@ -21,9 +21,7 @@ public class TCPEndpoint implements ListenableEndPoint {
 
     @Override
     public NetworkConnection acceptNetworkConnection() throws IOException {
-        Socket socket = _socket.accept();
-
-        return new TCPNetworkConnection(socket);
+        return new TCPNetworkConnection(_socket.accept());
     }
 
     @Override
@@ -47,10 +45,7 @@ public class TCPEndpoint implements ListenableEndPoint {
     @Override
     public NetworkConnection connect() throws IOException {
         Socket socket = new Socket(_host, _port);
-        /*SocketChannel connection = SocketChannel.open();
-        connection.configureBlocking(true);
 
-        connection.connect(_localAddress);*/
         return new TCPNetworkConnection(socket);
     }
 

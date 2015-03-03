@@ -9,7 +9,7 @@ import at.fhv.puzzle2.communication.connection.networkPacket.NetworkPacketManage
 import at.fhv.puzzle2.logging.Logger;
 
 import java.io.IOException;
-import java.nio.channels.ClosedChannelException;
+import java.net.SocketException;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class ConnectionSendQueue implements Runnable {
@@ -29,7 +29,6 @@ public class ConnectionSendQueue implements Runnable {
         _sendQueue = new PriorityBlockingQueue<>();
 
         _localThread = new Thread(this);
-        _localThread.setPriority(Thread.MIN_PRIORITY);
         _localThread.setName("ConnectionSendQueue");
         _localThread.start();
     }
@@ -63,10 +62,9 @@ public class ConnectionSendQueue implements Runnable {
                     _packetHandler.getUnderlyingConnection().sendBytes(packet.getBytes());
 
                 } catch (IOException e) {
-                    e.printStackTrace();
                     _networkConnectionManager.connectionClosed(_packetHandler.getUnderlyingConnection());
 
-                    if(!(e instanceof ConnectionClosedException || e instanceof ClosedChannelException)) {
+                    if(!(e instanceof ConnectionClosedException || e instanceof SocketException)) {
                         e.printStackTrace();
                     }
 
