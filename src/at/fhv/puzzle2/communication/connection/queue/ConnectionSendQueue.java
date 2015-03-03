@@ -30,6 +30,7 @@ public class ConnectionSendQueue implements Runnable {
 
         _localThread = new Thread(this);
         _localThread.setPriority(Thread.MIN_PRIORITY);
+        _localThread.setName("ConnectionSendQueue");
         _localThread.start();
     }
 
@@ -55,8 +56,6 @@ public class ConnectionSendQueue implements Runnable {
                 try {
                     Logger.getLogger().trace(TAG, "Sending network packet:", packet);
 
-                    //Thread.sleep(1000);
-
                     if(packet.shouldResend()) {
                         NetworkPacketManager.getInstance().sentNetworkPacket(packet, _packetHandler);
                     }
@@ -74,7 +73,6 @@ public class ConnectionSendQueue implements Runnable {
                     break;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
                 //Do nothing here
             }
         }

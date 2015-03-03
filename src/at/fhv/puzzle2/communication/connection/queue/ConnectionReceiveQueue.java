@@ -25,6 +25,7 @@ public class ConnectionReceiveQueue implements Runnable {
         _networkConnectionManager = networkConnectionManager;
 
         _localThread = new Thread(this);
+        _localThread.setName("ConnectionReceiveQueue");
         _localThread.start();
     }
 
@@ -35,7 +36,6 @@ public class ConnectionReceiveQueue implements Runnable {
                     NetworkPacket packet = readMessage();
 
                     if(packet.getNetworkFlags() != null) {
-                        System.out.println("A flags-packet");
                         //So it should be an acknowledge, an error or the connection gets closed
                         if(packet.getNetworkFlags().isAcknowledgePresent()) {
                             NetworkPacketManager.getInstance().receivedAcknowledge(packet);
@@ -55,9 +55,7 @@ public class ConnectionReceiveQueue implements Runnable {
                     }
                 } catch(IOException e) {
                     _networkConnectionManager.connectionClosed(_packetHandler.getUnderlyingConnection());
-                    e.printStackTrace();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     //Dont do anything here
                 }
             }

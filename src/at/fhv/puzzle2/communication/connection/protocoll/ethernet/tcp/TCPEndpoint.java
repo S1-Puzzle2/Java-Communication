@@ -4,31 +4,31 @@ import at.fhv.puzzle2.communication.connection.NetworkConnection;
 import at.fhv.puzzle2.communication.connection.endpoint.ListenableEndPoint;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Objects;
 
 public class TCPEndpoint implements ListenableEndPoint {
-    private ServerSocketChannel _socket;
-    private final InetSocketAddress _localAddress;
+    private ServerSocket _socket;
+    //private final InetAddress _localAddress;
+    private String _host;
+    private int _port;
 
     public TCPEndpoint(String host, int port) {
-        _localAddress = new InetSocketAddress(host, port);
+        _host = host;
+        _port = port;
     }
 
     @Override
     public NetworkConnection acceptNetworkConnection() throws IOException {
-        SocketChannel connection = _socket.accept();
-        connection.configureBlocking(false);
+        Socket socket = _socket.accept();
 
-        return new TCPNetworkConnection(connection);
+        return new TCPNetworkConnection(socket);
     }
 
     @Override
     public void reserveListener() throws IOException {
-        _socket = ServerSocketChannel.open();
-        _socket.bind(_localAddress);
+        _socket = new ServerSocket(_port);
     }
 
     @Override
@@ -46,22 +46,22 @@ public class TCPEndpoint implements ListenableEndPoint {
 
     @Override
     public NetworkConnection connect() throws IOException {
-        SocketChannel connection = SocketChannel.open();
+        Socket socket = new Socket(_host, _port);
+        /*SocketChannel connection = SocketChannel.open();
         connection.configureBlocking(true);
 
-        connection.connect(_localAddress);
-        return new TCPNetworkConnection(connection);
+        connection.connect(_localAddress);*/
+        return new TCPNetworkConnection(socket);
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj instanceof TCPEndpoint &&
-                ((TCPEndpoint) obj)._localAddress.equals(this._localAddress) &&
-                ((TCPEndpoint) obj)._socket.equals(this._socket);
+                 ((TCPEndpoint) obj)._socket.equals(this._socket);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(_localAddress);
+        return Objects.hash(_host, _port);
     }
 }
